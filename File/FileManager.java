@@ -107,8 +107,8 @@ public class FileManager {
 				e.printStackTrace();
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
 				readMemo.setContent("[ERROR]"
-						+ "\nUnable to decrypt the password. "
-						+ "\nThe file, crypto.conf, may be corrupt.");
+						+ "\nUnable to decrypt the file."
+						+ "\nThe crypto.conf, may be corrupt.");
 			}
 			
 		}
