@@ -107,15 +107,15 @@ public class FileManager {
 				e.printStackTrace();
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
 				readMemo.setContent("[ERROR]"
-						+ "Unable to decrypt the password. "
+						+ "\nUnable to decrypt the password. "
 						+ "\nThe file, crypto.conf, may be corrupt.");
 			}
 			
 		}
 		else {
 			readMemo.setContent("[ERROR]"
-					+ "The file does not exist."
-					+ "Please check your file name.");
+					+ "\nThe file does not exist."
+					+ "\nPlease check your file name.");
 		}
 		
 		return readMemo;

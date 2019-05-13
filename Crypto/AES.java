@@ -18,27 +18,25 @@ public abstract class AES {
 	private static final int KEY_SIZE = 256;
 	private static final String ENCRYPT_ALGO = "AES";
 	private static final String TRANSFORMATION = ENCRYPT_ALGO + "/ECB/PKCS5Padding";
-	// private static byte[] secretKey = null;
-
+	private KeyGenerator keyGenerator;
+	
 	public AES() {
-		// do nothing.
+		try {
+			System.out.println("AES initialize.");
+			keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		keyGenerator.init(KEY_SIZE);
 	}
 
 	public String generateSecretKey() {
 
 		byte[] secretKey = null;
 
-		try {
-			KeyGenerator keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
-			keyGenerator.init(KEY_SIZE);
-
-			secretKey = keyGenerator.generateKey().getEncoded();
-
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		String SecretKeyStr = Base64.getEncoder().encodeToString(secretKey);
-		return SecretKeyStr;
+		secretKey = keyGenerator.generateKey().getEncoded();	
+		String secretKeyStr = Base64.getEncoder().encodeToString(secretKey);
+		return secretKeyStr;
 	}
 
 	abstract protected String getSecretKey();
