@@ -26,7 +26,6 @@ public abstract class AES {
 
 	public String generateSecretKey() {
 
-		// 상대방에게 secretKey를 전달해주는 메소드.
 		byte[] secretKey = null;
 
 		try {
@@ -36,21 +35,12 @@ public abstract class AES {
 			secretKey = keyGenerator.generateKey().getEncoded();
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// For Spring Server.
 		String SecretKeyStr = Base64.getEncoder().encodeToString(secretKey);
-		// For Android.
-		// String SecretKeyStr = Base64.encodeToString(aes.secretKey, Base64.NO_WRAP);
-
-		System.out.println();
-
 		return SecretKeyStr;
 	}
 
-	// Server에게 secretKey를 받아오는 메소드.
 	abstract protected String getSecretKey();
 
 	public Encryptor getEncryptor(String secretKey) {
@@ -71,13 +61,8 @@ public abstract class AES {
 		
 		private AESEncryptor(String secretKeyStr) {
 			
-			// 전달 받은 string을 공개키로 변환.
-			// ***************** For Spring Server. *****************
+			//convert string as parameter into public key
 			SecretKeySpec keySpec = new SecretKeySpec(Base64.getDecoder().decode(secretKeyStr), ENCRYPT_ALGO);
-			// ***************** For Android. *****************
-			// SecretKeySpec keySpec = new SecretKeySpec(Base64.decode(secretKeyStr,
-			// Base64.NO_WRAP), ENCRYPT_ALGO);
-
 			setKey(keySpec);
 		}
 		
@@ -89,14 +74,9 @@ public abstract class AES {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.ENCRYPT_MODE, (SecretKey) getKey());
 
-				// 인코딩 주의!! - charset설정주의 / base64플래그 중요!
-				// ***************** For Spring Server. *****************
+				//be careful about encoding, charset, flag of base64
 				encrypted = Base64.getEncoder()
 						.encodeToString(cipher.doFinal(rawValue.getBytes(StandardCharsets.UTF_8)));
-				// ***************** For Android. *****************
-				// encrypted =
-				// Base64.encodeToString(cipher.doFinal(rawValue.getBytes(StandardCharsets.UTF_8)),
-				// Base64.NO_WRAP);
 
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
@@ -118,13 +98,7 @@ public abstract class AES {
 
 		private AESDecryptor(String secretKeyStr) {
 
-			// 전달 받은 string을 공개키로 변환.
-			// ***************** For Spring Server. *****************
 			SecretKeySpec keySpec = new SecretKeySpec(Base64.getDecoder().decode(secretKeyStr), ENCRYPT_ALGO);
-			// ***************** For Android. *****************
-			// SecretKeySpec keySpec = new SecretKeySpec(Base64.decode(secretKeyStr,
-			// Base64.NO_WRAP), ENCRYPT_ALGO);
-
 			setKey(keySpec);
 		}
 
@@ -136,15 +110,10 @@ public abstract class AES {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.DECRYPT_MODE, (SecretKey) getKey());
 
-				// 문자열 생성시 반드시 charset지정 할 것.
-				// ***************** For Spring Server. *****************
+				//make sure to specify charset when creating string.
 				decoded = new String(
 						cipher.doFinal(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))),
 						StandardCharsets.UTF_8);
-				// ***************** For Android. *****************
-				// decoded = new
-				// String(cipher.doFinal(Base64.decode(encrypted.getBytes(StandardCharsets.UTF_8),
-				// Base64.NO_WRAP)), StandardCharsets.UTF_8);
 
 			} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
 				e.printStackTrace();

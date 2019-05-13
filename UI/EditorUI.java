@@ -33,7 +33,6 @@ public class EditorUI extends JFrame implements UI{
 
 	@Override
 	public void draw() {
-		//draw("", "");
 		draw(this.name, this.content);
 	}
 	
@@ -87,18 +86,18 @@ public class EditorUI extends JFrame implements UI{
 		
 		
 		JPanel namePanel = new JPanel();
-		namePanel.setBackground(Color.RED);
+		//namePanel.setBackground(Color.RED);
 		namePanel.setLayout(fl);
-		namePanel.add(new JLabel("파일명 : "));
+		namePanel.add(new JLabel("File : "));
 		JTextField nameTextField = new JTextField(20);
 		nameTextField.setText(name);
 		namePanel.add(nameTextField);
 		
 		
 		JPanel contentPanel = new JPanel();
-		contentPanel.setBackground(Color.BLUE);
+		//contentPanel.setBackground(Color.BLUE);
 		contentPanel.setLayout(fl);
-		contentPanel.add(new JLabel("내  용 : "));
+		contentPanel.add(new JLabel("Content : "));
 		JTextArea contentTextArea = new JTextArea(10, 30);
 		contentTextArea.setLineWrap(true);
 		contentTextArea.setText(content);
@@ -106,8 +105,8 @@ public class EditorUI extends JFrame implements UI{
 	
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(2,1,0,20));
-		JButton saveBtn = new JButton("저  장");
-		JButton resetBtn = new JButton("초기화");
+		JButton saveBtn = new JButton("Save");
+		JButton resetBtn = new JButton("Reset");
 		saveBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -137,7 +136,7 @@ public class EditorUI extends JFrame implements UI{
 		container.add(namePanel);
 		container.add(contentPanel);
 		
-		setSize(600,500);
+		setSize(550,500);
 		setVisible(true);
 	}
 

@@ -41,6 +41,7 @@ public class ViewerUI extends JFrame implements UI {
 		fl.setHgap(10);
 
 		this.container.setLayout(fl);
+		this.container.setBackground(Color.WHITE);
 
 		JPanel titlePanel = new JPanel();
 		JLabel title = new JLabel();
@@ -49,6 +50,7 @@ public class ViewerUI extends JFrame implements UI {
 		titlePanel.add(title);
 		
 		JPanel statePanel = new JPanel();
+		
 		ButtonGroup modeGroup = new ButtonGroup();
 		JRadioButton editorBtn = new JRadioButton("Editor");
 		JRadioButton viewerBtn = new JRadioButton("Viewer");
@@ -81,17 +83,17 @@ public class ViewerUI extends JFrame implements UI {
 		statePanel.add(viewerBtn);
 
 		JPanel namePanel = new JPanel();
-		namePanel.setBackground(Color.RED);
+		//namePanel.setBackground(Color.RED);
 		namePanel.setLayout(fl);
-		namePanel.add(new JLabel("파일명 : "));
+		namePanel.add(new JLabel("File : "));
 		JTextField nameTextField = new JTextField(20);
 		// nameTextField.setText(name);
 		namePanel.add(nameTextField);
 
 		JPanel contentPanel = new JPanel();
-		contentPanel.setBackground(Color.BLUE);
+		//contentPanel.setBackground(Color.BLUE);
 		contentPanel.setLayout(fl);
-		contentPanel.add(new JLabel("내  용 : "));
+		contentPanel.add(new JLabel("Content : "));
 		JTextArea contentTextArea = new JTextArea(10, 30);
 		// contentTextArea.setText(content);
 		contentTextArea.setLineWrap(true);
@@ -101,8 +103,8 @@ public class ViewerUI extends JFrame implements UI {
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(2, 1, 0, 20));
-		JButton openBtn = new JButton("열  기");
-		JButton editBtn = new JButton("편  집"); 
+		JButton openBtn = new JButton("Open");
+		JButton editBtn = new JButton("Edit"); 
 		openBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -130,7 +132,7 @@ public class ViewerUI extends JFrame implements UI {
 		container.add(namePanel);
 		container.add(contentPanel);
 
-		setSize(600, 500);
+		setSize(550, 500);
 		setVisible(true);
 
 	}

@@ -25,7 +25,7 @@ public class FileManager {
 		try {
 			File confFile = new File(FILE_NAME_CONF);
 			if (!confFile.exists()) {
-				System.out.println("crypto.conf 생성");
+				System.out.println("Create crypto.conf");
 				confFile.createNewFile();
 			}
 
@@ -106,12 +106,16 @@ public class FileManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
-				readMemo.setContent("암호를 해독할 수 없습니다. \ncrypto.conf파일이 손상되었습니다.");
+				readMemo.setContent("[ERROR]"
+						+ "Unable to decrypt the password. "
+						+ "\nThe file, crypto.conf, may be corrupt.");
 			}
 			
 		}
 		else {
-			readMemo.setContent("파일이 존재하지 않습니다. 파일명을 확인하여 주십시오.");
+			readMemo.setContent("[ERROR]"
+					+ "The file does not exist."
+					+ "Please check your file name.");
 		}
 		
 		return readMemo;
