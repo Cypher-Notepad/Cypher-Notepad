@@ -4,16 +4,22 @@ import UI.UIManager;
 
 public class Main {
 
+	private static Thread threadInit = new Thread() {
+		
+		public void run() {
+			initialize();
+		}
+		
+		private void initialize() {
+			//to reduce the first file saving time.
+			FileManager.getInstance();
+			new CryptoFacade();
+		}
+	};
+	
 	public static void main(String[] args) {
 		/*TODO reduce initializing time */
-		initialize();
 		UIManager.getInstance().setDefaultUI();
-
-	}
-	
-	private static void initialize() {
-		//to reduce the first file saving time.
-		FileManager.getInstance();
-		new CryptoFacade();
+		threadInit.start();
 	}
 }

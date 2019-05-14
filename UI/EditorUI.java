@@ -39,6 +39,7 @@ public class EditorUI extends JFrame implements UI{
 	public void draw(String name, String content) {
 		setTitle("**Crypto Editor**");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setUndecorated(true);
 		
 		this.container = getContentPane();
 		
