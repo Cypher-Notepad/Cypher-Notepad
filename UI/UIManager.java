@@ -17,7 +17,8 @@ public class UIManager {
 
 	public void setDefaultUI() {
 		// Default UI - Viewer;
-		UIStrategy = new ViewerUI();
+		//UIStrategy = new ViewerUI();
+		UIStrategy = new MainUI();
 		UIStrategy.draw();
 	}
 

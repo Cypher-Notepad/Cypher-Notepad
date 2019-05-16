@@ -39,7 +39,8 @@ public class EditorUI extends JFrame implements UI{
 	public void draw(String name, String content) {
 		setTitle("**Crypto Editor**");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setUndecorated(true);
+		setSize(550,500);
+		//setUndecorated(true);
 		
 		this.container = getContentPane();
 		
@@ -51,6 +52,7 @@ public class EditorUI extends JFrame implements UI{
 		JLabel title = new JLabel();
 		title.setText("--EDITOR--");
 		title.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
+		titlePanel.setBackground(new Color(0x68217A));
 		titlePanel.add(title);
 		
 		
@@ -137,7 +139,7 @@ public class EditorUI extends JFrame implements UI{
 		container.add(namePanel);
 		container.add(contentPanel);
 		
-		setSize(550,500);
+		
 		setVisible(true);
 	}
 
