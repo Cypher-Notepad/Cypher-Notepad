@@ -27,5 +27,9 @@ public class UIManager {
 		UIStrategy = ui;
 		ui.draw();
 	}
+	
+	public void closeWindow() {
+		//UIStrategy.
+	}
 
 }

@@ -3,6 +3,9 @@ package UI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -69,13 +72,13 @@ public class MainUI extends JFrame implements UI{
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Text", "2019-05-14", "129KB", "Lee"},
+				{"Text", "2019-05-14", "129KB", "/Desktop/example"},
 				{null, null, null, null},
 				{null, null, null, null},
 				{null, null, null, null},
 			},
 			new String[] {
-				"Name", "Date", "Size", "Writer"
+				"Name", "Date", "Size", "Path"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
@@ -130,6 +133,14 @@ public class MainUI extends JFrame implements UI{
 		btnNew.setForeground(new Color(0xffffff));
 		btnNew.setkHoverColor(new Color(0xffffff));
 		btnNew.setkHoverForeGround(new Color(0x68217A));
+		btnNew.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				UIManager.getInstance().setUI(new NotepadUI());
+				
+			}
+			
+		});
 
 		
 		
@@ -161,6 +172,31 @@ public class MainUI extends JFrame implements UI{
 		ImageIcon Icon = new ImageIcon(changedImg);
 		lblSdf.setIcon(Icon);
 		
+		//JButton btnX = new JButton("X");
+		KButton btnX = new KButton();
+		btnX.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
+		btnX.setMargin(new Insets(1,1,1,1));
+		btnX.setText("X");
+		btnX.setFocusPainted(true);
+		btnX.setkAllowGradient(false);
+		btnX.setkAllowTab(false);
+		btnX.setkFillButton(true);
+		btnX.setBorderPainted(false);
+		btnX.setkBorderRadius(5);
+		btnX.setkPressedColor(new Color(0xebcff2));
+		//btnOpen.setBackground(new Color(0x68217A));
+		btnX.setkBackGroundColor(new Color(0x9730b0));
+		btnX.setkForeGround(new Color(0xffffff));
+		btnX.setForeground(new Color(0xffffff));
+		btnX.setkHoverColor(new Color(0xffffff));
+		btnX.setkHoverForeGround(new Color(0x68217A));
+		btnX.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				erase();
+				//System.exit(0);
+			}});
+		
 		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -177,10 +213,13 @@ public class MainUI extends JFrame implements UI{
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(367, Short.MAX_VALUE))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap(874, Short.MAX_VALUE)
+					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+				.addGroup(gl_panel.createSequentialGroup()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,16 +232,18 @@ public class MainUI extends JFrame implements UI{
 						.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
 					.addGap(46))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(258, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
-		contentPane.setLayout(gl_contentPane);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
 	}
 
 	@Override
 	public void erase() {
-		// TODO Auto-generated method stub
+		this.dispose();
 		
 	}
 
