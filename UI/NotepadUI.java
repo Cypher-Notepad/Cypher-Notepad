@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,19 +12,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Calendar;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import UI.Custom.JFontChooser;
+import UI.Custom.KFinder;
 import UI.Custom.KFontChooser;
 import UI.Custom.KFontChooser_T;
 import UI.Custom.KPrinter;
@@ -49,6 +55,8 @@ public class NotepadUI extends JFrame implements UI {
 	public File directory;
 	
 	private KFontChooser fc;
+	private KPrinter pt;
+	private KFinder fd;
 
 	@Override
 	public void draw() {
@@ -114,7 +122,13 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
-
+		
+		textArea = new JTextArea();
+		
+		fc = new KFontChooser(this, textArea.getFont(), textArea.getForeground());
+		pt = new KPrinter(textArea);
+		fd = new KFinder(textArea);
+		
 		// sub menu accelerators keys
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
@@ -201,8 +215,6 @@ public class NotepadUI extends JFrame implements UI {
 
 		// sets it
 		frame.setJMenuBar(menuBar);
-
-		textArea = new JTextArea();
 		frame.add(textArea);
 
 		// actions
@@ -285,9 +297,13 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
+		
 		//pagesetup
+		pageSetupMenuItem.setActionCommand("PageSetup");
+		pageSetupMenuItem.addActionListener(pt);
 		//print
-		printMenuItem.addActionListener(new KPrinter(textArea));
+		printMenuItem.setActionCommand("Print");
+		printMenuItem.addActionListener(pt);
 		
 		//exit
 		exitMenuItem.addActionListener(e-> erase());
@@ -301,8 +317,13 @@ public class NotepadUI extends JFrame implements UI {
 		pasteMenuItem.addActionListener(e-> textArea.paste());
 		//delete
 		deleteMenuItem.addActionListener(e-> textArea.replaceSelection(""));
+		
 		//find
+		findMenuItem.addActionListener(e-> fd.showDialog());
+		
+		
 		//findnext
+		findNextMenuItem.addActionListener(fd);
 		//replace
 		//goto
 		//selectall
@@ -431,7 +452,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 	
 	private boolean showFontChooser() {
-		fc = new KFontChooser();
-		return fc.showDialog(this, textArea.getFont(), textArea.getForeground());
+		return fc.showDialog();
 	}
+	
 }

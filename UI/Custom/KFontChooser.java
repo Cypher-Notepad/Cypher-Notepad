@@ -44,22 +44,13 @@ public class KFontChooser extends JDialog {
 	private Color selectedColor;
 	private boolean isConfirmed;
 
-	public KFontChooser() {
+	public KFontChooser(JFrame jframe, Font curFont, Color curColor) {
 		fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		styles = new String[] { "Plain", "Italics", "Bold" };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
 		selectedFont = new Font("Courier", Font.PLAIN, 12);
 
-	}
-
-	public boolean showDialog(JFrame jframe, Font curFont, Color curColor) {
-		/*
-		String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		String[] styles = { "plain", "italics", "bold" };
-		String[] sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24",
-				"30", "36", "48", "72" };
-		*/
 		this.setTitle("Select Font");
 		selectedFont = curFont;
 		selectedColor = curColor;
@@ -232,8 +223,10 @@ public class KFontChooser extends JDialog {
 
 		setLocationRelativeTo(jframe);
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
-		setVisible(true);
+	}
 
+	public boolean showDialog() {
+		setVisible(true);
 		return isConfirmed;
 	}
 
