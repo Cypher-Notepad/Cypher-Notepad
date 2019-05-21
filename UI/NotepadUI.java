@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Calendar;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,6 +26,7 @@ import javax.swing.UIManager;
 import UI.Custom.JFontChooser;
 import UI.Custom.KFontChooser;
 import UI.Custom.KFontChooser_T;
+import UI.Custom.KPrinter;
 
 public class NotepadUI extends JFrame implements UI {
 	// Frame
@@ -35,8 +38,10 @@ public class NotepadUI extends JFrame implements UI {
 	// Menu items
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
-			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem, wordWrapMenuItem,
+			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
 			fontMenuItem, statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem;
+	
+	public JCheckBoxMenuItem wordWrapMenuItem;
 	// Text area
 	public JTextArea textArea;
 
@@ -102,7 +107,7 @@ public class NotepadUI extends JFrame implements UI {
 		selectAllMenuItem = new JMenuItem("Select All");
 		timeDateMenuItem = new JMenuItem("Time/Date");
 
-		wordWrapMenuItem = new JMenuItem("Word Wrap");
+		wordWrapMenuItem = new JCheckBoxMenuItem("Word Wrap");
 		fontMenuItem = new JMenuItem("Font...");
 
 		statusBarMenuItem = new JMenuItem("Status Bar");
@@ -282,20 +287,58 @@ public class NotepadUI extends JFrame implements UI {
 		
 		//pagesetup
 		//print
+		printMenuItem.addActionListener(new KPrinter(textArea));
+		
 		//exit
+		exitMenuItem.addActionListener(e-> erase());
 		//
 		//undo
 		//cut
+		cutMenuItem.addActionListener(e-> textArea.cut());
 		//copy
+		copyMenuItem.addActionListener(e-> textArea.copy());
 		//paste
+		pasteMenuItem.addActionListener(e-> textArea.paste());
 		//delete
+		deleteMenuItem.addActionListener(e-> textArea.replaceSelection(""));
 		//find
 		//findnext
 		//replace
 		//goto
 		//selectall
 		//timedate
+		timeDateMenuItem.addActionListener(e->{
+			Calendar cal = Calendar.getInstance();
+            int hour = cal.get(Calendar.HOUR);
+            int minute = cal.get(Calendar.MINUTE);
+            int amPm = cal.get(Calendar.AM_PM);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int year = cal.get(Calendar.YEAR);
+            String ampm = "";
+            if(amPm == 0) {
+                ampm = "AM";
+            }
+            else{
+                ampm = "PM";
+            }
+            
+            int pos = textArea.getCaretPosition();
+            textArea.insert(String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour,minute,month,day,year), pos);
+		});
+		
 		//wordwrap
+		wordWrapMenuItem.addActionListener(e->{
+			if(wordWrapMenuItem.isSelected()) {
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+            }
+            else{
+            	textArea.setLineWrap(false);
+            	textArea.setWrapStyleWord(false);
+            }
+		});
+		
 		//font
 		fontMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -357,7 +400,7 @@ public class NotepadUI extends JFrame implements UI {
 	@Override
 	public void erase() {
 		// TODO Auto-generated method stub
-
+		this.dispose();
 	}
 	
 	public void saveAsAction() {
