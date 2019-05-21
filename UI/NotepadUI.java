@@ -42,6 +42,8 @@ public class NotepadUI extends JFrame implements UI {
 
 	public String fileName;
 	public File directory;
+	
+	private KFontChooser fc;
 
 	@Override
 	public void draw() {
@@ -299,9 +301,9 @@ public class NotepadUI extends JFrame implements UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Font selectedFont = showFontChooser();
-				if(selectedFont != null) {
-					textArea.setFont(selectedFont);
+				if(showFontChooser()) {
+					textArea.setFont(fc.getSelctedFont());
+					textArea.setForeground(fc.getSelectedColor());
 				}
 			}
 		});
@@ -385,14 +387,8 @@ public class NotepadUI extends JFrame implements UI {
 		}
 	}
 	
-	private Font showFontChooser() {
-		KFontChooser fc = new KFontChooser();
-		boolean rtn = fc.showDialog(this, textArea.getFont(), textArea.getForeground());
-		if(rtn) {
-			return fc.getSelctedFont();
-		}
-		
-		return null;
-		
+	private boolean showFontChooser() {
+		fc = new KFontChooser();
+		return fc.showDialog(this, textArea.getFont(), textArea.getForeground());
 	}
 }

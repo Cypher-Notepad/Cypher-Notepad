@@ -3,6 +3,7 @@ package UI.Custom;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -40,7 +41,7 @@ public class KFontChooser extends JDialog {
 	private String[] styles;
 	private String[] sizes;
 	private Font selectedFont;
-	private Color fontColor;
+	private Color selectedColor;
 	private boolean isConfirmed;
 
 	public KFontChooser() {
@@ -61,6 +62,7 @@ public class KFontChooser extends JDialog {
 		*/
 		this.setTitle("Select Font");
 		selectedFont = curFont;
+		selectedColor = curColor;
 
 		setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
@@ -77,7 +79,16 @@ public class KFontChooser extends JDialog {
 		panel.setBorder(new TitledBorder(null, "\uBCF4\uAE30", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		JLabel txtrScriptView = new JLabel();
+		panel.setLayout(new BorderLayout(0, 0));
+		panel.add(txtrScriptView, BorderLayout.CENTER);
 		txtrScriptView.setText("AaBbYyZz");
+		int txtViewWidth = txtrScriptView.getParent().getWidth();
+		int txtViewHeight = txtrScriptView.getParent().getHeight();
+		txtrScriptView.setMinimumSize(new Dimension(txtViewWidth, txtViewHeight));
+		txtrScriptView.setPreferredSize(new Dimension(txtViewWidth, txtViewHeight));
+		txtrScriptView.setMaximumSize(new Dimension(txtViewWidth, txtViewHeight));
+		txtrScriptView.setFont(curFont);
+		txtrScriptView.setForeground(curColor);
 
 		JList listFont = new JList(fonts);
 		JScrollPane listFontScroll = new JScrollPane(listFont);
@@ -148,8 +159,8 @@ public class KFontChooser extends JDialog {
 		JColorChooser cc = null;
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fontColor = JColorChooser.showDialog(cc, "Select Color", fontColor);
-				txtrScriptView.setForeground(fontColor);
+				selectedColor = JColorChooser.showDialog(cc, "Select Color", selectedColor);
+				txtrScriptView.setForeground(selectedColor);
 			}
 		});
 
@@ -193,9 +204,6 @@ public class KFontChooser extends JDialog {
 										GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnColor))
 				.addContainerGap(73, Short.MAX_VALUE)));
-
-		panel.setLayout(new BorderLayout(0, 0));
-		panel.add(txtrScriptView, BorderLayout.CENTER);
 
 		contentPanel.setLayout(gl_contentPanel);
 		{
@@ -246,6 +254,10 @@ public class KFontChooser extends JDialog {
 	
 	public Font getSelctedFont() {
 		return selectedFont;
+	}
+	
+	public Color getSelectedColor() {
+		return selectedColor;
 	}
 
 }
