@@ -16,39 +16,12 @@ import VO.MemoVO;
 
 public class FileManager {
 
-	private static final String FILE_NAME_CONF = "crypto.conf";
+	private static final String FILE_NAME_CONF = "crypto-notepad.conf";
 	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
 	private static FileManager instance = null;
-	ArrayList<String> config;
+	ArrayList<String> keys;
 
-	private void loadKeys() {
-		try {
-			File confFile = new File(FILE_NAME_KEYS);
-			if (!confFile.exists()) {
-				System.out.println("Create crypto-notepad.keys");
-				confFile.createNewFile();
-			}
-
-			BufferedReader confReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
-			config = new ArrayList<String>();
-			String confLine = null;
-			while ((confLine = confReader.readLine()) != null) {
-				config.add(confLine);
-			}
-			confReader.close();
-
-			PrintWriter confWriter = new PrintWriter(new FileWriter(FILE_NAME_KEYS, true));
-			confWriter.println(RSAImpl.getInstance().getPrivateKey());
-			confWriter.close();
-			config.add(RSAImpl.getInstance().getPrivateKey());
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 	private FileManager() {
 		loadKeys();
 	}
@@ -61,8 +34,36 @@ public class FileManager {
 		return instance;
 	}
 	
-	private String getConfig(int idx) {
-		return this.config.get(idx);
+	private String getKey(int idx) {
+		return this.keys.get(idx);
+	}
+	
+	private void loadKeys() {
+		try {
+			File keyFile = new File(FILE_NAME_KEYS);
+			if (!keyFile.exists()) {
+				System.out.println("Create crypto-notepad.keys");
+				keyFile.createNewFile();
+			}
+
+			BufferedReader keyReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
+			keys = new ArrayList<String>();
+			String keyLine = null;
+			while ((keyLine = keyReader.readLine()) != null) {
+				keys.add(keyLine);
+			}
+			keyReader.close();
+
+			PrintWriter keyWriter = new PrintWriter(new FileWriter(FILE_NAME_KEYS, true));
+			keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+			keyWriter.close();
+			keys.add(RSAImpl.getInstance().getPrivateKey());
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 	public void saveMemo(String filename, MemoVO memo) {
@@ -70,7 +71,7 @@ public class FileManager {
 		PrintWriter memoWriter;
 		try {
 			memoWriter = new PrintWriter(new FileWriter(filename));
-			memoWriter.println(String.valueOf(config.size()-1));
+			memoWriter.println(String.valueOf(keys.size()-1));
 			
 			//Encrypt.
 			CryptoFacade crypto = new CryptoFacade();
@@ -99,7 +100,7 @@ public class FileManager {
 				readMemo.setContent(memoReader.readLine());
 				memoReader.close();
 				//Decrypt.
-				new CryptoFacade().decrypt(readMemo, getConfig(idx));
+				new CryptoFacade().decrypt(readMemo, getKey(idx));
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
