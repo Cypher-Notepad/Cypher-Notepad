@@ -27,7 +27,7 @@ public class CryptoFacade {
 		Encryptor rsaEncryptor = rsa.getEncryptor();
 		memo.setKey(rsaEncryptor.encrypt(secretKey));
 	}
-
+/*
 	public void decrypt(MemoVO memo) throws BadPaddingException {
 
 		Decryptor rsaDecryptor = rsa.getDecryptor();
@@ -38,7 +38,7 @@ public class CryptoFacade {
 		memo.setContent(aesDecryptor.decrypt(memo.getContent()));
 
 	}
-
+*/
 	public void decrypt(MemoVO memo, String privateKey) throws BadPaddingException {
 		
 		Decryptor rsaDecryptor = rsa.getDecryptor(privateKey);

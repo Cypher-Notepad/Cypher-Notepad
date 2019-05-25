@@ -32,6 +32,7 @@ public class KFinder extends JDialog implements ActionListener {
 	private String strToFind;
 	private JTextArea textArea;
 	private int findIdx;
+	private int startToFind;
 	private String direction;
 	ButtonGroup bgDirection;
 	/**
@@ -57,9 +58,7 @@ public class KFinder extends JDialog implements ActionListener {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			findButton = new JButton("Find Next");
-			findButton.addActionListener(e->{
-				
-			});
+			findButton.addActionListener(this);
 			//okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(findButton);
 		}
@@ -76,6 +75,7 @@ public class KFinder extends JDialog implements ActionListener {
 		txtToFind.getDocument().addDocumentListener(new DocumentListener() {
 			private void update() {
 				strToFind = txtToFind.getText();
+				//startToFind = txtToFind.getCaretPosition();
 			}
 
 			@Override
@@ -182,9 +182,21 @@ public class KFinder extends JDialog implements ActionListener {
 		if (!strToFind.equals("")) {
 			String source = textArea.getText();
 			if(direction.equals("Up")) {
+				startToFind =  textArea.getSelectionStart();
+				findIdx = source.lastIndexOf(strToFind, startToFind-1);
+				if(findIdx > -1) {
+					textArea.select(findIdx, findIdx + strToFind.length());
+				}
+				else { JOptionPane.showMessageDialog(null, "Nothing"); }
 				
 			}
 			else if(direction.equals("Down")) {
+				startToFind =  textArea.getSelectionEnd();
+				findIdx = source.indexOf(strToFind, startToFind);
+				if(findIdx > -1) {
+					textArea.select(findIdx, findIdx + strToFind.length());
+				}
+				else { JOptionPane.showMessageDialog(null, "Nothing"); }
 				
 			}
 

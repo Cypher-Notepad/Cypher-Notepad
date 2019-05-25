@@ -327,6 +327,7 @@ public class NotepadUI extends JFrame implements UI {
 		//replace
 		//goto
 		//selectall
+		selectAllMenuItem.addActionListener(e-> textArea.selectAll());
 		//timedate
 		timeDateMenuItem.addActionListener(e->{
 			Calendar cal = Calendar.getInstance();

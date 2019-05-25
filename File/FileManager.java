@@ -17,19 +17,20 @@ import VO.MemoVO;
 public class FileManager {
 
 	private static final String FILE_NAME_CONF = "crypto.conf";
+	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
 	private static FileManager instance = null;
 	ArrayList<String> config;
 
-	private FileManager() {
+	private void loadKeys() {
 		try {
-			File confFile = new File(FILE_NAME_CONF);
+			File confFile = new File(FILE_NAME_KEYS);
 			if (!confFile.exists()) {
-				System.out.println("Create crypto.conf");
+				System.out.println("Create crypto-notepad.keys");
 				confFile.createNewFile();
 			}
 
-			BufferedReader confReader = new BufferedReader(new FileReader(FILE_NAME_CONF));
+			BufferedReader confReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
 			config = new ArrayList<String>();
 			String confLine = null;
 			while ((confLine = confReader.readLine()) != null) {
@@ -37,7 +38,7 @@ public class FileManager {
 			}
 			confReader.close();
 
-			PrintWriter confWriter = new PrintWriter(new FileWriter(FILE_NAME_CONF, true));
+			PrintWriter confWriter = new PrintWriter(new FileWriter(FILE_NAME_KEYS, true));
 			confWriter.println(RSAImpl.getInstance().getPrivateKey());
 			confWriter.close();
 			config.add(RSAImpl.getInstance().getPrivateKey());
@@ -46,6 +47,10 @@ public class FileManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+	private FileManager() {
+		loadKeys();
 	}
 
 	public static FileManager getInstance() {
