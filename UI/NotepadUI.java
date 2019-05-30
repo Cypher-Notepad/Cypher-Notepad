@@ -125,7 +125,7 @@ public class NotepadUI extends JFrame implements UI {
 		
 		textArea = new JTextArea();
 		
-		fc = new KFontChooser(this, textArea.getFont(), textArea.getForeground());
+		fc = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
 		
@@ -325,7 +325,10 @@ public class NotepadUI extends JFrame implements UI {
 		//findnext
 		findNextMenuItem.addActionListener(fd);
 		//replace
+		
 		//goto
+		goToMenuItem.setEnabled(false);
+		
 		//selectall
 		selectAllMenuItem.addActionListener(e-> textArea.selectAll());
 		//timedate
@@ -434,6 +437,9 @@ public class NotepadUI extends JFrame implements UI {
 		if (userSelection == fc.APPROVE_OPTION) {
 			FileWriter fw;
 			try {
+				
+				
+				
 				fw = new FileWriter(new File(fc.getCurrentDirectory() + "/" + fc.getSelectedFile().getName()));
 				fw.write(textArea.getText());
 				System.out.print(textArea.getText());
@@ -453,7 +459,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 	
 	private boolean showFontChooser() {
-		return fc.showDialog();
+		return fc.showDialog(textArea.getFont(), textArea.getForeground());
 	}
 	
 }
