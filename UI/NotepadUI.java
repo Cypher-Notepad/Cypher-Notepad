@@ -28,11 +28,13 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import File.FileManager;
 import UI.Custom.JFontChooser;
 import UI.Custom.KFinder;
 import UI.Custom.KFontChooser;
 import UI.Custom.KFontChooser_T;
 import UI.Custom.KPrinter;
+import VO.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
 	// Frame
@@ -274,7 +276,7 @@ public class NotepadUI extends JFrame implements UI {
 
 		saveMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				System.out.println("Directory is: " + directory);
+				//System.out.println("Directory is: " + directory);
 				if (directory != null) {
 					FileWriter fw;
 					try {
@@ -435,22 +437,15 @@ public class NotepadUI extends JFrame implements UI {
 		int userSelection = fc.showSaveDialog(frame);
 
 		if (userSelection == fc.APPROVE_OPTION) {
-			FileWriter fw;
-			try {
-				
-				
-				
-				fw = new FileWriter(new File(fc.getCurrentDirectory() + "/" + fc.getSelectedFile().getName()));
-				fw.write(textArea.getText());
-				System.out.print(textArea.getText());
-				fw.close();
-
-				fileName = fc.getSelectedFile().getName();
-				directory = fc.getCurrentDirectory();
-				frame.setTitle(fileName + " - Notepad");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			fileName = fc.getSelectedFile().getName();
+			directory = fc.getCurrentDirectory();
+			
+			String filePath = directory + "/" + fileName;
+			MemoVO memo = new MemoVO();
+			memo.setContent(textArea.getText());
+			FileManager.getInstance().saveMemo(filePath, memo);
+			
+			frame.setTitle(fileName + " - Notepad");
 		} else if (userSelection == fc.CANCEL_OPTION) {
 			System.out.println("Cancel selected!");
 		} else if (userSelection == fc.ERROR_OPTION) {
