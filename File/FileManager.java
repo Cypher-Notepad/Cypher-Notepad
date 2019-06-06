@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import javax.crypto.BadPaddingException;
 
+import Config.Property;
 import Crypto.CryptoFacade;
 import Crypto.RSAImpl;
 import VO.MemoVO;
@@ -27,9 +28,12 @@ public class FileManager {
 	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
 	private static FileManager instance = null;
-	ArrayList<String> keys;
+	private ArrayList<String> keys;
+	private Properties property;
 
 	private FileManager() {
+		keys = new ArrayList<String>();
+		property = new Properties();
 		loadKeys();
 	}
 
@@ -54,7 +58,7 @@ public class FileManager {
 			}
 
 			BufferedReader keyReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
-			keys = new ArrayList<String>();
+			//keys = new ArrayList<String>();
 			String keyLine = null;
 			while ((keyLine = keyReader.readLine()) != null) {
 				keys.add(keyLine);
@@ -74,34 +78,32 @@ public class FileManager {
 	}
 
 	public void loadProperties() {
-		Properties p = new Properties();
-		InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
+
 		try {
-			p.load(inStream);
-			PropertiesVO properties = PropertiesVO.getInstance();
-			// TODO load properties
-
-		} catch (IOException e) {
-
-		} finally {
-			try {
+			File propFile = new File(FILE_NAME_PROP);
+			if (!propFile.exists()) {
+				System.out.println("Create crypto-notepad.properties");
+				Property.setDefaultProperties(property);
+			} else {
+				InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
+				property.load(inStream);
 				inStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+
 		}
 	}
 
+	private void createProperties() {
+
+	}
+
 	public void saveProperties() {
-		Properties p = new Properties();
 		OutputStream outStream;
 		try {
 			outStream = new FileOutputStream(FILE_NAME_PROP);
 			try {
-				p.store(outStream, "Crypto-notepad User Properties");
-				PropertiesVO properties = PropertiesVO.getInstance();
-				// TODO load properties
-
+				property.store(outStream, "Crypto-notepad User Properties");
 			} catch (IOException e) {
 			} finally {
 				try {
@@ -110,7 +112,9 @@ public class FileManager {
 					e.printStackTrace();
 				}
 			}
-		} catch (FileNotFoundException e1) { e1.printStackTrace(); }
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	public void saveMemo(String filename, MemoVO memo) {
