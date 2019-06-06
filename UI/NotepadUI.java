@@ -276,17 +276,8 @@ public class NotepadUI extends JFrame implements UI {
 
 		saveMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				//System.out.println("Directory is: " + directory);
 				if (directory != null) {
-					FileWriter fw;
-					try {
-						fw = new FileWriter(new File(directory + "/" + fileName));
-						fw.write(textArea.getText());
-						System.out.println("Saved");
-						fw.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					saveMemo();
 				} else {
 					saveAsAction();
 				}
@@ -434,16 +425,13 @@ public class NotepadUI extends JFrame implements UI {
 		// finalChooser
 		final JFileChooser fc = new JFileChooser();
 		fc.setSelectedFile(new File("*.txt"));
+		
 		int userSelection = fc.showSaveDialog(frame);
 
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
 			directory = fc.getCurrentDirectory();
-			
-			String filePath = directory + "/" + fileName;
-			MemoVO memo = new MemoVO();
-			memo.setContent(textArea.getText());
-			FileManager.getInstance().saveMemo(filePath, memo);
+			saveMemo();
 			
 			frame.setTitle(fileName + " - Notepad");
 		} else if (userSelection == fc.CANCEL_OPTION) {
@@ -451,6 +439,13 @@ public class NotepadUI extends JFrame implements UI {
 		} else if (userSelection == fc.ERROR_OPTION) {
 			System.out.println("Error detected!");
 		}
+	}
+	
+	public void saveMemo() {
+		String filePath = directory + "/" + fileName;
+		MemoVO memo = new MemoVO();
+		memo.setContent(textArea.getText());
+		FileManager.getInstance().saveMemo(filePath, memo);
 	}
 	
 	private boolean showFontChooser() {
