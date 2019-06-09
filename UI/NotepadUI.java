@@ -56,6 +56,7 @@ public class NotepadUI extends JFrame implements UI {
 
 	public String fileName;
 	public File directory;
+	public String savedContext;
 
 	private KFontChooser fc;
 	private KPrinter pt;
@@ -127,6 +128,7 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 
 		textArea = new JTextArea();
+		savedContext = "";
 
 		fc = new KFontChooser(this);
 		pt = new KPrinter(textArea);
@@ -225,31 +227,33 @@ public class NotepadUI extends JFrame implements UI {
 			public void actionPerformed(ActionEvent ev) {
 				if (textArea.getText().trim().length() != 0) {
 					System.out.println("Contains Text");
-					// JOptionPane.showConfirmDialog(frame, "Do you want to save changes to
-					// Untitled?");
-
-					Object[] options = { "Save", "Don't Save", "Cancel" };
-
-					int x = JOptionPane.showOptionDialog(frame, "Do you want to save changes to Untitled?", "Notepad",
-							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-
-					if (x != 2) {
-						if (x == 0) {
-							// Save action should be called here
-							System.out.println("Save");
-							saveAsAction();
-						} else if (x == 1) {
-							System.out.println("Don't Save");
-						}
+					if (checkSave()) {
 						textArea.setText(null);
+						directory = null;
 						fileName = "Untitled";
 						frame.setTitle(fileName + " - Notepad");
-					} else {
-						System.out.println("Cancel Selected");
 					}
+				}
+			}
+		});
 
-				} else {
-					System.out.println("Is Empty");
+		openMenuItem.addActionListener(e -> {
+			if (checkSave()) {
+				JFileChooser fc = new JFileChooser();
+				int response = fc.showOpenDialog(frame);
+				if(response == fc.APPROVE_OPTION) {
+					String selectedPath;
+					try {
+						selectedPath = fc.getSelectedFile().getCanonicalPath();
+						MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
+						textArea.setText(memo.getContent());
+						directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
+						fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
+						frame.setTitle(fileName + " - Notepad");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -415,7 +419,7 @@ public class NotepadUI extends JFrame implements UI {
 			directory = fc.getCurrentDirectory();
 			saveMemo();
 
-			Property.addRecentFiles(directory + "/" + fileName);
+			Property.addRecentFiles(directory + "\\" + fileName);
 
 			frame.setTitle(fileName + " - Notepad");
 		} else if (userSelection == fc.CANCEL_OPTION) {
@@ -426,9 +430,10 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void saveMemo() {
-		String filePath = directory + "/" + fileName;
+		String filePath = directory + "\\" + fileName;
 		MemoVO memo = new MemoVO();
-		memo.setContent(textArea.getText());
+		savedContext = textArea.getText();
+		memo.setContent(savedContext);
 		FileManager.getInstance().saveMemo(filePath, memo);
 	}
 
@@ -436,4 +441,27 @@ public class NotepadUI extends JFrame implements UI {
 		return fc.showDialog(textArea.getFont(), textArea.getForeground());
 	}
 
+	public boolean checkSave() {
+		if (savedContext != textArea.getText()) {
+			Object[] options = { "Save", "Don't Save", "Cancel" };
+
+			int response = JOptionPane.showOptionDialog(frame,
+					"Your work is not saved. Do you want to save changes to Untitled?", "Notepad",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			if (response == JOptionPane.YES_OPTION) {
+				if (directory != null) {
+					saveMemo();
+				} else {
+					saveAsAction();
+				}
+				return true;
+			} else if (response == JOptionPane.NO_OPTION) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
 }

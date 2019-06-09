@@ -115,7 +115,7 @@ public class FileManager {
 	}
 
 	public void saveMemo(String filename, MemoVO memo) {
-		filename = filename + EXT_MEMO;
+		//filename = filename + EXT_MEMO;
 		PrintWriter memoWriter;
 		try {
 			memoWriter = new PrintWriter(new FileWriter(filename));
@@ -174,6 +174,7 @@ public class FileManager {
 		ArrayList<String> paths = Property.getRecentFilePaths();
 		ArrayList<File> files = new ArrayList<File>();
 		for (String path : paths) {
+			System.out.println(path);
 			File f = new File(path);
 			if (f.exists()) {
 				files.add(f);
