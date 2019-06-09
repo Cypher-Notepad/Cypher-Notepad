@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,8 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 
+import Config.Property;
 import File.FileManager;
 import UI.Custom.JFontChooser;
 import UI.Custom.KFinder;
@@ -46,16 +47,16 @@ public class NotepadUI extends JFrame implements UI {
 	// Menu items
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
-			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
-			fontMenuItem, statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem;
-	
+			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem, fontMenuItem,
+			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem;
+
 	public JCheckBoxMenuItem wordWrapMenuItem;
 	// Text area
 	public JTextArea textArea;
 
 	public String fileName;
 	public File directory;
-	
+
 	private KFontChooser fc;
 	private KPrinter pt;
 	private KFinder fd;
@@ -64,7 +65,7 @@ public class NotepadUI extends JFrame implements UI {
 	public void draw() {
 		// TODO Auto-generated method stub
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -124,13 +125,13 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
-		
+
 		textArea = new JTextArea();
-		
+
 		fc = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
-		
+
 		// sub menu accelerators keys
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
@@ -268,121 +269,110 @@ public class NotepadUI extends JFrame implements UI {
 				saveAsAction();
 			}
 		});
-		
-		
-		//pagesetup
+
+		// pagesetup
 		pageSetupMenuItem.setActionCommand("PageSetup");
 		pageSetupMenuItem.addActionListener(pt);
-		//print
+		// print
 		printMenuItem.setActionCommand("Print");
 		printMenuItem.addActionListener(pt);
-		
-		//exit
-		exitMenuItem.addActionListener(e-> erase());
+
+		// exit
+		exitMenuItem.addActionListener(e -> erase());
 		//
-		//undo
-		//cut
-		cutMenuItem.addActionListener(e-> textArea.cut());
-		//copy
-		copyMenuItem.addActionListener(e-> textArea.copy());
-		//paste
-		pasteMenuItem.addActionListener(e-> textArea.paste());
-		//delete
-		deleteMenuItem.addActionListener(e-> textArea.replaceSelection(""));
-		
-		//find
-		findMenuItem.addActionListener(e-> fd.showDialog());
-		
-		
-		//findnext
+		// undo
+		// cut
+		cutMenuItem.addActionListener(e -> textArea.cut());
+		// copy
+		copyMenuItem.addActionListener(e -> textArea.copy());
+		// paste
+		pasteMenuItem.addActionListener(e -> textArea.paste());
+		// delete
+		deleteMenuItem.addActionListener(e -> textArea.replaceSelection(""));
+
+		// find
+		findMenuItem.addActionListener(e -> fd.showDialog());
+
+		// findnext
 		findNextMenuItem.addActionListener(fd);
-		//replace
-		
-		//goto
+		// replace
+
+		// goto
 		goToMenuItem.setEnabled(false);
-		
-		//selectall
-		selectAllMenuItem.addActionListener(e-> textArea.selectAll());
-		//timedate
-		timeDateMenuItem.addActionListener(e->{
+
+		// selectall
+		selectAllMenuItem.addActionListener(e -> textArea.selectAll());
+		// timedate
+		timeDateMenuItem.addActionListener(e -> {
 			Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR);
-            int minute = cal.get(Calendar.MINUTE);
-            int amPm = cal.get(Calendar.AM_PM);
-            int month = cal.get(Calendar.MONTH) + 1;
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-            int year = cal.get(Calendar.YEAR);
-            String ampm = "";
-            if(amPm == 0) {
-                ampm = "AM";
-            }
-            else{
-                ampm = "PM";
-            }
-            
-            int pos = textArea.getCaretPosition();
-            textArea.insert(String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour,minute,month,day,year), pos);
+			int hour = cal.get(Calendar.HOUR);
+			int minute = cal.get(Calendar.MINUTE);
+			int amPm = cal.get(Calendar.AM_PM);
+			int month = cal.get(Calendar.MONTH) + 1;
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+			int year = cal.get(Calendar.YEAR);
+			String ampm = "";
+			if (amPm == 0) {
+				ampm = "AM";
+			} else {
+				ampm = "PM";
+			}
+
+			int pos = textArea.getCaretPosition();
+			textArea.insert(String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour, minute, month, day, year), pos);
 		});
-		
-		//wordwrap
-		wordWrapMenuItem.addActionListener(e->{
-			if(wordWrapMenuItem.isSelected()) {
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-            }
-            else{
-            	textArea.setLineWrap(false);
-            	textArea.setWrapStyleWord(false);
-            }
+
+		// wordwrap
+		wordWrapMenuItem.addActionListener(e -> {
+			if (wordWrapMenuItem.isSelected()) {
+				textArea.setLineWrap(true);
+				textArea.setWrapStyleWord(true);
+			} else {
+				textArea.setLineWrap(false);
+				textArea.setWrapStyleWord(false);
+			}
 		});
-		
-		//font
+
+		// font
 		fontMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(showFontChooser()) {
+				if (showFontChooser()) {
 					textArea.setFont(fc.getSelctedFont());
 					textArea.setForeground(fc.getSelectedColor());
 				}
 			}
 		});
-		//statusbar
-		//view
-		//about
-		
+		// statusbar
+		// view
+		// about
+
 		/*
-		// menu items
-				newMenuItem = new JMenuItem("New");
-				openMenuItem = new JMenuItem("Open...");
-				saveMenuItem = new JMenuItem("Save");
-				saveAsMenuItem = new JMenuItem("Save As...");
-				pageSetupMenuItem = new JMenuItem("Page Setup...");
-				printMenuItem = new JMenuItem("Print...");
-				exitMenuItem = new JMenuItem("Exit");
+		 * // menu items newMenuItem = new JMenuItem("New"); openMenuItem = new
+		 * JMenuItem("Open..."); saveMenuItem = new JMenuItem("Save"); saveAsMenuItem =
+		 * new JMenuItem("Save As..."); pageSetupMenuItem = new
+		 * JMenuItem("Page Setup..."); printMenuItem = new JMenuItem("Print...");
+		 * exitMenuItem = new JMenuItem("Exit");
+		 * 
+		 * undoMenuItem = new JMenuItem("Undo"); cutMenuItem = new JMenuItem("Cut");
+		 * copyMenuItem = new JMenuItem("Copy"); pasteMenuItem = new JMenuItem("Paste");
+		 * deleteMenuItem = new JMenuItem("Delete"); findMenuItem = new
+		 * JMenuItem("Find..."); findNextMenuItem = new JMenuItem("Find Next");
+		 * replaceMenuItem = new JMenuItem("Replace..."); goToMenuItem = new
+		 * JMenuItem("Go To..."); selectAllMenuItem = new JMenuItem("Select All");
+		 * timeDateMenuItem = new JMenuItem("Time/Date");
+		 * 
+		 * wordWrapMenuItem = new JMenuItem("Word Wrap"); fontMenuItem = new
+		 * JMenuItem("Font...");
+		 * 
+		 * statusBarMenuItem = new JMenuItem("Status Bar");
+		 * 
+		 * viewHelpMenuItem = new JMenuItem("View Help"); aboutNotepadMenuItem = new
+		 * JMenuItem("About Notepad");
+		 * 
+		 */
 
-				undoMenuItem = new JMenuItem("Undo");
-				cutMenuItem = new JMenuItem("Cut");
-				copyMenuItem = new JMenuItem("Copy");
-				pasteMenuItem = new JMenuItem("Paste");
-				deleteMenuItem = new JMenuItem("Delete");
-				findMenuItem = new JMenuItem("Find...");
-				findNextMenuItem = new JMenuItem("Find Next");
-				replaceMenuItem = new JMenuItem("Replace...");
-				goToMenuItem = new JMenuItem("Go To...");
-				selectAllMenuItem = new JMenuItem("Select All");
-				timeDateMenuItem = new JMenuItem("Time/Date");
-
-				wordWrapMenuItem = new JMenuItem("Word Wrap");
-				fontMenuItem = new JMenuItem("Font...");
-
-				statusBarMenuItem = new JMenuItem("Status Bar");
-
-				viewHelpMenuItem = new JMenuItem("View Help");
-				aboutNotepadMenuItem = new JMenuItem("About Notepad");
-		
-		*/
-		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -392,27 +382,41 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setSize(1450, 750);
 		frame.setResizable(true);
 		frame.setVisible(true);
+
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				// call the function, erase().
+				UIManager.getInstance().closeWindow();
+			}
+		});
 	}
 
 	@Override
 	public void erase() {
 		// TODO Auto-generated method stub
-		this.dispose();
-		FileManager.getInstance().saveProperties();
+		if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to close this window?", "Close Window?",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+			this.dispose();
+			FileManager.getInstance().saveProperties();
+			System.exit(0);
+		}
 	}
-	
+
 	public void saveAsAction() {
 		// finalChooser
 		final JFileChooser fc = new JFileChooser();
 		fc.setSelectedFile(new File("*.txt"));
-		
+
 		int userSelection = fc.showSaveDialog(frame);
 
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
 			directory = fc.getCurrentDirectory();
 			saveMemo();
-			
+
+			Property.addRecentFiles(directory + "/" + fileName);
+
 			frame.setTitle(fileName + " - Notepad");
 		} else if (userSelection == fc.CANCEL_OPTION) {
 			System.out.println("Cancel selected!");
@@ -420,16 +424,16 @@ public class NotepadUI extends JFrame implements UI {
 			System.out.println("Error detected!");
 		}
 	}
-	
+
 	public void saveMemo() {
 		String filePath = directory + "/" + fileName;
 		MemoVO memo = new MemoVO();
 		memo.setContent(textArea.getText());
 		FileManager.getInstance().saveMemo(filePath, memo);
 	}
-	
+
 	private boolean showFontChooser() {
 		return fc.showDialog(textArea.getFont(), textArea.getForeground());
 	}
-	
+
 }

@@ -29,7 +29,7 @@ public class UIManager {
 	}
 	
 	public void closeWindow() {
-		//UIStrategy.
+		UIStrategy.erase();
 	}
 
 }
