@@ -28,35 +28,32 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import File.FileManager;
 import UI.Custom.KButton;
 
-
-public class MainUI extends JFrame implements UI{
-
+public class MainUI extends JFrame implements UI {
 
 	private JPanel contentPane;
 	private JTable table;
 	int mpX, mpY;
-	
-	public MainUI() {
-		addMouseListener( new MouseAdapter() {
-	        @Override
-	        public void mousePressed( MouseEvent e ) {
-	          mpX = e.getX();
-	          mpY = e.getY();
-	        }
-	    } );
 
-	    addMouseMotionListener( new MouseMotionAdapter() {
-	        @Override
-	        public void mouseDragged( MouseEvent e ) {
-	          setLocation(
-	              getLocation().x + e.getX() - mpX,
-	              getLocation().y + e.getY() - mpY );
-	        }
-	    } );
+	public MainUI() {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mpX = e.getX();
+				mpY = e.getY();
+			}
+		});
+
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				setLocation(getLocation().x + e.getX() - mpX, getLocation().y + e.getY() - mpY);
+			}
+		});
 	}
-	
+
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -66,26 +63,20 @@ public class MainUI extends JFrame implements UI{
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		this.setUndecorated(true);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
-		
-        table = new JTable();
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Text", "2019-05-14", "129KB", "/Desktop/example"},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"Name", "Date", "Size", "Path"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
+
+		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
+				new String[] { "Name", "Date", "Size", "Path" }) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			boolean[] columnEditables = new boolean[] { false, false, false, false };
+
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
@@ -94,40 +85,34 @@ public class MainUI extends JFrame implements UI{
 		table.setSelectionBackground(new Color(0x451651));
 		table.setSelectionForeground(new Color(0xffffff));
 		table.setRowHeight(50);
-		
+
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 		TableColumnModel tcmSchedule = table.getColumnModel();
 		for (int i = 1; i < tcmSchedule.getColumnCount(); i++) {
 			tcmSchedule.getColumn(i).setCellRenderer(tScheduleCellRenderer);
 		}
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
 
-
-		
-		//list.
+		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
-				.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE).addComponent(panel,
+						Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
-		);
-		
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE)));
+
 		JLabel lblNewLabel = new JLabel("Crypto Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
-		
-		//JButton btnNew = new JButton("New");
-		
+
+		// JButton btnNew = new JButton("New");
+
 		KButton btnNew = new KButton();
 		btnNew.setText("New");
 		btnNew.setFocusPainted(true);
@@ -137,7 +122,7 @@ public class MainUI extends JFrame implements UI{
 		btnNew.setBorderPainted(false);
 		btnNew.setkBorderRadius(50);
 		btnNew.setkPressedColor(new Color(0xebcff2));
-		//btnNew.setBackground(new Color(0x68217A));
+		// btnNew.setBackground(new Color(0x68217A));
 		btnNew.setkBackGroundColor(new Color(0x9730b0));
 		btnNew.setkForeGround(new Color(0xffffff));
 		btnNew.setForeground(new Color(0xffffff));
@@ -147,15 +132,13 @@ public class MainUI extends JFrame implements UI{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				UIManager.getInstance().setUI(new NotepadUI());
-				
+
 			}
-			
+
 		});
 
-		
-		
-		//JButton btnOpen = new JButton("Open");
-		
+		// JButton btnOpen = new JButton("Open");
+
 		KButton btnOpen = new KButton();
 		btnOpen.setText("Open");
 		btnOpen.setFocusPainted(true);
@@ -165,27 +148,25 @@ public class MainUI extends JFrame implements UI{
 		btnOpen.setBorderPainted(false);
 		btnOpen.setkBorderRadius(50);
 		btnOpen.setkPressedColor(new Color(0xebcff2));
-		//btnOpen.setBackground(new Color(0x68217A));
+		// btnOpen.setBackground(new Color(0x68217A));
 		btnOpen.setkBackGroundColor(new Color(0x9730b0));
 		btnOpen.setkForeGround(new Color(0xffffff));
 		btnOpen.setForeground(new Color(0xffffff));
 		btnOpen.setkHoverColor(new Color(0xffffff));
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
 
-		
-		
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon = new ImageIcon("C:\\Users\\matth\\Desktop\\Untitled_tp.png");  
-		Image originImg = originIcon.getImage(); 
-		Image changedImg= originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH );
+		ImageIcon originIcon = new ImageIcon("C:\\Users\\matth\\Desktop\\Untitled_tp.png");
+		Image originImg = originIcon.getImage();
+		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
 		lblSdf.setIcon(Icon);
-		
-		//JButton btnX = new JButton("X");
+
+		// JButton btnX = new JButton("X");
 		KButton btnX = new KButton();
 		btnX.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
-		btnX.setMargin(new Insets(1,1,1,1));
+		btnX.setMargin(new Insets(1, 1, 1, 1));
 		btnX.setText("X");
 		btnX.setFocusPainted(true);
 		btnX.setkAllowGradient(false);
@@ -194,7 +175,7 @@ public class MainUI extends JFrame implements UI{
 		btnX.setBorderPainted(false);
 		btnX.setkBorderRadius(5);
 		btnX.setkPressedColor(new Color(0xebcff2));
-		//btnOpen.setBackground(new Color(0x68217A));
+		// btnOpen.setBackground(new Color(0x68217A));
 		btnX.setkBackGroundColor(new Color(0x9730b0));
 		btnX.setkForeGround(new Color(0xffffff));
 		btnX.setForeground(new Color(0xffffff));
@@ -203,47 +184,38 @@ public class MainUI extends JFrame implements UI{
 		btnX.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//erase();
-				//System.exit(0);
-			}});
-		
-		
+				erase();
+				// System.exit(0);
+			}
+		});
+
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap(525, Short.MAX_VALUE)
-					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-					.addGap(98)
-					.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)))
-					.addContainerGap(17, Short.MAX_VALUE))
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(gl_panel.createSequentialGroup()
-									.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel.createSequentialGroup()
-									.addGap(73)
-									.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-							.addGap(17)
-							.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup().addContainerGap(525, Short.MAX_VALUE).addComponent(btnX,
+						GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup().addGap(98)
+						.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 226,
+												Short.MAX_VALUE)))
+						.addContainerGap(17, Short.MAX_VALUE)));
+		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
+				.createSequentialGroup()
+				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false).addGroup(gl_panel
+								.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_panel.createSequentialGroup().addGap(73).addComponent(lblSdf,
+										GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+						.addGap(17).addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(29, Short.MAX_VALUE))
-		);
+				.addGap(18).addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(29, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
@@ -252,7 +224,7 @@ public class MainUI extends JFrame implements UI{
 	@Override
 	public void erase() {
 		this.dispose();
-		
+
 	}
 
 }

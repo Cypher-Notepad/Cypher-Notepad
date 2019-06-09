@@ -2,6 +2,7 @@ package File;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -12,6 +13,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.crypto.BadPaddingException;
@@ -29,12 +32,13 @@ public class FileManager {
 	private static final String EXT_MEMO = ".txt";
 	private static FileManager instance = null;
 	private ArrayList<String> keys;
-	private Properties property;
+	// private Properties property;
 
 	private FileManager() {
-		keys = new ArrayList<String>();
-		property = new Properties();
-		loadKeys();
+		//keys = new ArrayList<String>();
+		// property = new Properties();
+		// property = Property.getProperties();
+		// loadKeys();
 	}
 
 	public static FileManager getInstance() {
@@ -49,7 +53,7 @@ public class FileManager {
 		return this.keys.get(idx);
 	}
 
-	private void loadKeys() {
+	public void loadKeys() {
 		try {
 			File keyFile = new File(FILE_NAME_KEYS);
 			if (!keyFile.exists()) {
@@ -58,7 +62,7 @@ public class FileManager {
 			}
 
 			BufferedReader keyReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
-			//keys = new ArrayList<String>();
+			keys = new ArrayList<String>();
 			String keyLine = null;
 			while ((keyLine = keyReader.readLine()) != null) {
 				keys.add(keyLine);
@@ -83,38 +87,31 @@ public class FileManager {
 			File propFile = new File(FILE_NAME_PROP);
 			if (!propFile.exists()) {
 				System.out.println("Create crypto-notepad.properties");
-				Property.setDefaultProperties(property);
+				propFile.createNewFile();
+				Property.setDefaultProperties();
+				saveProperties();
 			} else {
-				InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
-				property.load(inStream);
+				//InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
+				InputStream inStream = new FileInputStream(FILE_NAME_PROP);	
+				Property.load(inStream);
 				inStream.close();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 
 		}
-	}
-
-	private void createProperties() {
-
 	}
 
 	public void saveProperties() {
 		OutputStream outStream;
 		try {
 			outStream = new FileOutputStream(FILE_NAME_PROP);
-			try {
-				property.store(outStream, "Crypto-notepad User Properties");
-			} catch (IOException e) {
-			} finally {
-				try {
-					outStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			Property.store(outStream, "Crypto-notepad User Properties");
+			outStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+
 	}
 
 	public void saveMemo(String filename, MemoVO memo) {
@@ -171,6 +168,63 @@ public class FileManager {
 		}
 
 		return readMemo;
+	}
+
+	public Object[][] loadRecentFiles() {
+		ArrayList<String> paths = Property.getRecentFilePaths();
+		ArrayList<File> files = new ArrayList<File>();
+		for (String path : paths) {
+			File f = new File(path);
+			if (f.exists()) {
+				files.add(f);
+			}
+		}
+		String[][] rcntFiles = new String[files.size()][];
+		for (int i = 0; i < files.size(); i++) {
+			rcntFiles[i] = new String[4];
+			File f = files.get(i);
+			rcntFiles[i][0] = f.getName();
+			rcntFiles[i][1] = getDate(f.lastModified());
+			rcntFiles[i][2] = getFileSize(Integer.parseInt(String.valueOf(f.length())));
+			try {
+				rcntFiles[i][3] = f.getCanonicalPath();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rcntFiles;
+	}
+
+	private String getDate(long time) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(time));
+		int hour = cal.get(Calendar.HOUR);
+		int minute = cal.get(Calendar.MINUTE);
+		int amPm = cal.get(Calendar.AM_PM);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		int year = cal.get(Calendar.YEAR);
+		String ampm = "";
+		if (amPm == 0) {
+			ampm = "AM";
+		} else {
+			ampm = "PM";
+		}
+
+		// int pos = textArea.getCaretPosition();
+		return String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour, minute, month, day, year);
+	}
+
+	private String getFileSize(int filesize) {
+		Integer unit = 1024;
+		if (filesize < unit) {
+			return String.format("(%d B)", filesize);
+		}
+		int exp = (int) (Math.log(filesize) / Math.log(unit));
+
+		return String.format("(%.0f %s)", filesize / Math.pow(unit, exp), "KMGTPE".charAt(exp - 1));
 	}
 
 }

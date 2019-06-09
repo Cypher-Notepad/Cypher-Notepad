@@ -398,6 +398,7 @@ public class NotepadUI extends JFrame implements UI {
 	public void erase() {
 		// TODO Auto-generated method stub
 		this.dispose();
+		FileManager.getInstance().saveProperties();
 	}
 	
 	public void saveAsAction() {

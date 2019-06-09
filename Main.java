@@ -12,13 +12,14 @@ public class Main {
 		
 		private void initialize() {
 			//to reduce the first file saving time.
-			FileManager.getInstance();
+			FileManager.getInstance().loadKeys();
 			new CryptoFacade();
 		}
 	};
 	
 	public static void main(String[] args) {
 		/*TODO reduce initializing time */
+		FileManager.getInstance().loadProperties();
 		UIManager.getInstance().setDefaultUI();
 		threadInit.start();
 	}

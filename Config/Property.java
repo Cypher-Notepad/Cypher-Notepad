@@ -1,9 +1,11 @@
 package Config;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
-
-import VO.PropertiesVO;
 
 public class Property {
 	
@@ -18,14 +20,31 @@ public class Property {
 		prop = new Properties();
 	}
 	
+	private static class LazyHolder {
+	    private static final Property INSTANCE = new Property();  
+	}
+	
 	public static Properties getProperties() {
-		if(property == null) {
-			property = new Property();
-		}
-		
-		return property.prop;
+		return LazyHolder.INSTANCE.prop;
 	} 
 	
+	public static void load(InputStream inStream) {
+		try {
+			Property.getProperties().load(inStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+	}
+	
+	public static void store(OutputStream out, String comments) {
+		try {
+			Property.getProperties().store(out, comments);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
@@ -58,13 +77,17 @@ public class Property {
 		}
 	}
 	
-	public static ArrayList<String> getRecentFiles() {
+	public static ArrayList<String> getRecentFilePaths() {
 		ArrayList<String> rcntFiles = new ArrayList<String>();
 		Properties prop = Property.getProperties();
+		System.out.println(prop.getProperty(nOfRcntFiles));
 		
 		int i = 0;
 		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))){
-			rcntFiles.add(prop.getProperty(rcntFile + i));
+			String path = prop.getProperty(rcntFile + i);
+			if(path != null) {
+				rcntFiles.add(prop.getProperty(rcntFile + i));
+			}
 			i++;
 		}
 		

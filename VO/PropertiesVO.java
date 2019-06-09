@@ -13,7 +13,10 @@ public class PropertiesVO {
 	private String[] rcntFilePath;
 	private String[] rcntFileDate;
 	
-	private PropertiesVO() {}
+	private PropertiesVO() {
+		
+		
+	}
 	
 	public static PropertiesVO getInstance() {
 		if(instance == null) {
@@ -23,5 +26,10 @@ public class PropertiesVO {
 		return instance;
 	}
 	
+	/*
+	private setDefaultProperties() {
+		
+	}
+	*/
 	
 }
