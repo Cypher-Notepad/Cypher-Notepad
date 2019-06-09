@@ -253,27 +253,6 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 
-		openMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				final JFileChooser fc = new JFileChooser();
-				int userSelection = fc.showOpenDialog(frame);
-
-				if (userSelection == fc.APPROVE_OPTION) {
-					try {
-						File file = new File(fc.getCurrentDirectory() + "/" + fc.getSelectedFile().getName());
-						String contents = new String(Files.readAllBytes(file.toPath()));
-						textArea.setText(contents);
-
-						fileName = fc.getSelectedFile().getName();
-						directory = fc.getCurrentDirectory();
-						frame.setTitle(fileName + " - Notepad");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-
 		saveMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (directory != null) {

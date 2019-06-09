@@ -78,7 +78,7 @@ public class TestMain extends JFrame {
 					}
 				) {
 					boolean[] columnEditables = new boolean[] {
-						false, true, true, true
+						false, false, false, false
 					};
 					public boolean isCellEditable(int row, int column) {
 						return columnEditables[column];
@@ -206,39 +206,37 @@ public class TestMain extends JFrame {
 				gl_panel.setHorizontalGroup(
 					gl_panel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap(540, Short.MAX_VALUE)
-							.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-							.addGap(57)
-							.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-							.addGap(96))
-						.addGroup(gl_panel.createSequentialGroup()
+							.addContainerGap(525, Short.MAX_VALUE)
+							.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+						.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 							.addGap(98)
 							.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(367, Short.MAX_VALUE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap(874, Short.MAX_VALUE)
-							.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)))
+							.addContainerGap(17, Short.MAX_VALUE))
 				);
 				gl_panel.setVerticalGroup(
 					gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
-									.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel.createSequentialGroup()
-									.addGap(73)
-									.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
-							.addGap(46))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(258, Short.MAX_VALUE))
+									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(gl_panel.createSequentialGroup()
+											.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_panel.createSequentialGroup()
+											.addGap(73)
+											.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+									.addGap(17)
+									.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(29, Short.MAX_VALUE))
 				);
 				panel.setLayout(gl_panel);
 				contentPane.setLayout(gl_contentPane);

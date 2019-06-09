@@ -84,7 +84,7 @@ public class MainUI extends JFrame implements UI{
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, true, true, true
+				false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
