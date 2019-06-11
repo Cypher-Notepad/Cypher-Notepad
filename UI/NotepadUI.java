@@ -61,7 +61,32 @@ public class NotepadUI extends JFrame implements UI {
 	private KFontChooser fc;
 	private KPrinter pt;
 	private KFinder fd;
+	
+	public NotepadUI() {
+		fileName = "Untitled";
+		frame = new JFrame(fileName + " - Notepad");
+		textArea = new JTextArea();
+		savedContext = "";
 
+	}
+	public NotepadUI(File file) {
+		String path;
+		try {
+			path = file.getCanonicalPath();
+			directory = new File(path.substring(0, path.lastIndexOf("\\")));
+			fileName = path.substring(path.lastIndexOf("\\") + 1);
+			MemoVO loadedContent = FileManager.getInstance().loadMemo(path);
+			savedContext = loadedContent.getContent();
+			frame = new JFrame(fileName + " - Notepad");
+			textArea = new JTextArea();
+			textArea.setText(savedContext);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -71,9 +96,11 @@ public class NotepadUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
+		/*
 		fileName = "Untitled";
 		frame = new JFrame(fileName + " - Notepad");
-
+		*/
+		
 		// Bar
 		menuBar = new JMenuBar();
 
@@ -127,8 +154,8 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 
-		textArea = new JTextArea();
-		savedContext = "";
+		//textArea = new JTextArea();
+		//savedContext = "";
 
 		fc = new KFontChooser(this);
 		pt = new KPrinter(textArea);
@@ -251,7 +278,6 @@ public class NotepadUI extends JFrame implements UI {
 						fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
 						frame.setTitle(fileName + " - Notepad");
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}

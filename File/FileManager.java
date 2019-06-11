@@ -136,7 +136,7 @@ public class FileManager {
 	}
 
 	public MemoVO loadMemo(String filename) {
-		filename = filename + EXT_MEMO;
+		//filename = filename + EXT_MEMO;
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
 		if (memo.exists()) {

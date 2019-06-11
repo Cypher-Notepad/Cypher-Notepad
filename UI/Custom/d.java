@@ -36,7 +36,7 @@ import UI.Custom.KButton;
 
 public class d extends JFrame implements UI{
 
-
+	static final long serialVersionUID = 12; 
 	private JPanel contentPane;
 	private JTable table;
 	int mpX, mpY;
@@ -66,7 +66,7 @@ public class d extends JFrame implements UI{
 	public void draw() {
 		// TODO Auto-generated method stub
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
+		setBounds(100, 100, 550, 719);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
@@ -131,8 +131,8 @@ public class d extends JFrame implements UI{
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 		
-		//JButton btnNew = new JButton("New");
-		
+		JButton btnNew = new JButton("New");
+		/*
 		KButton btnNew = new KButton();
 		btnNew.setText("New");
 		btnNew.setFocusPainted(true);
@@ -157,10 +157,10 @@ public class d extends JFrame implements UI{
 			
 		});
 
+		*/
 		
-		
-		//JButton btnOpen = new JButton("Open");
-		
+		JButton btnOpen = new JButton("Open");
+		/*
 		KButton btnOpen = new KButton();
 		btnOpen.setText("Open");
 		btnOpen.setFocusPainted(true);
@@ -176,7 +176,7 @@ public class d extends JFrame implements UI{
 		btnOpen.setForeground(new Color(0xffffff));
 		btnOpen.setkHoverColor(new Color(0xffffff));
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
-
+*/
 		
 		
 		JLabel lblSdf = new JLabel("sdf");
@@ -218,9 +218,9 @@ public class d extends JFrame implements UI{
 			gl_panel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap(540, Short.MAX_VALUE)
-					.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addGap(57)
-					.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addGap(96))
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(98)
@@ -244,8 +244,8 @@ public class d extends JFrame implements UI{
 							.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
 					.addGap(46))
 				.addGroup(gl_panel.createSequentialGroup()
 					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)

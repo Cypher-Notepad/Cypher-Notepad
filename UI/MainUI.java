@@ -9,10 +9,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,6 +33,7 @@ import javax.swing.table.TableColumnModel;
 
 import File.FileManager;
 import UI.Custom.KButton;
+import VO.MemoVO;
 
 public class MainUI extends JFrame implements UI {
 
@@ -57,6 +61,13 @@ public class MainUI extends JFrame implements UI {
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
+		try {
+			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 719);
 		contentPane = new JPanel();
@@ -154,6 +165,15 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.setForeground(new Color(0xffffff));
 		btnOpen.setkHoverColor(new Color(0xffffff));
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
+		btnOpen.addActionListener(e->{
+			JFileChooser fc = new JFileChooser();
+			
+			int response = fc.showOpenDialog(this);
+			if(response == fc.APPROVE_OPTION) {
+				System.out.println(fc.getSelectedFile());
+				UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
+			}
+		});
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
