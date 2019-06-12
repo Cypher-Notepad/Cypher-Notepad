@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -82,9 +83,7 @@ public class MainUI extends JFrame implements UI {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
 				new String[] { "Name", "Date", "Size", "Path" }) {
-			/**
-			 * 
-			 */
+			
 			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] { false, false, false, false };
 
@@ -167,7 +166,7 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
 		btnOpen.addActionListener(e->{
 			JFileChooser fc = new JFileChooser();
-			
+			fc.setFileFilter(new FileNameExtensionFilter("Text File", "txt"));
 			int response = fc.showOpenDialog(this);
 			if(response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());

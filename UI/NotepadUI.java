@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Config.Property;
 import File.FileManager;
@@ -58,7 +59,8 @@ public class NotepadUI extends JFrame implements UI {
 	public File directory;
 	public String savedContext;
 
-	private KFontChooser fc;
+	private JFileChooser fc;
+	private KFontChooser fontChooser;
 	private KPrinter pt;
 	private KFinder fd;
 	
@@ -157,7 +159,9 @@ public class NotepadUI extends JFrame implements UI {
 		//textArea = new JTextArea();
 		//savedContext = "";
 
-		fc = new KFontChooser(this);
+		fc = new JFileChooser();
+		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
+		fontChooser = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
 
@@ -266,7 +270,6 @@ public class NotepadUI extends JFrame implements UI {
 
 		openMenuItem.addActionListener(e -> {
 			if (checkSave()) {
-				JFileChooser fc = new JFileChooser();
 				int response = fc.showOpenDialog(frame);
 				if(response == fc.APPROVE_OPTION) {
 					String selectedPath;
@@ -369,8 +372,8 @@ public class NotepadUI extends JFrame implements UI {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (showFontChooser()) {
-					textArea.setFont(fc.getSelctedFont());
-					textArea.setForeground(fc.getSelectedColor());
+					textArea.setFont(fontChooser.getSelctedFont());
+					textArea.setForeground(fontChooser.getSelectedColor());
 				}
 			}
 		});
@@ -435,8 +438,7 @@ public class NotepadUI extends JFrame implements UI {
 
 	public void saveAsAction() {
 		// finalChooser
-		final JFileChooser fc = new JFileChooser();
-		fc.setSelectedFile(new File("*.txt"));
+		//fc.setSelectedFile(new File("*.txt"));
 
 		int userSelection = fc.showSaveDialog(frame);
 
@@ -464,15 +466,16 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	private boolean showFontChooser() {
-		return fc.showDialog(textArea.getFont(), textArea.getForeground());
+		return fontChooser.showDialog(textArea.getFont(), textArea.getForeground());
 	}
 
 	public boolean checkSave() {
-		if (savedContext != textArea.getText()) {
+		
+		if (!savedContext.equals(textArea.getText())) {
 			Object[] options = { "Save", "Don't Save", "Cancel" };
 
 			int response = JOptionPane.showOptionDialog(frame,
-					"Your work is not saved. Do you want to save changes to Untitled?", "Notepad",
+					"Your work has not been saved. Do you want to save changes to Untitled?", "Notepad",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
 			if (response == JOptionPane.YES_OPTION) {
@@ -488,6 +491,6 @@ public class NotepadUI extends JFrame implements UI {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 }
