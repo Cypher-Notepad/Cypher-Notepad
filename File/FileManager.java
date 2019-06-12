@@ -30,12 +30,22 @@ public class FileManager {
 	private static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
+	private static final int NUM_HEADER_LINE = 9;
+	private static final String HEADER_WARNING = 
+			"####################################################\r\n"
+			+ "## 		      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
+			+ "## Notepad, you can not access this file anymore. ##\r\n"
+			+ "## Please open it with Crypto-Notepad. Do not	  ##\r\n"
+			+ "## modify anything in this file including this    ##\r\n"
+			+ "## message or you will never recover its original ##\r\n"
+			+ "## content.		_LEEDONGGEON1996_	  ##\r\n" 
+			+ "####################################################\r\n";
 	private static FileManager instance = null;
 	private ArrayList<String> keys;
 	// private Properties property;
 
 	private FileManager() {
-		//keys = new ArrayList<String>();
+		// keys = new ArrayList<String>();
 		// property = new Properties();
 		// property = Property.getProperties();
 		// loadKeys();
@@ -91,8 +101,8 @@ public class FileManager {
 				Property.setDefaultProperties();
 				saveProperties();
 			} else {
-				//InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
-				InputStream inStream = new FileInputStream(FILE_NAME_PROP);	
+				// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
+				InputStream inStream = new FileInputStream(FILE_NAME_PROP);
 				Property.load(inStream);
 				inStream.close();
 			}
@@ -110,20 +120,21 @@ public class FileManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
 	public void saveMemo(String filename, MemoVO memo) {
-		//filename = filename + EXT_MEMO;
+		// filename = filename + EXT_MEMO;
 		PrintWriter memoWriter;
 		try {
 			memoWriter = new PrintWriter(new FileWriter(filename));
-			memoWriter.println(String.valueOf(keys.size() - 1));
 
 			// Encrypt.
 			CryptoFacade crypto = new CryptoFacade();
 			crypto.encrypt(memo);
+
+			memoWriter.println(HEADER_WARNING);
+			memoWriter.println(String.valueOf(keys.size() - 1));
 			memoWriter.println(memo.getKey());
 			memoWriter.println(memo.getContent());
 			memoWriter.close();
@@ -136,20 +147,33 @@ public class FileManager {
 	}
 
 	public MemoVO loadMemo(String filename) {
-		//filename = filename + EXT_MEMO;
+		// filename = filename + EXT_MEMO;
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
 		if (memo.exists()) {
 			try {
 				BufferedReader memoReader = new BufferedReader(new FileReader(filename));
-				int idx = Integer.parseInt(memoReader.readLine());
+				if (isEncrypted(memoReader)) {
+					memoReader.readLine();
+					int idx = Integer.parseInt(memoReader.readLine());
 
-				readMemo.setKey(memoReader.readLine());
-				readMemo.setContent(memoReader.readLine());
-				memoReader.close();
-				// Decrypt.
-				new CryptoFacade().decrypt(readMemo, getKey(idx));
-
+					readMemo.setKey(memoReader.readLine());
+					readMemo.setContent(memoReader.readLine());
+					memoReader.close();
+					// Decrypt.
+					new CryptoFacade().decrypt(readMemo, getKey(idx));
+				}
+				else {
+					memoReader.close();
+					memoReader =  new BufferedReader(new FileReader(filename));
+					String content = "";
+					String read = memoReader.readLine();
+					while(read != null) {
+						content += read;
+						read = memoReader.readLine();
+					}
+					readMemo.setContent(content);
+				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -168,6 +192,24 @@ public class FileManager {
 		}
 
 		return readMemo;
+	}
+
+	private Boolean isEncrypted(BufferedReader reader) {
+		String read = "";
+		try {
+			for (int i = 0; i < NUM_HEADER_LINE; i++) {
+				String line = reader.readLine();
+				if (line == null)
+					return false;
+				read += line+"\r\n";
+			}
+			System.out.println(read);
+			if (read.equals(HEADER_WARNING))
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public Object[][] loadRecentFiles() {
