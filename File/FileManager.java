@@ -124,7 +124,6 @@ public class FileManager {
 	}
 
 	public void saveMemo(String filename, MemoVO memo) {
-		// filename = filename + EXT_MEMO;
 		PrintWriter memoWriter;
 		try {
 			memoWriter = new PrintWriter(new FileWriter(filename));

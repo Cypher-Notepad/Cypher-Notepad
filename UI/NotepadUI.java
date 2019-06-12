@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Config.Property;
@@ -98,7 +101,7 @@ public class NotepadUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
-		/*
+        /*
 		fileName = "Untitled";
 		frame = new JFrame(fileName + " - Notepad");
 		*/
@@ -411,11 +414,10 @@ public class NotepadUI extends JFrame implements UI {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(1450, 750);
 		frame.setResizable(true);
 		frame.setVisible(true);
-
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -428,8 +430,8 @@ public class NotepadUI extends JFrame implements UI {
 	@Override
 	public void erase() {
 		// TODO Auto-generated method stub
-		if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to close this window?", "Close Window?",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+		if (checkSave()) {
+			System.out.println("[Frame] Close Window");
 			this.dispose();
 			FileManager.getInstance().saveProperties();
 			System.exit(0);
@@ -444,6 +446,9 @@ public class NotepadUI extends JFrame implements UI {
 
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
+			if(!fileName.endsWith(".txt")) {
+				fileName += ".txt";
+			}
 			directory = fc.getCurrentDirectory();
 			saveMemo();
 
@@ -470,7 +475,6 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public boolean checkSave() {
-		
 		if (!savedContext.equals(textArea.getText())) {
 			Object[] options = { "Save", "Don't Save", "Cancel" };
 
