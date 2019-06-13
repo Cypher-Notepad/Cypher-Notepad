@@ -41,6 +41,7 @@ public class MainUI extends JFrame implements UI {
 
 	private JPanel contentPane;
 	private JTable table;
+	private KButton btnNew, btnOpen, btnX;
 	int mpX, mpY;
 
 	public MainUI() {
@@ -68,9 +69,6 @@ public class MainUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 550, 719);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -81,7 +79,6 @@ public class MainUI extends JFrame implements UI {
 		panel.setBackground(new Color(0x68217A));
 
 		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
 				new String[] { "Name", "Date", "Size", "Path" }) {
 			
@@ -92,19 +89,9 @@ public class MainUI extends JFrame implements UI {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(0).setResizable(false);
 		table.setSelectionBackground(new Color(0x451651));
 		table.setSelectionForeground(new Color(0xffffff));
 		table.setRowHeight(50);
-		table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2) {
-					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
-					Property.addRecentFiles(path);
-					UIManager.getInstance().setUI(new NotepadUI(new File(path)));
-				}
-			}
-		});
 
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -133,7 +120,7 @@ public class MainUI extends JFrame implements UI {
 
 		// JButton btnNew = new JButton("New");
 
-		KButton btnNew = new KButton();
+		btnNew = new KButton();
 		btnNew.setText("New");
 		btnNew.setFocusPainted(true);
 		btnNew.setkAllowGradient(false);
@@ -148,18 +135,11 @@ public class MainUI extends JFrame implements UI {
 		btnNew.setForeground(new Color(0xffffff));
 		btnNew.setkHoverColor(new Color(0xffffff));
 		btnNew.setkHoverForeGround(new Color(0x68217A));
-		btnNew.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				UIManager.getInstance().setUI(new NotepadUI());
-
-			}
-
-		});
+		
 
 		// JButton btnOpen = new JButton("Open");
 
-		KButton btnOpen = new KButton();
+		btnOpen = new KButton();
 		btnOpen.setText("Open");
 		btnOpen.setFocusPainted(true);
 		btnOpen.setkAllowGradient(false);
@@ -174,20 +154,7 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.setForeground(new Color(0xffffff));
 		btnOpen.setkHoverColor(new Color(0xffffff));
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
-		btnOpen.addActionListener(e->{
-			JFileChooser fc = new JFileChooser();
-			fc.setFileFilter(new FileNameExtensionFilter("Text File", "txt"));
-			int response = fc.showOpenDialog(this);
-			if(response == fc.APPROVE_OPTION) {
-				System.out.println(fc.getSelectedFile());
-				try {
-					Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
-			}
-		});
+		
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
@@ -198,7 +165,7 @@ public class MainUI extends JFrame implements UI {
 		lblSdf.setIcon(Icon);
 
 		// JButton btnX = new JButton("X");
-		KButton btnX = new KButton();
+		btnX = new KButton();
 		btnX.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
 		btnX.setMargin(new Insets(1, 1, 1, 1));
 		btnX.setText("X");
@@ -215,13 +182,6 @@ public class MainUI extends JFrame implements UI {
 		btnX.setForeground(new Color(0xffffff));
 		btnX.setkHoverColor(new Color(0xffffff));
 		btnX.setkHoverForeGround(new Color(0x68217A));
-		btnX.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				erase();
-				// System.exit(0);
-			}
-		});
 
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -253,12 +213,49 @@ public class MainUI extends JFrame implements UI {
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
+		
+		addListeners();
 	}
 
 	@Override
 	public void erase() {
 		this.dispose();
 
+	}
+	
+	public void addListeners() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getColumnModel().getColumn(0).setResizable(false);
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
+					Property.addRecentFiles(path);
+					UIManager.getInstance().setUI(new NotepadUI(new File(path)));
+				}
+			}
+		});
+		
+		btnNew.addActionListener(e->UIManager.getInstance().setUI(new NotepadUI()));
+		
+		btnOpen.addActionListener(e->{
+			JFileChooser fc = new JFileChooser();
+			fc.setFileFilter(new FileNameExtensionFilter("Text File", "txt"));
+			int response = fc.showOpenDialog(this);
+			if(response == fc.APPROVE_OPTION) {
+				System.out.println(fc.getSelectedFile());
+				try {
+					Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
+			}
+		});
+		
+		btnX.addActionListener(e->erase());
 	}
 
 }

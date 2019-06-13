@@ -105,13 +105,14 @@ public class NotepadUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+		
 		Properties p = Property.getProperties();
 		Font textFont = new Font(p.getProperty(Property.fontFamily),
 				Integer.parseInt(p.getProperty(Property.fontStyle)),
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 		textArea.setFont(textFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
+
 
 		// Bar
 		menuBar = new JMenuBar();
@@ -122,13 +123,6 @@ public class NotepadUI extends JFrame implements UI {
 		formatMenu = new JMenu("Format");
 		viewMenu = new JMenu("View");
 		helpMenu = new JMenu("Help");
-
-		// menu mnemonic keys
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-		editMenu.setMnemonic(KeyEvent.VK_E);
-		formatMenu.setMnemonic(KeyEvent.VK_O);
-		viewMenu.setMnemonic(KeyEvent.VK_V);
-		helpMenu.setMnemonic(KeyEvent.VK_H);
 
 		// add menu to bar, but not set yet.
 		menuBar.add(fileMenu);
@@ -166,15 +160,87 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 
-		// textArea = new JTextArea();
-		// savedContext = "";
+		// add items to menus
+		fileMenu.add(newMenuItem);
+		fileMenu.add(openMenuItem);
+		fileMenu.add(saveMenuItem);
+		fileMenu.add(saveAsMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(pageSetupMenuItem);
+		fileMenu.add(printMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exitMenuItem);
 
+		editMenu.add(undoMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(cutMenuItem);
+		editMenu.add(copyMenuItem);
+		editMenu.add(pasteMenuItem);
+		editMenu.add(deleteMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(findMenuItem);
+		editMenu.add(findNextMenuItem);
+		editMenu.add(replaceMenuItem);
+		editMenu.add(goToMenuItem);
+		editMenu.addSeparator();
+		editMenu.add(selectAllMenuItem);
+		editMenu.add(timeDateMenuItem);
+
+		formatMenu.add(wordWrapMenuItem);
+		formatMenu.add(fontMenuItem);
+
+		viewMenu.add(statusBarMenuItem);
+
+		helpMenu.add(viewHelpMenuItem);
+		helpMenu.addSeparator();
+		helpMenu.add(aboutNotepadMenuItem);
+
+		// sets it
+		frame.setJMenuBar(menuBar);
+		frame.add(textArea);
+
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		frame.add(scrollPane, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setSize(1450, 750);
+		frame.setResizable(true);
+		frame.setVisible(true);
+
+		new Thread() {
+			public void run() {
+				System.out.println("[Frame] settings()");
+				settings();
+			}
+		}.start();
+	}
+
+	@Override
+	public void erase() {
+		// TODO Auto-generated method stub
+		if (checkSave()) {
+			System.out.println("[Frame] Close Window");
+			this.dispose();
+			FileManager.getInstance().saveProperties();
+			System.exit(0);
+		}
+	}
+
+	public void settings() {
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
 		rp = new KReplacer(textArea);
+		
+		// menu mnemonic keys
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		editMenu.setMnemonic(KeyEvent.VK_E);
+		formatMenu.setMnemonic(KeyEvent.VK_O);
+		viewMenu.setMnemonic(KeyEvent.VK_V);
+		helpMenu.setMnemonic(KeyEvent.VK_H);
 
 		// sub menu accelerators keys
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
@@ -224,45 +290,6 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
-
-		// add items to menus
-		fileMenu.add(newMenuItem);
-		fileMenu.add(openMenuItem);
-		fileMenu.add(saveMenuItem);
-		fileMenu.add(saveAsMenuItem);
-		fileMenu.addSeparator();
-		fileMenu.add(pageSetupMenuItem);
-		fileMenu.add(printMenuItem);
-		fileMenu.addSeparator();
-		fileMenu.add(exitMenuItem);
-
-		editMenu.add(undoMenuItem);
-		editMenu.addSeparator();
-		editMenu.add(cutMenuItem);
-		editMenu.add(copyMenuItem);
-		editMenu.add(pasteMenuItem);
-		editMenu.add(deleteMenuItem);
-		editMenu.addSeparator();
-		editMenu.add(findMenuItem);
-		editMenu.add(findNextMenuItem);
-		editMenu.add(replaceMenuItem);
-		editMenu.add(goToMenuItem);
-		editMenu.addSeparator();
-		editMenu.add(selectAllMenuItem);
-		editMenu.add(timeDateMenuItem);
-
-		formatMenu.add(wordWrapMenuItem);
-		formatMenu.add(fontMenuItem);
-
-		viewMenu.add(statusBarMenuItem);
-
-		helpMenu.add(viewHelpMenuItem);
-		helpMenu.addSeparator();
-		helpMenu.add(aboutNotepadMenuItem);
-
-		// sets it
-		frame.setJMenuBar(menuBar);
-		frame.add(textArea);
 
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
@@ -339,9 +366,9 @@ public class NotepadUI extends JFrame implements UI {
 
 		// findnext
 		findNextMenuItem.addActionListener(fd);
-		
+
 		// replace
-		replaceMenuItem.addActionListener(e->rp.showDialog());
+		replaceMenuItem.addActionListener(e -> rp.showDialog());
 
 		// goto
 		goToMenuItem.setEnabled(false);
@@ -420,15 +447,6 @@ public class NotepadUI extends JFrame implements UI {
 		 * 
 		 */
 
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		frame.add(scrollPane, BorderLayout.CENTER);
-
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.setSize(1450, 750);
-		frame.setResizable(true);
-		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -436,17 +454,7 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
-	}
 
-	@Override
-	public void erase() {
-		// TODO Auto-generated method stub
-		if (checkSave()) {
-			System.out.println("[Frame] Close Window");
-			this.dispose();
-			FileManager.getInstance().saveProperties();
-			System.exit(0);
-		}
 	}
 
 	public boolean saveAsAction() {
@@ -505,8 +513,7 @@ public class NotepadUI extends JFrame implements UI {
 			} else {
 				rtn = false;
 			}
-		}
-		else {
+		} else {
 			rtn = true;
 		}
 		return rtn;
