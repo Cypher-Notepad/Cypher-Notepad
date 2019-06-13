@@ -187,7 +187,7 @@ public class KFinder extends JDialog implements ActionListener {
 				if(findIdx > -1) {
 					textArea.select(findIdx, findIdx + strToFind.length());
 				}
-				else { JOptionPane.showMessageDialog(null, "Nothing"); }
+				else { showNothingMessage(); }
 				
 			}
 			else if(direction.equals("Down")) {
@@ -196,7 +196,7 @@ public class KFinder extends JDialog implements ActionListener {
 				if(findIdx > -1) {
 					textArea.select(findIdx, findIdx + strToFind.length());
 				}
-				else { JOptionPane.showMessageDialog(null, "Nothing"); }
+				else { showNothingMessage(); }
 				
 			}
 
@@ -206,5 +206,9 @@ public class KFinder extends JDialog implements ActionListener {
 			}
 			// JOptionPane.showMessageDialog(null, "Nothing");
 		}
+	}
+	
+	private void showNothingMessage() {
+		JOptionPane.showMessageDialog(null, "Cannot find \"" + strToFind +"\"", "Notepad", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

@@ -41,6 +41,7 @@ import UI.Custom.KFinder;
 import UI.Custom.KFontChooser;
 import UI.Custom.KFontChooser_T;
 import UI.Custom.KPrinter;
+import UI.Custom.KReplacer;
 import VO.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -68,6 +69,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KFontChooser fontChooser;
 	private KPrinter pt;
 	private KFinder fd;
+	private KReplacer rp;
 
 	public NotepadUI() {
 		fileName = "Untitled";
@@ -110,11 +112,6 @@ public class NotepadUI extends JFrame implements UI {
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 		textArea.setFont(textFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
-		// +7ÇØÁà¾ßÇÔ
-
-		/*
-		 * fileName = "Untitled"; frame = new JFrame(fileName + " - Notepad");
-		 */
 
 		// Bar
 		menuBar = new JMenuBar();
@@ -177,6 +174,7 @@ public class NotepadUI extends JFrame implements UI {
 		fontChooser = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
+		rp = new KReplacer(textArea);
 
 		// sub menu accelerators keys
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
@@ -341,7 +339,9 @@ public class NotepadUI extends JFrame implements UI {
 
 		// findnext
 		findNextMenuItem.addActionListener(fd);
+		
 		// replace
+		replaceMenuItem.addActionListener(e->rp.showDialog());
 
 		// goto
 		goToMenuItem.setEnabled(false);

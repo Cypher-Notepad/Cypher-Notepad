@@ -13,6 +13,7 @@ import UI.Custom.KFontChooser;
 
 public class Property {
 	
+	public static String version = "VERSION";
 	public static String language = "LANGUAGE";
 	public static String isEncrypted = "ENCRYPTED";
 	public static String nOfRcntFiles = "NUMBER_OF_RECENT_FILES";
@@ -57,6 +58,7 @@ public class Property {
 	
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
+		prop.setProperty(version, "1.0");
 		prop.setProperty(language, "KOREAN");
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
