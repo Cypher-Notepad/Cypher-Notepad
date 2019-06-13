@@ -449,7 +449,8 @@ public class NotepadUI extends JFrame implements UI {
 		}
 	}
 
-	public void saveAsAction() {
+	public boolean saveAsAction() {
+		boolean rtn = false;
 		int userSelection = fc.showSaveDialog(frame);
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
@@ -462,11 +463,13 @@ public class NotepadUI extends JFrame implements UI {
 			Property.addRecentFiles(directory + "\\" + fileName);
 
 			frame.setTitle(fileName + " - Notepad");
+			rtn = true;
 		} else if (userSelection == fc.CANCEL_OPTION) {
 			System.out.println("Cancel selected!");
 		} else if (userSelection == fc.ERROR_OPTION) {
 			System.out.println("Error detected!");
 		}
+		return rtn;
 	}
 
 	public void saveMemo() {
@@ -482,6 +485,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public boolean checkSave() {
+		boolean rtn = false;
 		if (!savedContext.equals(textArea.getText())) {
 			Object[] options = { "Save", "Don't Save", "Cancel" };
 
@@ -492,16 +496,19 @@ public class NotepadUI extends JFrame implements UI {
 			if (response == JOptionPane.YES_OPTION) {
 				if (directory != null) {
 					saveMemo();
+					rtn = true;
 				} else {
-					saveAsAction();
+					rtn = saveAsAction();
 				}
-				return true;
 			} else if (response == JOptionPane.NO_OPTION) {
-				return true;
+				rtn = true;
 			} else {
-				return false;
+				rtn = false;
 			}
 		}
-		return true;
+		else {
+			rtn = true;
+		}
+		return rtn;
 	}
 }
