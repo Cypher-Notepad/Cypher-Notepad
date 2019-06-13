@@ -1,5 +1,6 @@
 package Config;
 
+import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -11,8 +12,13 @@ public class Property {
 	
 	public static String language = "LANGUAGE";
 	public static String isEncrypted = "ENCRYPTED";
-	public static String nOfRcntFiles = "NUMBER OF RECENT FILES";
+	public static String nOfRcntFiles = "NUMBER_OF_RECENT_FILES";
 	public static String rcntFile = "Recent File";
+	public static String fontFamily = "FONT_FAMILY";
+	public static String fontStyle = "FONT_STYLE";
+	public static String fontSize = "FONT_SIZE";
+	public static String fontColor = "FONT_COLOR";
+			
 	private static Property property = null;
 	private Properties prop;
 	
@@ -51,6 +57,10 @@ public class Property {
 		prop.setProperty(language, "KOREAN");
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
+		prop.setProperty(fontFamily, "Consolas");
+		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
+		prop.setProperty(fontSize, String.valueOf(11));
+		prop.setProperty(fontColor, "0");
 	}
 	
 	public static void addRecentFiles(String newFilePath) {

@@ -36,6 +36,7 @@ import UI.UI;
 
 public class KFontChooser extends JDialog {
 
+	public static final int FONT_SIZE_CORRECTION = 7;
 	private final JPanel contentPanel = new JPanel();
 	private String[] fonts;
 	private String[] styles;
@@ -43,10 +44,10 @@ public class KFontChooser extends JDialog {
 	private Font selectedFont;
 	private Color selectedColor;
 	private boolean isConfirmed;
-	
+
 	private JLabel txtrScriptView;
 	private JList listFont, listStyle, listSize;
-	
+
 	public KFontChooser(JFrame jframe) {
 		fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		styles = new String[] { "Plain", "Italics", "Bold" };
@@ -55,7 +56,7 @@ public class KFontChooser extends JDialog {
 		selectedFont = new Font("Courier", Font.PLAIN, 12);
 
 		this.setTitle("Select Font");
-		
+
 		setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -79,7 +80,6 @@ public class KFontChooser extends JDialog {
 		txtrScriptView.setMinimumSize(new Dimension(txtViewWidth, txtViewHeight));
 		txtrScriptView.setPreferredSize(new Dimension(txtViewWidth, txtViewHeight));
 		txtrScriptView.setMaximumSize(new Dimension(txtViewWidth, txtViewHeight));
-		
 
 		listFont = new JList(fonts);
 		JScrollPane listFontScroll = new JScrollPane(listFont);
@@ -87,7 +87,8 @@ public class KFontChooser extends JDialog {
 		listFont.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listFont.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
-				selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(), selectedFont.getSize());
+				selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(),
+						selectedFont.getSize());
 				txtrScriptView.setFont(selectedFont);
 			}
 		});
@@ -98,7 +99,8 @@ public class KFontChooser extends JDialog {
 		listStyle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listStyle.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
-				selectedFont = new Font(selectedFont.getFamily(), getSelectedStyle(listStyle.getSelectedIndex()), selectedFont.getSize());
+				selectedFont = new Font(selectedFont.getFamily(), getSelectedStyle(listStyle.getSelectedIndex()),
+						selectedFont.getSize());
 				txtrScriptView.setFont(selectedFont);
 			}
 		});
@@ -109,11 +111,12 @@ public class KFontChooser extends JDialog {
 		listSize.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listSize.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
-				selectedFont = new Font(selectedFont.getFamily(), selectedFont.getStyle(), Integer.parseInt(sizes[listSize.getSelectedIndex()]));
+				selectedFont = new Font(selectedFont.getFamily(), selectedFont.getStyle(),
+						Integer.parseInt(sizes[listSize.getSelectedIndex()]) + FONT_SIZE_CORRECTION);
 				txtrScriptView.setFont(selectedFont);
 			}
 		});
-		
+
 		JLabel lblScript = new JLabel("\uC2A4\uD06C\uB9BD\uD2B8");
 		JTextField txtScript = new JTextField();
 		txtScript.setText("AaBbYyZz");
@@ -144,7 +147,7 @@ public class KFontChooser extends JDialog {
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Color color = JColorChooser.showDialog(cc, "Select Color", selectedColor);
-				if(color != null) {
+				if (color != null) {
 					selectedColor = color;
 					txtrScriptView.setForeground(selectedColor);
 				}
@@ -223,29 +226,30 @@ public class KFontChooser extends JDialog {
 
 	public boolean showDialog(Font curFont, Color curColor) {
 		isConfirmed = false;
-		
+
 		selectedFont = curFont;
 		selectedColor = curColor;
 
 		txtrScriptView.setFont(curFont);
 		txtrScriptView.setForeground(curColor);
-		
+
 		listFont.setSelectedValue(curFont.getFamily(), true);
-		
-		String fontName = curFont.getFontName();
-		String curStyle = fontName.substring(fontName.indexOf(".")+1, fontName.length());
-		curStyle = curStyle.replace(curStyle.charAt(0), curStyle.substring(0, 1).toUpperCase().charAt(0));
-		System.out.println(curStyle);
-		listStyle.setSelectedValue(curStyle, true);
-		
-		listSize.setSelectedValue(String.valueOf(curFont.getSize()), true);
-		
+		/*
+		 * String fontName = curFont.getFontName(); String curStyle =
+		 * fontName.substring(fontName.indexOf(".")+1, fontName.length()); curStyle =
+		 * curStyle.replace(curStyle.charAt(0), curStyle.substring(0,
+		 * 1).toUpperCase().charAt(0)); System.out.println(curStyle);
+		 * listStyle.setSelectedValue(curStyle, true);
+		 */
+		listStyle.setSelectedIndex(getStyleIdx(curFont.getStyle()));
+		listSize.setSelectedValue(String.valueOf(curFont.getSize() - FONT_SIZE_CORRECTION), true);
+
 		setVisible(true);
 		return isConfirmed;
 	}
 
 	private int getSelectedStyle(int selectedIdx) {
-		int style = Font.BOLD;
+		int style = Font.PLAIN;
 		if (styles[selectedIdx].equals("Bold")) {
 			style = Font.BOLD;
 		}
@@ -258,11 +262,25 @@ public class KFontChooser extends JDialog {
 		}
 		return style;
 	}
-	
+
+	private int getStyleIdx(int style) {
+		int idx = 0;
+		if (style == Font.PLAIN) {
+			idx = 0;
+		}
+		if (style == Font.ITALIC) {
+			idx = 1;
+		}
+		if (style == Font.BOLD) {
+			idx = 2;
+		}
+		return idx;
+	}
+
 	public Font getSelctedFont() {
 		return selectedFont;
 	}
-	
+
 	public Color getSelectedColor() {
 		return selectedColor;
 	}

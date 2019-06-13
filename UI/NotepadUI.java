@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Calendar;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -66,7 +68,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KFontChooser fontChooser;
 	private KPrinter pt;
 	private KFinder fd;
-	
+
 	public NotepadUI() {
 		fileName = "Untitled";
 		frame = new JFrame(fileName + " - Notepad");
@@ -74,6 +76,7 @@ public class NotepadUI extends JFrame implements UI {
 		savedContext = "";
 
 	}
+
 	public NotepadUI(File file) {
 		String path;
 		try {
@@ -85,13 +88,13 @@ public class NotepadUI extends JFrame implements UI {
 			frame = new JFrame(fileName + " - Notepad");
 			textArea = new JTextArea();
 			textArea.setText(savedContext);
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
@@ -101,11 +104,18 @@ public class NotepadUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
-        /*
-		fileName = "Untitled";
-		frame = new JFrame(fileName + " - Notepad");
-		*/
-		
+		Properties p = Property.getProperties();
+		Font textFont = new Font(p.getProperty(Property.fontFamily),
+				Integer.parseInt(p.getProperty(Property.fontStyle)),
+				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
+		textArea.setFont(textFont);
+		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
+		// +7ÇØÁà¾ßÇÔ
+
+		/*
+		 * fileName = "Untitled"; frame = new JFrame(fileName + " - Notepad");
+		 */
+
 		// Bar
 		menuBar = new JMenuBar();
 
@@ -159,8 +169,8 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 
-		//textArea = new JTextArea();
-		//savedContext = "";
+		// textArea = new JTextArea();
+		// savedContext = "";
 
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
@@ -274,7 +284,7 @@ public class NotepadUI extends JFrame implements UI {
 		openMenuItem.addActionListener(e -> {
 			if (checkSave()) {
 				int response = fc.showOpenDialog(frame);
-				if(response == fc.APPROVE_OPTION) {
+				if (response == fc.APPROVE_OPTION) {
 					String selectedPath;
 					try {
 						selectedPath = fc.getSelectedFile().getCanonicalPath();
@@ -442,7 +452,7 @@ public class NotepadUI extends JFrame implements UI {
 		int userSelection = fc.showSaveDialog(frame);
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
-			if(!fileName.endsWith(".txt")) {
+			if (!fileName.endsWith(".txt")) {
 				fileName += ".txt";
 			}
 			directory = fc.getCurrentDirectory();
