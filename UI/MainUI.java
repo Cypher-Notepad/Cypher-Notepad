@@ -96,6 +96,15 @@ public class MainUI extends JFrame implements UI {
 		table.setSelectionBackground(new Color(0x451651));
 		table.setSelectionForeground(new Color(0xffffff));
 		table.setRowHeight(50);
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
+					Property.addRecentFiles(path);
+					UIManager.getInstance().setUI(new NotepadUI(new File(path)));
+				}
+			}
+		});
 
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
