@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import Config.Property;
 import File.FileManager;
 import UI.Custom.KButton;
 import VO.MemoVO;
@@ -170,6 +171,11 @@ public class MainUI extends JFrame implements UI {
 			int response = fc.showOpenDialog(this);
 			if(response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
+				try {
+					Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
 			}
 		});

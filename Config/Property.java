@@ -55,25 +55,53 @@ public class Property {
 	
 	public static void addRecentFiles(String newFilePath) {
 		Properties prop = Property.getProperties();
+		int i;
 		
-		int i = 0;
-		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))-1) {
+		i = 0;
+		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
+			String path = prop.getProperty(rcntFile + i, null);
+			if(newFilePath.equals(path)) break;
+			i++;
+		}
+		removeRecentFile(i);
+		
+		i = Integer.parseInt(prop.getProperty(nOfRcntFiles))-2;
+		while(i >= 0) {
 			String moveDown = prop.getProperty(rcntFile + i, null);
 			if(moveDown != null) {
 				prop.setProperty(rcntFile + (i+1), moveDown);
 			}
-			i++;
+			i--;
 		}
 		prop.setProperty(rcntFile + "0", newFilePath);
 	}
 	
-	public static void removeRecentFiles() {
+	public static void removeAllRecentFiles() {
 		Properties prop = Property.getProperties();
 		
 		int i = 0;
 		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
 			prop.remove(rcntFile + i);
 			i++;
+		}
+	}
+	
+	public static void removeRecentFile(int idx) {
+		Properties prop = Property.getProperties();
+		
+		int max = Integer.parseInt(prop.getProperty(nOfRcntFiles))-1;
+		if(idx < 0 || idx > max) return;
+		prop.remove(rcntFile + idx);
+		while(idx < max-1) {
+			String moveUp = prop.getProperty(rcntFile + (idx+1), null);
+			if(moveUp != null) {
+				prop.setProperty(rcntFile + idx, moveUp);
+			} 
+			else {
+				prop.remove(rcntFile + idx);
+				break;
+			}
+			idx++;
 		}
 	}
 	

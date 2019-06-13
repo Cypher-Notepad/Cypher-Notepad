@@ -439,11 +439,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void saveAsAction() {
-		// finalChooser
-		//fc.setSelectedFile(new File("*.txt"));
-
 		int userSelection = fc.showSaveDialog(frame);
-
 		if (userSelection == fc.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
 			if(!fileName.endsWith(".txt")) {
