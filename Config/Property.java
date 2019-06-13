@@ -1,5 +1,6 @@
 package Config;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
+
+import UI.Custom.KFontChooser;
 
 public class Property {
 	
@@ -61,6 +64,14 @@ public class Property {
 		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
 		prop.setProperty(fontSize, String.valueOf(11));
 		prop.setProperty(fontColor, "0");
+	}
+	
+	public static void setFont(Font font, Color color) {
+		Properties prop = Property.getProperties();
+		prop.setProperty(fontFamily, font.getFamily());
+		prop.setProperty(fontStyle, String.valueOf(font.getStyle()));
+		prop.setProperty(fontSize, String.valueOf(font.getSize() - KFontChooser.FONT_SIZE_CORRECTION));
+		prop.setProperty(fontColor, String.valueOf(color.getRGB()));
 	}
 	
 	public static void addRecentFiles(String newFilePath) {

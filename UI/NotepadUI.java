@@ -387,6 +387,7 @@ public class NotepadUI extends JFrame implements UI {
 				if (showFontChooser()) {
 					textArea.setFont(fontChooser.getSelctedFont());
 					textArea.setForeground(fontChooser.getSelectedColor());
+					Property.setFont(fontChooser.getSelctedFont(), fontChooser.getSelectedColor());
 				}
 			}
 		});
