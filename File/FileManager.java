@@ -168,7 +168,7 @@ public class FileManager {
 					String content = "";
 					String read = memoReader.readLine();
 					while(read != null) {
-						content += read;
+						content += read + "\r\n";
 						read = memoReader.readLine();
 					}
 					readMemo.setContent(content);
