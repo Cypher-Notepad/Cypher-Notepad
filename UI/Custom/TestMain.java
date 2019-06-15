@@ -98,6 +98,7 @@ public class TestMain extends JFrame {
 				
 				lblRecentFiles = new JLabel("Recent Files");
 				lblRecentFiles.setFont(new Font("Condolas", Font.BOLD, 15));
+				
 				// list.
 				GroupLayout gl_contentPane = new GroupLayout(contentPane);
 				gl_contentPane.setHorizontalGroup(
@@ -105,17 +106,17 @@ public class TestMain extends JFrame {
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
 						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
+							.addGap(10)
 							.addComponent(lblRecentFiles)
-							.addContainerGap(474, Short.MAX_VALUE))
+							.addContainerGap())
 				);
 				gl_contentPane.setVerticalGroup(
 					gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblRecentFiles)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblRecentFiles, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGap(4)
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
 				);
 

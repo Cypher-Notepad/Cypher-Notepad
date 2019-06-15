@@ -64,7 +64,6 @@ public class MainUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		
 		// TODO Auto-generated method stub
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -72,6 +71,7 @@ public class MainUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 		setBounds(100, 100, 550, 719);
+		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
@@ -200,36 +200,45 @@ public class MainUI extends JFrame implements UI {
 		btnX.setkHoverForeGround(new Color(0x68217A));
 
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup().addContainerGap(525, Short.MAX_VALUE).addComponent(btnX,
-						GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup().addGap(98)
-						.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 226,
-												Short.MAX_VALUE)))
-						.addContainerGap(17, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup()
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false).addGroup(gl_panel
-								.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap(525, Short.MAX_VALUE)
+					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(98)
+					.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(17, Short.MAX_VALUE))
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(154)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+					.addGap(161))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_panel.createSequentialGroup().addGap(73).addComponent(lblSdf,
-										GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-						.addGap(17).addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGap(73)
+								.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(29, Short.MAX_VALUE)));
+					.addGap(23)
+					.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(22, Short.MAX_VALUE))
+		);
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
-		
 		addListeners();
 	}
 
@@ -258,7 +267,7 @@ public class MainUI extends JFrame implements UI {
 		
 		btnOpen.addActionListener(e->{
 			JFileChooser fc = new JFileChooser();
-			fc.setFileFilter(new FileNameExtensionFilter("Text File", "txt"));
+			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 			int response = fc.showOpenDialog(this);
 			if(response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());

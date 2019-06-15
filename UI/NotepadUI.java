@@ -204,8 +204,10 @@ public class NotepadUI extends JFrame implements UI {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.setSize(1450, 750);
+		//frame.setSize(1450, 750);
+		frame.setSize(1280, 800);
 		frame.setResizable(true);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
 		new Thread() {
@@ -228,6 +230,14 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void settings() {
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				// call the function, erase().
+				UIManager.getInstance().closeWindow();
+			}
+		});
+		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
@@ -446,14 +456,6 @@ public class NotepadUI extends JFrame implements UI {
 		 * JMenuItem("About Notepad");
 		 * 
 		 */
-
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				// call the function, erase().
-				UIManager.getInstance().closeWindow();
-			}
-		});
 
 	}
 
