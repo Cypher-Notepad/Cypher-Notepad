@@ -40,6 +40,7 @@ import UI.Custom.JFontChooser;
 import UI.Custom.KFinder;
 import UI.Custom.KFontChooser;
 import UI.Custom.KFontChooser_T;
+import UI.Custom.KInformation;
 import UI.Custom.KPrinter;
 import UI.Custom.KReplacer;
 import VO.MemoVO;
@@ -70,6 +71,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KPrinter pt;
 	private KFinder fd;
 	private KReplacer rp;
+	private KInformation info;
 
 	public NotepadUI() {
 		fileName = "Untitled";
@@ -244,6 +246,7 @@ public class NotepadUI extends JFrame implements UI {
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
 		rp = new KReplacer(textArea);
+		info =  new KInformation();
 		
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -431,6 +434,7 @@ public class NotepadUI extends JFrame implements UI {
 		// statusbar
 		// view
 		// about
+		aboutNotepadMenuItem.addActionListener(e->info.showDialog());
 
 		/*
 		 * // menu items newMenuItem = new JMenuItem("New"); openMenuItem = new

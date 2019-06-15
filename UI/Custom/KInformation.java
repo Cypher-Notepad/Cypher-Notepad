@@ -2,62 +2,28 @@ package UI.Custom;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
-import File.FileManager;
-import UI.NotepadUI;
-import UI.UIManager;
-import javax.swing.JButton;
-import javax.swing.JTextPane;
-
-public class TestMain extends JFrame {
+public class KInformation extends JDialog {
 
 	private JPanel contentPane;
-	int mpX, mpY;
-	private JLabel lblRecentFiles;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TestMain frame = new TestMain();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public TestMain() {
+	
+	public KInformation() {
 		// TODO Auto-generated method stub
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -73,44 +39,35 @@ public class TestMain extends JFrame {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
-		String context = 
-				"Crypto-Notepad\n\r" + 
-				"Version 2.0\n\r" + 
-				"";
+		String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
 
 		JButton btnOk = new JButton("OK");
-		
+		btnOk.addActionListener(e->this.dispose());
+
 		JTextPane txtpnCryptonotepadVersion = new JTextPane();
 		txtpnCryptonotepadVersion.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtpnCryptonotepadVersion.setEditable(false);
-		//txtpnCryptonotepadVersion.setForeground(new Color(0x000000));
-		txtpnCryptonotepadVersion.setBackground(new Color(240,240,240));
-		txtpnCryptonotepadVersion.setText("Crypto-Notepad\r\nVersion 2.0\r\nCreated by \"LEEDONGGEON1996\" on Github\r\n\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\nThe source code of this program can be shown on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". It is always welcomed you to press \"Follow\" and \"Star\" button.");
+		// txtpnCryptonotepadVersion.setForeground(new Color(0x000000));
+		txtpnCryptonotepadVersion.setBackground(new Color(240, 240, 240));
+		txtpnCryptonotepadVersion.setText(
+				"Crypto-Notepad\r\nVersion 2.0\r\nCreated by \"LEEDONGGEON1996\" on Github\r\n\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\n\r\nThe source code of this program can be shown on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". It is always welcomed you to press \"Follow\" and \"Star\" button.");
 
 		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(236, Short.MAX_VALUE)
-					.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-					.addGap(228))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addGap(73)
-					.addComponent(txtpnCryptonotepadVersion, GroupLayout.PREFERRED_SIZE, 405, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(72, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
-					.addGap(65)
-					.addComponent(txtpnCryptonotepadVersion, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-					.addComponent(btnOk)
-					.addContainerGap())
-		);
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap(236, Short.MAX_VALUE)
+						.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE).addGap(228))
+				.addGroup(gl_contentPane
+						.createSequentialGroup().addGap(66).addComponent(txtpnCryptonotepadVersion,
+								GroupLayout.PREFERRED_SIZE, 416, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(68, Short.MAX_VALUE)));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
+				.createSequentialGroup()
+				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE).addGap(65)
+				.addComponent(txtpnCryptonotepadVersion, GroupLayout.PREFERRED_SIZE, 372, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE).addComponent(btnOk)
+				.addContainerGap()));
 
 		JLabel lblNewLabel = new JLabel("Crypto Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
@@ -152,7 +109,13 @@ public class TestMain extends JFrame {
 				.addComponent(lblAbout, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
-		setVisible(true);
-
+		
 	}
+	
+	public void showDialog() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		setVisible(true);
+	}
+	
 }
