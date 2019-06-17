@@ -107,14 +107,13 @@ public class NotepadUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		Properties p = Property.getProperties();
 		Font textFont = new Font(p.getProperty(Property.fontFamily),
 				Integer.parseInt(p.getProperty(Property.fontStyle)),
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 		textArea.setFont(textFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
-
 
 		// Bar
 		menuBar = new JMenuBar();
@@ -206,7 +205,7 @@ public class NotepadUI extends JFrame implements UI {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		//frame.setSize(1450, 750);
+		// frame.setSize(1450, 750);
 		frame.setSize(1280, 800);
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
@@ -239,70 +238,14 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
-		
+
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
 		pt = new KPrinter(textArea);
 		fd = new KFinder(textArea);
 		rp = new KReplacer(textArea);
-		info =  new KInformation();
-		
-		// menu mnemonic keys
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-		editMenu.setMnemonic(KeyEvent.VK_E);
-		formatMenu.setMnemonic(KeyEvent.VK_O);
-		viewMenu.setMnemonic(KeyEvent.VK_V);
-		helpMenu.setMnemonic(KeyEvent.VK_H);
-
-		// sub menu accelerators keys
-		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-		printMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
-
-		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
-		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
-		findNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
-		replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
-		goToMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
-		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
-		timeDateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-
-		// sub menu mnemonic keys
-		newMenuItem.setMnemonic(KeyEvent.VK_N);
-		openMenuItem.setMnemonic(KeyEvent.VK_O);
-		saveMenuItem.setMnemonic(KeyEvent.VK_S);
-		saveAsMenuItem.setMnemonic(KeyEvent.VK_A);
-		saveAsMenuItem.setDisplayedMnemonicIndex(5);
-		pageSetupMenuItem.setMnemonic(KeyEvent.VK_U);
-		printMenuItem.setMnemonic(KeyEvent.VK_P);
-		exitMenuItem.setMnemonic(KeyEvent.VK_X);
-
-		undoMenuItem.setMnemonic(KeyEvent.VK_U);
-		cutMenuItem.setMnemonic(KeyEvent.VK_T);
-		copyMenuItem.setMnemonic(KeyEvent.VK_C);
-		pasteMenuItem.setMnemonic(KeyEvent.VK_P);
-		deleteMenuItem.setMnemonic(KeyEvent.VK_L);
-		findMenuItem.setMnemonic(KeyEvent.VK_F);
-		findNextMenuItem.setMnemonic(KeyEvent.VK_N);
-		findNextMenuItem.setDisplayedMnemonicIndex(5);
-		replaceMenuItem.setMnemonic(KeyEvent.VK_R);
-		goToMenuItem.setMnemonic(KeyEvent.VK_G);
-		selectAllMenuItem.setMnemonic(KeyEvent.VK_A);
-		timeDateMenuItem.setMnemonic(KeyEvent.VK_D);
-
-		wordWrapMenuItem.setMnemonic(KeyEvent.VK_W);
-		fontMenuItem.setMnemonic(KeyEvent.VK_F);
-
-		statusBarMenuItem.setMnemonic(KeyEvent.VK_S);
-
-		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
-		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
+		info = new KInformation();
 
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
@@ -434,7 +377,7 @@ public class NotepadUI extends JFrame implements UI {
 		// statusbar
 		// view
 		// about
-		aboutNotepadMenuItem.addActionListener(e->info.showDialog());
+		aboutNotepadMenuItem.addActionListener(e -> info.showDialog());
 
 		/*
 		 * // menu items newMenuItem = new JMenuItem("New"); openMenuItem = new
@@ -460,6 +403,62 @@ public class NotepadUI extends JFrame implements UI {
 		 * JMenuItem("About Notepad");
 		 * 
 		 */
+
+		// menu mnemonic keys
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		editMenu.setMnemonic(KeyEvent.VK_E);
+		formatMenu.setMnemonic(KeyEvent.VK_O);
+		viewMenu.setMnemonic(KeyEvent.VK_V);
+		helpMenu.setMnemonic(KeyEvent.VK_H);
+
+		// sub menu accelerators keys
+		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+		printMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+
+		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
+		findNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+		replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
+		goToMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
+		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
+		timeDateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+
+		// sub menu mnemonic keys
+		newMenuItem.setMnemonic(KeyEvent.VK_N);
+		openMenuItem.setMnemonic(KeyEvent.VK_O);
+		saveMenuItem.setMnemonic(KeyEvent.VK_S);
+		saveAsMenuItem.setMnemonic(KeyEvent.VK_A);
+		saveAsMenuItem.setDisplayedMnemonicIndex(5);
+		pageSetupMenuItem.setMnemonic(KeyEvent.VK_U);
+		printMenuItem.setMnemonic(KeyEvent.VK_P);
+		exitMenuItem.setMnemonic(KeyEvent.VK_X);
+
+		undoMenuItem.setMnemonic(KeyEvent.VK_U);
+		cutMenuItem.setMnemonic(KeyEvent.VK_T);
+		copyMenuItem.setMnemonic(KeyEvent.VK_C);
+		pasteMenuItem.setMnemonic(KeyEvent.VK_P);
+		deleteMenuItem.setMnemonic(KeyEvent.VK_L);
+		findMenuItem.setMnemonic(KeyEvent.VK_F);
+		findNextMenuItem.setMnemonic(KeyEvent.VK_N);
+		findNextMenuItem.setDisplayedMnemonicIndex(5);
+		replaceMenuItem.setMnemonic(KeyEvent.VK_R);
+		goToMenuItem.setMnemonic(KeyEvent.VK_G);
+		selectAllMenuItem.setMnemonic(KeyEvent.VK_A);
+		timeDateMenuItem.setMnemonic(KeyEvent.VK_D);
+
+		wordWrapMenuItem.setMnemonic(KeyEvent.VK_W);
+		fontMenuItem.setMnemonic(KeyEvent.VK_F);
+
+		statusBarMenuItem.setMnemonic(KeyEvent.VK_S);
+
+		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
+		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
 
 	}
 
