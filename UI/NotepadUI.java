@@ -43,6 +43,7 @@ import UI.Custom.KFontChooser_T;
 import UI.Custom.KInformation;
 import UI.Custom.KPrinter;
 import UI.Custom.KReplacer;
+import UI.Custom.KSettings;
 import VO.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -56,7 +57,7 @@ public class NotepadUI extends JFrame implements UI {
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
 			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem, fontMenuItem,
-			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem;
+			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem;
 	// Text area
@@ -72,6 +73,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KFinder fd;
 	private KReplacer rp;
 	private KInformation info;
+	private KSettings st;
 
 	public NotepadUI() {
 		fileName = "Untitled";
@@ -160,6 +162,14 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem = new JMenuItem("View Help");
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
+		settingsMenuItem = new JMenuItem("Settings");
+
+		new Thread() {
+			public void run() {
+				System.out.println("[Frame] settings()");
+				settings();
+			}
+		}.start();
 
 		// add items to menus
 		fileMenu.add(newMenuItem);
@@ -195,6 +205,7 @@ public class NotepadUI extends JFrame implements UI {
 		helpMenu.add(viewHelpMenuItem);
 		helpMenu.addSeparator();
 		helpMenu.add(aboutNotepadMenuItem);
+		helpMenu.add(settingsMenuItem);
 
 		// sets it
 		frame.setJMenuBar(menuBar);
@@ -210,13 +221,6 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-
-		new Thread() {
-			public void run() {
-				System.out.println("[Frame] settings()");
-				settings();
-			}
-		}.start();
 	}
 
 	@Override
@@ -246,6 +250,7 @@ public class NotepadUI extends JFrame implements UI {
 		fd = new KFinder(textArea);
 		rp = new KReplacer(textArea);
 		info = new KInformation();
+		st = new KSettings();
 
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
@@ -305,7 +310,7 @@ public class NotepadUI extends JFrame implements UI {
 		printMenuItem.addActionListener(pt);
 
 		// exit
-		exitMenuItem.addActionListener(e -> erase());
+		exitMenuItem.addActionListener(e -> UIManager.getInstance().closeWindow());
 		//
 		// undo
 		// cut
@@ -378,6 +383,12 @@ public class NotepadUI extends JFrame implements UI {
 		// view
 		// about
 		aboutNotepadMenuItem.addActionListener(e -> info.showDialog());
+		settingsMenuItem.addActionListener(e -> {
+			if(st.showDialog()) {
+				System.out.println("confirmed");
+				st.applySettings();
+			}
+		});
 
 		/*
 		 * // menu items newMenuItem = new JMenuItem("New"); openMenuItem = new

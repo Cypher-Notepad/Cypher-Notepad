@@ -58,6 +58,16 @@ public class Property {
 	
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
+		prop.setProperty(isEncrypted, "TRUE");
+		prop.setProperty(nOfRcntFiles, "5");
+		prop.setProperty(fontFamily, "Consolas");
+		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
+		prop.setProperty(fontSize, String.valueOf(11));
+		prop.setProperty(fontColor, "0");
+	}
+	
+	public static void initialize() {
+		Properties prop = Property.getProperties();
 		prop.setProperty(version, "1.0");
 		prop.setProperty(language, "KOREAN");
 		prop.setProperty(isEncrypted, "TRUE");

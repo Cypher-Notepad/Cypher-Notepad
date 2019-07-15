@@ -23,7 +23,6 @@ import Config.Property;
 import Crypto.CryptoFacade;
 import Crypto.RSAImpl;
 import VO.MemoVO;
-import VO.PropertiesVO;
 
 public class FileManager {
 
@@ -90,6 +89,15 @@ public class FileManager {
 		}
 
 	}
+	
+	public void invalidateKeys() {
+		File keyFile = new File(FILE_NAME_KEYS);
+		if (keyFile.exists()) {
+			System.out.println("Re-create crypto-notepad.keys");
+			keyFile.delete();
+			loadKeys();
+		}
+	}
 
 	public void loadProperties() {
 
@@ -98,7 +106,7 @@ public class FileManager {
 			if (!propFile.exists()) {
 				System.out.println("Create crypto-notepad.properties");
 				propFile.createNewFile();
-				Property.setDefaultProperties();
+				Property.initialize();
 				saveProperties();
 			} else {
 				// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
@@ -262,11 +270,11 @@ public class FileManager {
 	private String getFileSize(int filesize) {
 		Integer unit = 1024;
 		if (filesize < unit) {
-			return String.format("(%d B)", filesize);
+			return String.format("%d Byte", filesize);
 		}
 		int exp = (int) (Math.log(filesize) / Math.log(unit));
 
-		return String.format("(%.0f %s)", filesize / Math.pow(unit, exp), "KMGTPE".charAt(exp - 1));
+		return String.format("%.0f %s", filesize / Math.pow(unit, exp), "KMGTPE".charAt(exp - 1));
 	}
 
 }
