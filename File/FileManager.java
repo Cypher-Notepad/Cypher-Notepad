@@ -191,7 +191,7 @@ public class FileManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
-				readMemo.setContent("[ERROR]" + "\nUnable to decrypt the file." + "\nThe crypto.conf, may be corrupt.");
+				readMemo.setContent("[ERROR]" + "\nUnable to decrypt the file." + "\nThe configuration file may be corrupted.");
 			}
 
 		} else {
