@@ -29,6 +29,10 @@ import javax.swing.border.TitledBorder;
 
 import Config.Property;
 import File.FileManager;
+import Thread.ThreadManager;
+import Thread.TrKsetInitialize;
+import Thread.TrKsetInvalidateFile;
+import Thread.TrKsetLanguage;
 
 public class KSettings extends JDialog {
 
@@ -48,6 +52,10 @@ public class KSettings extends JDialog {
 	private boolean initColored = false;
 
 	private ArrayList<Thread> toDoList;
+	private Thread trLang;
+	private Thread trInval;
+	private Thread trInit;
+	/*
 	private Thread trLang = new Thread() {
 		public void run() {
 			String current = Property.getProperties().getProperty(Property.language);
@@ -68,7 +76,8 @@ public class KSettings extends JDialog {
 			Property.setDefaultProperties();
 		}
 	};
-
+	*/
+	
 	private ActionListener selectedAction = new ActionListener() {
 
 		@Override
@@ -217,9 +226,12 @@ public class KSettings extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (selectInvalidate) {
+					System.out.println("btn - re-clicked");
 					selectInvalidate = false;
 					toDoList.remove(trInval);
 				} else {
+
+					System.out.println("btn - clicked");
 					selectInvalidate = true;
 					toDoList.add(trInval);
 				}
@@ -341,9 +353,17 @@ public class KSettings extends JDialog {
 
 	public boolean showDialog() {
 		isConfirmed = false;
+		trLang = new TrKsetLanguage();
+		trInval = new TrKsetInvalidateFile();
+		trInit = new TrKsetInitialize();
+		
 		selectLang = false;
 		selectInvalidate = false;
 		selectInit = false;
+		btnClicked(btnLang, selectLang);
+		btnClicked(btnInvalidate, selectInvalidate);
+		btnClicked(btnInit, selectInit);
+		
 		toDoList = new ArrayList<Thread>();
 		selectedTimer.start();
 		setVisible(true);
@@ -354,13 +374,18 @@ public class KSettings extends JDialog {
 	public void applySettings() {
 		if(isConfirmed) {
 			for (Thread t : toDoList) {
-				System.out.println("task - KSetting");
-				t.start();
+				if(t.getState() == Thread.State.NEW) {
+					System.out.println("task - KSetting");
+					t.start();
+					ThreadManager.getInstance().addThread(t);
+				}
 			}
 		}
 	}
 
 	private void btnClicked(KButton btn, boolean isSelected) {
+
+		System.out.println("btn listener" + isSelected);
 		if (isSelected) {
 			btn.setBorderPainted(true);
 			btn.setkBackGroundColor(new Color(0xf0f0f0));
