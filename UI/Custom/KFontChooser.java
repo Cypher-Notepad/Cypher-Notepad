@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
@@ -29,10 +28,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import UI.UI;
 
 public class KFontChooser extends JDialog {
 
@@ -234,13 +229,6 @@ public class KFontChooser extends JDialog {
 		txtrScriptView.setForeground(curColor);
 
 		listFont.setSelectedValue(curFont.getFamily(), true);
-		/*
-		 * String fontName = curFont.getFontName(); String curStyle =
-		 * fontName.substring(fontName.indexOf(".")+1, fontName.length()); curStyle =
-		 * curStyle.replace(curStyle.charAt(0), curStyle.substring(0,
-		 * 1).toUpperCase().charAt(0)); System.out.println(curStyle);
-		 * listStyle.setSelectedValue(curStyle, true);
-		 */
 		listStyle.setSelectedIndex(getStyleIdx(curFont.getStyle()));
 		listSize.setSelectedValue(String.valueOf(curFont.getSize() - FONT_SIZE_CORRECTION), true);
 

@@ -2,49 +2,37 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 import Config.Property;
 import File.FileManager;
-import UI.Custom.JFontChooser;
 import UI.Custom.KFinder;
 import UI.Custom.KFontChooser;
-import UI.Custom.KFontChooser_T;
 import UI.Custom.KInformation;
 import UI.Custom.KPrinter;
 import UI.Custom.KReplacer;
@@ -210,10 +198,6 @@ public class NotepadUI extends JFrame implements UI {
 		
 		System.out.println("notepad init finish");
 		
-		/*
-		System.out.println("[Frame] settings()");
-		settings();
-		*/
 	}
 	
 	@Override
@@ -322,19 +306,6 @@ public class NotepadUI extends JFrame implements UI {
 				int response = fc.showOpenDialog(frame);
 				if (response == fc.APPROVE_OPTION) {
 					loadMemo(fc.getSelectedFile());
-					/*
-					String selectedPath;
-					try {
-						selectedPath = fc.getSelectedFile().getCanonicalPath();
-						MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
-						textArea.setText(memo.getContent());
-						directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
-						fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
-						frame.setTitle(fileName + " - Notepad");
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					*/
 				}
 			}
 		});
@@ -442,31 +413,6 @@ public class NotepadUI extends JFrame implements UI {
 				st.applySettings();
 			}
 		});
-
-		/*
-		 * // menu items newMenuItem = new JMenuItem("New"); openMenuItem = new
-		 * JMenuItem("Open..."); saveMenuItem = new JMenuItem("Save"); saveAsMenuItem =
-		 * new JMenuItem("Save As..."); pageSetupMenuItem = new
-		 * JMenuItem("Page Setup..."); printMenuItem = new JMenuItem("Print...");
-		 * exitMenuItem = new JMenuItem("Exit");
-		 * 
-		 * undoMenuItem = new JMenuItem("Undo"); cutMenuItem = new JMenuItem("Cut");
-		 * copyMenuItem = new JMenuItem("Copy"); pasteMenuItem = new JMenuItem("Paste");
-		 * deleteMenuItem = new JMenuItem("Delete"); findMenuItem = new
-		 * JMenuItem("Find..."); findNextMenuItem = new JMenuItem("Find Next");
-		 * replaceMenuItem = new JMenuItem("Replace..."); goToMenuItem = new
-		 * JMenuItem("Go To..."); selectAllMenuItem = new JMenuItem("Select All");
-		 * timeDateMenuItem = new JMenuItem("Time/Date");
-		 * 
-		 * wordWrapMenuItem = new JMenuItem("Word Wrap"); fontMenuItem = new
-		 * JMenuItem("Font...");
-		 * 
-		 * statusBarMenuItem = new JMenuItem("Status Bar");
-		 * 
-		 * viewHelpMenuItem = new JMenuItem("View Help"); aboutNotepadMenuItem = new
-		 * JMenuItem("About Notepad");
-		 * 
-		 */
 
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);

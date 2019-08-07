@@ -1,7 +1,5 @@
 package UI.Custom;
 
-//import com.sun.glass.ui.Size;
-//import com.sun.org.apache.regexp.internal.recompile;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,18 +7,14 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.border.Border;
 
 /**
  *

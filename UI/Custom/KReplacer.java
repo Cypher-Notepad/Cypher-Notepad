@@ -1,10 +1,6 @@
 package UI.Custom;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -42,6 +38,7 @@ public class KReplacer extends JDialog {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		try {
 			KReplacer dialog = new KReplacer(new JTextArea());
@@ -50,7 +47,7 @@ public class KReplacer extends JDialog {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	/**
 	 * Create the dialog.
 	 */

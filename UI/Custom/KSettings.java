@@ -1,9 +1,7 @@
 package UI.Custom;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -27,8 +25,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import Config.Property;
-import File.FileManager;
 import Thread.ThreadManager;
 import Thread.TrKsetInitialize;
 import Thread.TrKsetInvalidateFile;
@@ -55,28 +51,6 @@ public class KSettings extends JDialog {
 	private Thread trLang;
 	private Thread trInval;
 	private Thread trInit;
-	/*
-	private Thread trLang = new Thread() {
-		public void run() {
-			String current = Property.getProperties().getProperty(Property.language);
-			if (current.equals("KOREAN")) {
-				Property.getProperties().setProperty(Property.language, "ENGLISH");
-			} else {
-				Property.getProperties().setProperty(Property.language, "KOREAN");
-			}
-		}
-	};
-	private Thread trInval = new Thread() {
-		public void run() {
-			FileManager.getInstance().invalidateKeys();
-		}
-	};
-	private Thread trInit = new Thread() {
-		public void run() {
-			Property.setDefaultProperties();
-		}
-	};
-	*/
 	
 	private ActionListener selectedAction = new ActionListener() {
 
