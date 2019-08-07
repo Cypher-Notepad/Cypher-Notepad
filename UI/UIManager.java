@@ -1,5 +1,7 @@
 package UI;
 
+import Thread.ThreadManager;
+
 public class UIManager {
 
 	private static UIManager instance = null;
@@ -29,6 +31,7 @@ public class UIManager {
 	}
 	
 	public void closeWindow() {
+		ThreadManager.getInstance().joinThreads();
 		UIStrategy.erase();
 	}
 

@@ -4,19 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
@@ -33,6 +37,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 import Config.Property;
 import File.FileManager;
@@ -101,13 +106,44 @@ public class NotepadUI extends JFrame implements UI {
 		}
 	}
 
-	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
+	public void initializeUI() {
+		//reduce the time for loading.
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+
+		try {
+			String[][] icons = { { "OptionPane.errorIcon", "65581" }, { "OptionPane.warningIcon", "65577" },
+					{ "OptionPane.questionIcon", "65579" }, { "OptionPane.informationIcon", "65583" } };
+			// obtain a method for creating proper icons
+			Method getIconBits = Class.forName("sun.awt.shell.Win32ShellFolder2").getDeclaredMethod("getIconBits",
+					new Class[] { long.class, int.class });
+			getIconBits.setAccessible(true);
+			// calculate scaling factor
+			double dpiScalingFactor = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
+			int icon32Size = (dpiScalingFactor == 1) ? (32)
+					: ((dpiScalingFactor == 1.25) ? (40)
+							: ((dpiScalingFactor == 1.5) ? (45) : ((int) (32 * dpiScalingFactor))));
+			Object[] arguments = { null, icon32Size };
+			for (String[] s : icons) {
+				if (javax.swing.UIManager.get(s[0]) instanceof ImageIcon) {
+					arguments[0] = Long.valueOf(s[1]);
+					// this method is static, so the first argument can be null
+					int[] iconBits = (int[]) getIconBits.invoke(null, arguments);
+					if (iconBits != null) {
+						// create an image from the obtained array
+						BufferedImage img = new BufferedImage(icon32Size, icon32Size, BufferedImage.TYPE_INT_ARGB);
+						img.setRGB(0, 0, icon32Size, icon32Size, iconBits, 0, icon32Size);
+						ImageIcon newIcon = new ImageIcon(img);
+						// override previous icon with the new one
+						javax.swing.UIManager.put(s[0], newIcon);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		Properties p = Property.getProperties();
@@ -164,12 +200,26 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 		settingsMenuItem = new JMenuItem("Settings");
 
+		
 		new Thread() {
 			public void run() {
 				System.out.println("[Frame] settings()");
 				settings();
 			}
 		}.start();
+		
+		System.out.println("notepad init finish");
+		
+		/*
+		System.out.println("[Frame] settings()");
+		settings();
+		*/
+	}
+	
+	@Override
+	public void draw() {
+		// TODO Auto-generated method stub
+		
 
 		// add items to menus
 		fileMenu.add(newMenuItem);
@@ -217,7 +267,7 @@ public class NotepadUI extends JFrame implements UI {
 		frame.add(scrollPane, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		// frame.setSize(1450, 750);
-		frame.setSize(1280, 800);
+		frame.setSize(950, 500);
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -271,6 +321,8 @@ public class NotepadUI extends JFrame implements UI {
 			if (checkSave()) {
 				int response = fc.showOpenDialog(frame);
 				if (response == fc.APPROVE_OPTION) {
+					loadMemo(fc.getSelectedFile());
+					/*
 					String selectedPath;
 					try {
 						selectedPath = fc.getSelectedFile().getCanonicalPath();
@@ -282,6 +334,7 @@ public class NotepadUI extends JFrame implements UI {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
+					*/
 				}
 			}
 		});
@@ -384,7 +437,7 @@ public class NotepadUI extends JFrame implements UI {
 		// about
 		aboutNotepadMenuItem.addActionListener(e -> info.showDialog());
 		settingsMenuItem.addActionListener(e -> {
-			if(st.showDialog()) {
+			if (st.showDialog()) {
 				System.out.println("confirmed");
 				st.applySettings();
 			}
@@ -534,4 +587,19 @@ public class NotepadUI extends JFrame implements UI {
 		}
 		return rtn;
 	}
+	
+	public void loadMemo(File file) {
+		String selectedPath;
+		try {
+			selectedPath = file.getCanonicalPath();
+			MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
+			textArea.setText(memo.getContent());
+			directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
+			fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
+			frame.setTitle(fileName + " - Notepad");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 }

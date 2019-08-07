@@ -35,6 +35,7 @@ import javax.swing.table.TableColumnModel;
 
 import Config.Property;
 import File.FileManager;
+import Thread.ThreadManager;
 import UI.Custom.KButton;
 import VO.MemoVO;
 
@@ -43,6 +44,7 @@ public class MainUI extends JFrame implements UI {
 	private JPanel contentPane;
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
+	private NotepadUI notepadUI;
 	int mpX, mpY;
 
 	public MainUI() {
@@ -60,6 +62,16 @@ public class MainUI extends JFrame implements UI {
 				setLocation(getLocation().x + e.getX() - mpX, getLocation().y + e.getY() - mpY);
 			}
 		});
+
+		Thread prepareNotepad = new Thread() {
+			@Override
+			public void run() {
+				notepadUI = new NotepadUI();
+				notepadUI.initializeUI();
+			}
+		};
+		prepareNotepad.start();
+		ThreadManager.getInstance().addThread(prepareNotepad);
 	}
 
 	@Override
@@ -71,20 +83,21 @@ public class MainUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 		setBounds(100, 100, 550, 719);
+		// setBounds(100, 100, 440, 576);
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		this.setUndecorated(true);
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		
+
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
 
 		table = new JTable();
 		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
 				new String[] { "Name", "Date", "Size", "Path" }) {
-			
+
 			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] { false, false, false, false };
 
@@ -105,30 +118,26 @@ public class MainUI extends JFrame implements UI {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
-		
+
 		JLabel lblRecentFiles = new JLabel("Recent Files");
 		lblRecentFiles.setFont(new Font("Condolas", Font.BOLD, 15));
-		
+
 		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-				.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+						Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup().addGap(10).addComponent(lblRecentFiles)
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
-					.addComponent(lblRecentFiles)
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblRecentFiles, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(4)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE))
-		);
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(lblRecentFiles, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+						.addGap(4)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE)));
 
 		JLabel lblNewLabel = new JLabel("Crypto Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
@@ -151,7 +160,6 @@ public class MainUI extends JFrame implements UI {
 		btnNew.setForeground(new Color(0xffffff));
 		btnNew.setkHoverColor(new Color(0xffffff));
 		btnNew.setkHoverForeGround(new Color(0x68217A));
-		
 
 		// JButton btnOpen = new JButton("Open");
 
@@ -170,7 +178,6 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.setForeground(new Color(0xffffff));
 		btnOpen.setkHoverColor(new Color(0xffffff));
 		btnOpen.setkHoverForeGround(new Color(0x68217A));
-		
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
@@ -200,42 +207,32 @@ public class MainUI extends JFrame implements UI {
 		btnX.setkHoverForeGround(new Color(0x68217A));
 
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap(525, Short.MAX_VALUE)
-					.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(98)
-					.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(17, Short.MAX_VALUE))
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(154)
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
-					.addGap(161))
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(gl_panel.createSequentialGroup()
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup().addContainerGap(525, Short.MAX_VALUE).addComponent(btnX,
+						GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel.createSequentialGroup().addGap(98)
+						.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 356, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(17, Short.MAX_VALUE))
+				.addGroup(gl_panel.createSequentialGroup().addGap(154)
+						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnOpen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnNew, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 235,
+										Short.MAX_VALUE))
+						.addGap(161)));
+		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup().addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false).addGroup(gl_panel
+								.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel.createSequentialGroup()
-								.addGap(73)
-								.addComponent(lblSdf, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-					.addGap(23)
-					.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(22, Short.MAX_VALUE))
-		);
+								.addGroup(gl_panel.createSequentialGroup().addGap(73).addComponent(lblSdf,
+										GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(btnX, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)).addGap(23)
+						.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE).addGap(18)
+						.addComponent(btnOpen, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(22, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 		setVisible(true);
@@ -247,7 +244,7 @@ public class MainUI extends JFrame implements UI {
 		this.dispose();
 
 	}
-	
+
 	public void addListeners() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -255,32 +252,41 @@ public class MainUI extends JFrame implements UI {
 		table.getColumnModel().getColumn(0).setResizable(false);
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if(e.getClickCount() == 2) {
+				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
 					Property.addRecentFiles(path);
-					UIManager.getInstance().setUI(new NotepadUI(new File(path)));
+					// UIManager.getInstance().setUI(new NotepadUI(new File(path)));
+					notepadUI.loadMemo(new File(path));
+					ThreadManager.getInstance().joinThreads();
+					UIManager.getInstance().setUI(notepadUI);
 				}
 			}
 		});
-		
-		btnNew.addActionListener(e->UIManager.getInstance().setUI(new NotepadUI()));
-		
-		btnOpen.addActionListener(e->{
+
+		btnNew.addActionListener(e -> {
+			ThreadManager.getInstance().joinThreads();
+			UIManager.getInstance().setUI(notepadUI);
+		});
+
+		btnOpen.addActionListener(e -> {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 			int response = fc.showOpenDialog(this);
-			if(response == fc.APPROVE_OPTION) {
+			if (response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
 				try {
 					Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
+				//UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
+				notepadUI.loadMemo(fc.getSelectedFile());
+				ThreadManager.getInstance().joinThreads();
+				UIManager.getInstance().setUI(notepadUI);
 			}
 		});
-		
-		btnX.addActionListener(e->erase());
+
+		btnX.addActionListener(e -> UIManager.getInstance().closeWindow());
 	}
 
 }
