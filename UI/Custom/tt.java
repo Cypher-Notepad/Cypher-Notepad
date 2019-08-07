@@ -1,6 +1,8 @@
 package UI.Custom;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -18,12 +20,29 @@ import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
 
-public class KInformation extends JDialog {
+public class tt extends JDialog {
 
 	private JPanel contentPane;
 
-	public KInformation() {
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			tt dialog = new tt();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public tt() {
 		// TODO Auto-generated method stub
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -162,11 +181,4 @@ public class KInformation extends JDialog {
 		contentPane.setLayout(gl_contentPane);
 
 	}
-
-	public void showDialog() {
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		setVisible(true);
-	}
-
 }
