@@ -539,6 +539,7 @@ public class NotepadUI extends JFrame implements UI {
 		try {
 			selectedPath = file.getCanonicalPath();
 			MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
+			savedContext = memo.getContent();
 			textArea.setText(memo.getContent());
 			directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
 			fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
