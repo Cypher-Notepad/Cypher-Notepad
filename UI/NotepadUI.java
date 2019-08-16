@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Properties;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -143,7 +144,9 @@ public class NotepadUI extends JFrame implements UI {
 
 		// Bar
 		menuBar = new JMenuBar();
-
+		menuBar.setBorder(BorderFactory.createLineBorder(Color.white));
+		//textArea.setBorder(BorderFactory.createLineBorder(Color.white));
+		
 		// menu
 		fileMenu = new JMenu("File");
 		editMenu = new JMenu("Edit");
@@ -188,6 +191,7 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 		settingsMenuItem = new JMenuItem("Settings");
 
+		//textArea.setBorder(BorderFactory.createLineBorder(Color.red));
 		
 		new Thread() {
 			public void run() {
@@ -538,6 +542,7 @@ public class NotepadUI extends JFrame implements UI {
 		String selectedPath;
 		try {
 			selectedPath = file.getCanonicalPath();
+			Property.addRecentFiles(selectedPath);
 			MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
 			savedContext = memo.getContent();
 			textArea.setText(memo.getContent());
