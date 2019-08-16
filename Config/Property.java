@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import File.FileManager;
 import UI.Custom.KFontChooser;
 
 public class Property {
@@ -106,6 +107,16 @@ public class Property {
 			i--;
 		}
 		prop.setProperty(rcntFile + "0", newFilePath);
+		
+		//debug
+		i=0;
+		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
+			String path = prop.getProperty(rcntFile + i, null);
+			System.out.println("rcnt File  : " + path);
+			i++;
+		}
+
+		FileManager.getInstance().saveProperties();
 	}
 	
 	public static void removeAllRecentFiles() {
@@ -116,6 +127,8 @@ public class Property {
 			prop.remove(rcntFile + i);
 			i++;
 		}
+
+		FileManager.getInstance().saveProperties();
 	}
 	
 	public static void removeRecentFile(int idx) {
@@ -124,7 +137,7 @@ public class Property {
 		int max = Integer.parseInt(prop.getProperty(nOfRcntFiles))-1;
 		if(idx < 0 || idx > max) return;
 		prop.remove(rcntFile + idx);
-		while(idx < max-1) {
+		while(idx < max) {
 			String moveUp = prop.getProperty(rcntFile + (idx+1), null);
 			if(moveUp != null) {
 				prop.setProperty(rcntFile + idx, moveUp);
@@ -135,6 +148,8 @@ public class Property {
 			}
 			idx++;
 		}
+
+		FileManager.getInstance().saveProperties();
 	}
 	
 	public static ArrayList<String> getRecentFilePaths() {
