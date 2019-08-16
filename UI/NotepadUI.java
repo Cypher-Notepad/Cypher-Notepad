@@ -29,7 +29,6 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
 import Config.Property;
 import File.FileManager;
 import UI.Custom.KFinder;
@@ -83,9 +82,9 @@ public class NotepadUI extends JFrame implements UI {
 			path = file.getCanonicalPath();
 			directory = new File(path.substring(0, path.lastIndexOf("\\")));
 			fileName = path.substring(path.lastIndexOf("\\") + 1);
-			MemoVO loadedContent = FileManager.getInstance().loadMemo(path);
-			savedContext = loadedContent.getContent();
 			frame = new JFrame(fileName + " - Notepad");
+			MemoVO loadedContent = FileManager.getInstance().loadMemo(frame, path);
+			savedContext = loadedContent.getContent();
 			textArea = new JTextArea();
 			textArea.setText(savedContext);
 
@@ -96,7 +95,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void initializeUI() {
-		//reduce the time for loading.
+		// reduce the time for loading.
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
@@ -145,8 +144,8 @@ public class NotepadUI extends JFrame implements UI {
 		// Bar
 		menuBar = new JMenuBar();
 		menuBar.setBorder(BorderFactory.createLineBorder(Color.white));
-		//textArea.setBorder(BorderFactory.createLineBorder(Color.white));
-		
+		// textArea.setBorder(BorderFactory.createLineBorder(Color.white));
+
 		// menu
 		fileMenu = new JMenu("File");
 		editMenu = new JMenu("Edit");
@@ -191,23 +190,22 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem("About Notepad");
 		settingsMenuItem = new JMenuItem("Settings");
 
-		//textArea.setBorder(BorderFactory.createLineBorder(Color.red));
-		
+		// textArea.setBorder(BorderFactory.createLineBorder(Color.red));
+
 		new Thread() {
 			public void run() {
 				System.out.println("[Frame] settings()");
 				settings();
 			}
 		}.start();
-		
+
 		System.out.println("notepad init finish");
-		
+
 	}
-	
+
 	@Override
 	public void draw() {
 		// TODO Auto-generated method stub
-		
 
 		// add items to menus
 		fileMenu.add(newMenuItem);
@@ -537,21 +535,26 @@ public class NotepadUI extends JFrame implements UI {
 		}
 		return rtn;
 	}
-	
-	public void loadMemo(File file) {
+
+	public boolean loadMemo(File file) {
 		String selectedPath;
 		try {
 			selectedPath = file.getCanonicalPath();
 			Property.addRecentFiles(selectedPath);
-			MemoVO memo = FileManager.getInstance().loadMemo(selectedPath);
-			savedContext = memo.getContent();
-			textArea.setText(memo.getContent());
-			directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
-			fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
-			frame.setTitle(fileName + " - Notepad");
+			MemoVO memo = FileManager.getInstance().loadMemo(frame, selectedPath);
+			if (memo != null) {
+				savedContext = memo.getContent();
+				textArea.setText(memo.getContent());
+				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
+				fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
+				frame.setTitle(fileName + " - Notepad");
+				return true;
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		return false;
 	}
 	
+
 }

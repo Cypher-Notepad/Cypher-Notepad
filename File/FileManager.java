@@ -16,10 +16,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.crypto.BadPaddingException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import Config.Property;
 import Crypto.CryptoFacade;
 import Crypto.RSAImpl;
+import UI.NotepadUI;
 import VO.MemoVO;
 
 public class FileManager {
@@ -150,7 +153,7 @@ public class FileManager {
 
 	}
 
-	public MemoVO loadMemo(String filename) {
+	public MemoVO loadMemo(JFrame frame, String filename) {
 		// filename = filename + EXT_MEMO;
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
@@ -188,11 +191,19 @@ public class FileManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
-				readMemo.setContent("[ERROR]" + "\nUnable to decrypt the file." + "\nThe configuration file may be corrupted.");
+				JOptionPane.showMessageDialog(frame, 
+						"[ERROR]" + "\nUnable to decrypt this file." + "\nThe configuration file may be corrupted.", 
+						"Notepad", 
+						JOptionPane.ERROR_MESSAGE);
+				//readMemo.setContent("[ERROR]" + "\nUnable to decrypt the file." + "\nThe configuration file may be corrupted.");
 			}
 
 		} else {
-			readMemo.setContent("[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.");
+			JOptionPane.showMessageDialog(frame, 
+					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", 
+					"Notepad", 
+					JOptionPane.ERROR_MESSAGE);
+			return null;
 		}
 
 		return readMemo;

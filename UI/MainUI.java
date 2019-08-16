@@ -249,11 +249,12 @@ public class MainUI extends JFrame implements UI {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
-					Property.addRecentFiles(path);
-					// UIManager.getInstance().setUI(new NotepadUI(new File(path)));
-					notepadUI.loadMemo(new File(path));
-					ThreadManager.getInstance().joinThreads();
-					UIManager.getInstance().setUI(notepadUI);
+					boolean isLoaded = notepadUI.loadMemo(new File(path));
+					if(isLoaded) {
+						Property.addRecentFiles(path);
+						ThreadManager.getInstance().joinThreads();
+						UIManager.getInstance().setUI(notepadUI);
+					}
 				}
 			}
 		});
@@ -269,15 +270,16 @@ public class MainUI extends JFrame implements UI {
 			int response = fc.showOpenDialog(this);
 			if (response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
-				try {
-					Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
+				if(isLoaded) {
+					try {
+						Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					ThreadManager.getInstance().joinThreads();
+					UIManager.getInstance().setUI(notepadUI);
 				}
-				//UIManager.getInstance().setUI(new NotepadUI(fc.getSelectedFile()));
-				notepadUI.loadMemo(fc.getSelectedFile());
-				ThreadManager.getInstance().joinThreads();
-				UIManager.getInstance().setUI(notepadUI);
 			}
 		});
 
