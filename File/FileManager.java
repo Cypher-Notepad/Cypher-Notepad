@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,14 +32,13 @@ public class FileManager {
 	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
 	private static final int NUM_HEADER_LINE = 9;
-	private static final String HEADER_WARNING = 
-			"####################################################\r\n"
+	private static final String HEADER_WARNING = "####################################################\r\n"
 			+ "## 		      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
 			+ "## Notepad, you can not access this file anymore. ##\r\n"
 			+ "## Please open it with Crypto-Notepad. Do not	  ##\r\n"
 			+ "## modify anything in this file including this    ##\r\n"
 			+ "## message or you will never recover its original ##\r\n"
-			+ "## content.		_LEEDONGGEON1996_	  ##\r\n" 
+			+ "## content.		_LEEDONGGEON1996_	  ##\r\n"
 			+ "####################################################\r\n";
 	private static FileManager instance = null;
 	private ArrayList<String> keys;
@@ -89,7 +89,7 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void invalidateKeys() {
 		File keyFile = new File(FILE_NAME_KEYS);
 		if (keyFile.exists()) {
@@ -141,7 +141,8 @@ public class FileManager {
 			crypto.encrypt(memo);
 
 			memoWriter.println(HEADER_WARNING);
-			memoWriter.println(String.valueOf(keys.size() - 1));
+			memoWriter.println(
+					String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(keys.size() - 1).getBytes())));
 			memoWriter.println(memo.getKey());
 			memoWriter.println(memo.getContent());
 			memoWriter.close();
@@ -162,46 +163,66 @@ public class FileManager {
 				BufferedReader memoReader = new BufferedReader(new FileReader(filename));
 				if (isEncrypted(memoReader)) {
 					memoReader.readLine();
-					int idx = Integer.parseInt(memoReader.readLine());
-
+					String strIdx = memoReader.readLine();
 					readMemo.setKey(memoReader.readLine());
 					readMemo.setContent(memoReader.readLine());
 					memoReader.close();
 					// Decrypt.
+					int idx = Integer.parseInt(new String(Base64.getDecoder().decode(strIdx)));
 					new CryptoFacade().decrypt(readMemo, getKey(idx));
-				}
-				else {
+				} else {
 					memoReader.close();
-					memoReader =  new BufferedReader(new FileReader(filename));
+					memoReader = new BufferedReader(new FileReader(filename));
 					String content = "";
 					String read = memoReader.readLine();
-					while(read != null) {
+					while (read != null) {
 						content += read + "\r\n";
 						read = memoReader.readLine();
 					}
 					readMemo.setContent(content);
 				}
+				
+			//Return null not to be show up notepadUI.
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(
+						frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
+				return null;
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame,
+						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
+			} catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(frame,
+						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame,
+						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
+				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
-				JOptionPane.showMessageDialog(frame, 
-						"[ERROR]" + "\nUnable to decrypt this file." + "\nThe configuration file may be corrupted.", 
-						"Notepad", 
-						JOptionPane.ERROR_MESSAGE);
-				//readMemo.setContent("[ERROR]" + "\nUnable to decrypt the file." + "\nThe configuration file may be corrupted.");
+				JOptionPane.showMessageDialog(frame,
+						"[ERROR]" + "\nUnable to decrypt this file." + "\nThe configuration file may be corrupted."
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(frame,
+						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
+								+ "\nPlease contact developer via email with error name below."
+								+ "\n(E-mail : matth1996@hanmail.net)"
+								+ "\n(Error Name : " + e.getClass().getName() + ")",
+						"Notepad", JOptionPane.ERROR_MESSAGE);
+				return null;
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(frame, 
-					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", 
-					"Notepad", 
+			JOptionPane.showMessageDialog(frame,
+					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", "Notepad",
 					JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -216,7 +237,7 @@ public class FileManager {
 				String line = reader.readLine();
 				if (line == null)
 					return false;
-				read += line+"\r\n";
+				read += line + "\r\n";
 			}
 			System.out.println(read);
 			if (read.equals(HEADER_WARNING))

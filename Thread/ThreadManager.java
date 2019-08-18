@@ -27,9 +27,7 @@ public class ThreadManager {
 		for(Thread t : listTr) {
 			try {
 				t.join();
-				//listTr.remove(t);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
