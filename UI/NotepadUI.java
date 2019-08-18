@@ -3,6 +3,7 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -205,8 +207,11 @@ public class NotepadUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		// TODO Auto-generated method stub
-
+		ImageIcon originIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");	
+		Image originImg = originIcon.getImage();
+		Image changedImg = originImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+		frame.setIconImage(changedImg);
+		
 		// add items to menus
 		fileMenu.add(newMenuItem);
 		fileMenu.add(openMenuItem);

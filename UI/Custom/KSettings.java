@@ -271,7 +271,7 @@ public class KSettings extends JDialog {
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon = new ImageIcon("C:\\Users\\matth\\Desktop\\Untitled_tp.png");
+		ImageIcon originIcon = new ImageIcon("resource\\\\encrypted_white_origin.png");
 		Image originImg = originIcon.getImage();
 		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
