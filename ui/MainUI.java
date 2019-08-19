@@ -77,6 +77,12 @@ public class MainUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		ImageIcon frameIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");	
+		Image originFrameImg = frameIcon.getImage();
+		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+		setIconImage(changedFrameImg);
+		
 		setBounds(100, 100, 550, 719);
 		// setBounds(100, 100, 440, 576);
 		this.setLocationRelativeTo(null);
