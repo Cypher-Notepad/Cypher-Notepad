@@ -1,6 +1,6 @@
-import Crypto.CryptoFacade;
-import File.FileManager;
-import UI.UIManager;
+import crypto.CryptoFacade;
+import file.FileManager;
+import ui.UIManager;
 
 public class Main {
 
