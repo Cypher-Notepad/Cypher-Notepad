@@ -74,6 +74,7 @@ public class NotepadUI extends JFrame implements UI {
 		fileName = "Untitled";
 		frame = new JFrame(fileName + " - Crypto Notepad");
 		textArea = new JTextArea();
+		textArea.setText("");
 		savedContext = "";
 
 	}
@@ -302,6 +303,7 @@ public class NotepadUI extends JFrame implements UI {
 						textArea.setText(null);
 						directory = null;
 						fileName = "Untitled";
+						savedContext = "";
 						frame.setTitle(fileName + " - Crypto Notepad");
 					}
 				}
