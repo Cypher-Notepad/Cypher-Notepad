@@ -182,7 +182,7 @@ public class FileManager {
 					readMemo.setContent(content);
 				}
 				
-			//Return null not to be show up notepadUI.
+			//Return null not to show up notepadUI(= stay MainUI).
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(
 						frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."

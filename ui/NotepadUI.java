@@ -31,6 +31,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import config.Language;
 import config.Property;
 import file.FileManager;
 import ui.custom.KFinder;
@@ -70,8 +71,12 @@ public class NotepadUI extends JFrame implements UI {
 	private KInformation info;
 	private KSettings st;
 
+	private Language lang;
+	
 	public NotepadUI() {
-		fileName = "Untitled";
+		lang = Property.getLanguagePack();
+		
+		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
 		textArea = new JTextArea();
 		textArea.setText("");
@@ -80,6 +85,8 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public NotepadUI(File file) {
+		this();
+		
 		String path;
 		try {
 			path = file.getCanonicalPath();
@@ -150,11 +157,11 @@ public class NotepadUI extends JFrame implements UI {
 		// textArea.setBorder(BorderFactory.createLineBorder(Color.white));
 
 		// menu
-		fileMenu = new JMenu("File");
-		editMenu = new JMenu("Edit");
-		formatMenu = new JMenu("Format");
-		viewMenu = new JMenu("View");
-		helpMenu = new JMenu("Help");
+		fileMenu = new JMenu(lang.mbFile);
+		editMenu = new JMenu(lang.mbEdit);
+		formatMenu = new JMenu(lang.mbFormat);
+		viewMenu = new JMenu(lang.mbView);
+		helpMenu = new JMenu(lang.mbHelp);
 
 		// add menu to bar, but not set yet.
 		menuBar.add(fileMenu);
@@ -164,34 +171,34 @@ public class NotepadUI extends JFrame implements UI {
 		menuBar.add(helpMenu);
 
 		// menu items
-		newMenuItem = new JMenuItem("New");
-		openMenuItem = new JMenuItem("Open...");
-		saveMenuItem = new JMenuItem("Save");
-		saveAsMenuItem = new JMenuItem("Save As...");
-		pageSetupMenuItem = new JMenuItem("Page Setup...");
-		printMenuItem = new JMenuItem("Print...");
-		exitMenuItem = new JMenuItem("Exit");
+		newMenuItem = new JMenuItem(lang.miNew);
+		openMenuItem = new JMenuItem(lang.miOpen);
+		saveMenuItem = new JMenuItem(lang.miSave);
+		saveAsMenuItem = new JMenuItem(lang.miSaveAs);
+		pageSetupMenuItem = new JMenuItem(lang.miPageSet);
+		printMenuItem = new JMenuItem(lang.miPrint);
+		exitMenuItem = new JMenuItem(lang.miExit);
 
-		undoMenuItem = new JMenuItem("Undo");
-		cutMenuItem = new JMenuItem("Cut");
-		copyMenuItem = new JMenuItem("Copy");
-		pasteMenuItem = new JMenuItem("Paste");
-		deleteMenuItem = new JMenuItem("Delete");
-		findMenuItem = new JMenuItem("Find...");
-		findNextMenuItem = new JMenuItem("Find Next");
-		replaceMenuItem = new JMenuItem("Replace...");
-		goToMenuItem = new JMenuItem("Go To...");
-		selectAllMenuItem = new JMenuItem("Select All");
-		timeDateMenuItem = new JMenuItem("Time/Date");
+		undoMenuItem = new JMenuItem(lang.miUndo);
+		cutMenuItem = new JMenuItem(lang.miCut);
+		copyMenuItem = new JMenuItem(lang.miCopy);
+		pasteMenuItem = new JMenuItem(lang.miPaste);
+		deleteMenuItem = new JMenuItem(lang.miDelete);
+		findMenuItem = new JMenuItem(lang.miFind);
+		findNextMenuItem = new JMenuItem(lang.miFindNxt);
+		replaceMenuItem = new JMenuItem(lang.miReplce);
+		goToMenuItem = new JMenuItem(lang.miGoto);
+		selectAllMenuItem = new JMenuItem(lang.miSlctAll);
+		timeDateMenuItem = new JMenuItem(lang.miTimeDate);
 
-		wordWrapMenuItem = new JCheckBoxMenuItem("Word Wrap");
-		fontMenuItem = new JMenuItem("Font...");
+		wordWrapMenuItem = new JCheckBoxMenuItem(lang.miWordWrap);
+		fontMenuItem = new JMenuItem(lang.miFont);
 
-		statusBarMenuItem = new JMenuItem("Status Bar");
+		statusBarMenuItem = new JMenuItem(lang.miStsBar);
 
-		viewHelpMenuItem = new JMenuItem("View Help");
-		aboutNotepadMenuItem = new JMenuItem("About Crypto Notepad");
-		settingsMenuItem = new JMenuItem("Settings");
+		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
+		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
+		settingsMenuItem = new JMenuItem(lang.miSetting);
 
 		// textArea.setBorder(BorderFactory.createLineBorder(Color.red));
 

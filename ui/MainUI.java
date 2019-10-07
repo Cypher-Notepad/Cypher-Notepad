@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import config.Language;
 import config.Property;
 import file.FileManager;
 import thread.ThreadManager;
@@ -40,9 +41,13 @@ public class MainUI extends JFrame implements UI {
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
 	private NotepadUI notepadUI;
+	private Language lang;
 	int mpX, mpY;
 
 	public MainUI() {
+		System.out.println("####got lang");
+		lang = Property.getLanguagePack();
+		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -97,7 +102,7 @@ public class MainUI extends JFrame implements UI {
 
 		table = new JTable();
 		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
-				new String[] { "Name", "Date", "Size", "Path" }) {
+				new String[] { lang.tblName, lang.tblDate, lang.tblSize, lang.tblPath }) {
 
 			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] { false, false, false, false };
@@ -120,7 +125,7 @@ public class MainUI extends JFrame implements UI {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
 
-		JLabel lblRecentFiles = new JLabel("Recent Files");
+		JLabel lblRecentFiles = new JLabel(lang.rcntFiles);
 		lblRecentFiles.setFont(new Font("Condolas", Font.BOLD, 15));
 
 		// list.
@@ -147,7 +152,7 @@ public class MainUI extends JFrame implements UI {
 		// JButton btnNew = new JButton("New");
 
 		btnNew = new KButton();
-		btnNew.setText("New");
+		btnNew.setText(lang.btnNew);
 		btnNew.setFocusPainted(true);
 		btnNew.setkAllowGradient(false);
 		btnNew.setkAllowTab(false);
@@ -165,7 +170,7 @@ public class MainUI extends JFrame implements UI {
 		// JButton btnOpen = new JButton("Open");
 
 		btnOpen = new KButton();
-		btnOpen.setText("Open");
+		btnOpen.setText(lang.btnOpen);
 		btnOpen.setFocusPainted(true);
 		btnOpen.setkAllowGradient(false);
 		btnOpen.setkAllowTab(false);

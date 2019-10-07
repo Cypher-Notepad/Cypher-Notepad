@@ -25,6 +25,7 @@ public class Property {
 			
 	private static Property property = null;
 	private Properties prop;
+	private Language languagePack;
 	
 	private Property() {
 		prop = new Properties();
@@ -36,11 +37,26 @@ public class Property {
 	
 	public static Properties getProperties() {
 		return LazyHolder.INSTANCE.prop;
+	}
+	
+	public static Language getLanguagePack() {
+		return LazyHolder.INSTANCE.languagePack;
 	} 
 	
 	public static void load(InputStream inStream) {
 		try {
 			Property.getProperties().load(inStream);
+			switch(Property.getProperties().getProperty(Property.language)){
+			case "KOREAN":
+				System.out.println("###set lang");
+				LazyHolder.INSTANCE.languagePack = new KoreanPack();
+				break;
+			default:
+				System.out.println("###set lang");
+				LazyHolder.INSTANCE.languagePack = new EnglishPack();
+				break;
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,7 +85,7 @@ public class Property {
 	public static void initialize() {
 		Properties prop = Property.getProperties();
 		prop.setProperty(version, "1.0");
-		prop.setProperty(language, "KOREAN");
+		prop.setProperty(language, "ENGLISH");
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
 		prop.setProperty(fontFamily, "Consolas");

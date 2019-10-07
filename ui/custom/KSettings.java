@@ -25,6 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import config.Property;
 import thread.ThreadManager;
 import thread.TrKsetInitialize;
 import thread.TrKsetInvalidateFile;
@@ -46,6 +47,7 @@ public class KSettings extends JDialog {
 	private boolean langColored = false;
 	private boolean invalColored = false;
 	private boolean initColored = false;
+	private String curLang = null;
 
 	private ArrayList<Thread> toDoList;
 	private Thread trLang;
@@ -177,6 +179,18 @@ public class KSettings extends JDialog {
 				btnClicked(btnLang, selectLang);
 
 			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnLang.setText(" English -> ÇÑ±¹¾î");
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnLang.setText(" Language");
+			}
+			
+			
 		});
 
 		// JButton btnInvalidate = new JButton("New button");
@@ -330,6 +344,8 @@ public class KSettings extends JDialog {
 		trLang = new TrKsetLanguage();
 		trInval = new TrKsetInvalidateFile();
 		trInit = new TrKsetInitialize();
+		
+		curLang = Property.getProperties().getProperty(Property.language);
 		
 		selectLang = false;
 		selectInvalidate = false;
