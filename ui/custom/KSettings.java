@@ -129,25 +129,45 @@ public class KSettings extends JDialog {
 		});
 
 		panelForBtn = new JPanel();
+		
+		JLabel lblSomeFeaturesMay = new JLabel("\u203B Some changes will take effect after restart.");
+		lblSomeFeaturesMay.setHorizontalAlignment(SwingConstants.CENTER);
+		//lblSomeFeaturesMay.setFont(new Font("MS Gothic", Font.PLAIN, 12));
 
 		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(129)
-						.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE).addGap(122)
-						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(127, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(159)
-						.addComponent(panelForBtn, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(159, Short.MAX_VALUE)));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE).addGap(38)
-						.addComponent(panelForBtn, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE).addGroup(gl_contentPane
-								.createParallelGroup(Alignment.BASELINE).addComponent(btnOk).addComponent(btnCancel))
-						.addGap(36)));
+					.addGap(159)
+					.addComponent(panelForBtn, GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(159, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(129)
+					.addComponent(btnOk, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addGap(122)
+					.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(127, Short.MAX_VALUE))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(121)
+					.addComponent(lblSomeFeaturesMay, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(135))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
+					.addGap(38)
+					.addComponent(panelForBtn, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+					.addComponent(lblSomeFeaturesMay)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnOk)
+						.addComponent(btnCancel))
+					.addGap(36))
+		);
 
 		// JButton btnLang = new JButton("New button");
 		btnLang = new KButton();
@@ -171,9 +191,11 @@ public class KSettings extends JDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (selectLang) {
 					selectLang = false;
+					btnLang.setText(" Language");
 					toDoList.remove(trLang);
 				} else {
 					selectLang = true;
+					btnLang.setText(" English -> 한국어");
 					toDoList.add(trLang);
 				}
 				btnClicked(btnLang, selectLang);
@@ -182,12 +204,17 @@ public class KSettings extends JDialog {
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				if(!selectLang) {
 				btnLang.setText(" English -> 한국어");
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnLang.setText(" Language");
+				if(!selectLang) {
+					btnLang.setText(" Language");
+				}
+				
 			}
 			
 			
