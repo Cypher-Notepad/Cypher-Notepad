@@ -1,7 +1,7 @@
 package config;
 
  class KoreanPack extends Language {
-	 /*
+	 
 	 KoreanPack() {
 		// MainUI
 		 String btnNew = "New";
@@ -81,5 +81,5 @@ package config;
 
 		ksNoti = "\u203B \uC77C\uBD80 \uBCC0\uACBD\uC0AC\uD56D\uC740 \uD504\uB85C\uADF8\uB7A8 \uC7AC\uC2DC\uC791 \uD6C4 \uC801\uC6A9\uB429\uB2C8\uB2E4.";
 
-	}*/
+	}
 }

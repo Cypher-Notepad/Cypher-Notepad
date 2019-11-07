@@ -155,10 +155,7 @@ public class KSettings extends JDialog {
 					.addGap(122)
 					.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(127, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(121)
-					.addComponent(lblSomeFeaturesMay, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(135))
+				.addComponent(lblSomeFeaturesMay, GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
