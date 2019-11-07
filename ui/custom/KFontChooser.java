@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -32,7 +34,9 @@ import javax.swing.event.DocumentListener;
 public class KFontChooser extends JDialog {
 
 	public static final int FONT_SIZE_CORRECTION = 7;
+	private static final String TEST_STRING = "AaBbYyZz";
 	private final JPanel contentPanel = new JPanel();
+	private String[] allfonts;
 	private String[] fonts;
 	private String[] styles;
 	private String[] sizes;
@@ -43,8 +47,25 @@ public class KFontChooser extends JDialog {
 	private JLabel txtrScriptView;
 	private JList listFont, listStyle, listSize;
 
+	private ArrayList<String> fontValidation() {
+		//Font test = new Font("Arial", Font.PLAIN, 10);
+		Font test;
+		ArrayList<String> filtered = new ArrayList<String>();
+		
+		for(String fam : allfonts) {
+			test = new Font(fam,Font.PLAIN, 10);
+			if(test.canDisplay('a') && test.canDisplay('가')) {
+
+				filtered.add(fam);
+			}
+		}
+		return filtered;
+	}
+	
 	public KFontChooser(JFrame jframe) {
-		fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+		fonts = new String[] {};
+		fonts = fontValidation().toArray(fonts);
 		styles = new String[] { "Plain", "Italics", "Bold" };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
@@ -69,19 +90,22 @@ public class KFontChooser extends JDialog {
 		txtrScriptView = new JLabel();
 		panel.setLayout(new BorderLayout(0, 0));
 		panel.add(txtrScriptView, BorderLayout.CENTER);
-		txtrScriptView.setText("AaBbYyZz");
+		txtrScriptView.setText(TEST_STRING);
 		int txtViewWidth = txtrScriptView.getParent().getWidth();
 		int txtViewHeight = txtrScriptView.getParent().getHeight();
 		txtrScriptView.setMinimumSize(new Dimension(txtViewWidth, txtViewHeight));
 		txtrScriptView.setPreferredSize(new Dimension(txtViewWidth, txtViewHeight));
 		txtrScriptView.setMaximumSize(new Dimension(txtViewWidth, txtViewHeight));
 
+		//listFont = new JList(fonts);
 		listFont = new JList(fonts);
+		
 		JScrollPane listFontScroll = new JScrollPane(listFont);
 		listFontScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listFont.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listFont.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
+				//derive font로 코드량 줄일수 있을듯
 				selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(),
 						selectedFont.getSize());
 				txtrScriptView.setFont(selectedFont);
@@ -114,7 +138,7 @@ public class KFontChooser extends JDialog {
 
 		JLabel lblScript = new JLabel("\uC2A4\uD06C\uB9BD\uD2B8");
 		JTextField txtScript = new JTextField();
-		txtScript.setText("AaBbYyZz");
+		txtScript.setText(TEST_STRING);
 		txtScript.setColumns(10);
 		txtScript.getDocument().addDocumentListener(new DocumentListener() {
 			private void update() {

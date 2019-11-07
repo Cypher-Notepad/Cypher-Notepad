@@ -1,3 +1,5 @@
+import java.awt.Font;
+
 import crypto.CryptoFacade;
 import file.FileManager;
 import ui.UIManager;

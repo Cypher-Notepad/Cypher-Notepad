@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -78,8 +80,8 @@ public class NotepadUI extends JFrame implements UI {
 		
 		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
+		//textArea = new JTextArea();
 		textArea = new JTextArea();
-		textArea.setText("");
 		savedContext = "";
 
 	}
@@ -111,7 +113,7 @@ public class NotepadUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+		
 		try {
 			String[][] icons = { { "OptionPane.errorIcon", "65581" }, { "OptionPane.warningIcon", "65577" },
 					{ "OptionPane.questionIcon", "65579" }, { "OptionPane.informationIcon", "65583" } };
@@ -200,8 +202,8 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
 		settingsMenuItem = new JMenuItem(lang.miSetting);
 
-		// textArea.setBorder(BorderFactory.createLineBorder(Color.red));
-
+		//리스너가 스레드에서 붙기에 리스너 추가전 UI가 떠서 버튼이 동작안하는 순간이 있음.
+		//스레드를 풀어서 같이 join시키면 UI표시가 지연될 수있음..
 		new Thread() {
 			public void run() {
 				System.out.println("[Frame] settings()");
@@ -270,6 +272,8 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		System.out.println("text FONT: " + textArea.getFont().getFamily());
 	}
 
 	@Override

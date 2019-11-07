@@ -68,6 +68,7 @@ public class MainUI extends JFrame implements UI {
 			public void run() {
 				notepadUI = new NotepadUI();
 				notepadUI.initializeUI();
+				System.out.println("[MainUI] prepareNotepad finish");
 			}
 		};
 		prepareNotepad.start();
