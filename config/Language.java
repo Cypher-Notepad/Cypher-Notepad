@@ -78,7 +78,6 @@ public abstract class Language {
 	public String ksLangHover = " English -> ÇÑ±¹¾î";
 	public String ksInval = "Invalidate every encrypted files";
 	public String ksInit = "Initialize settings";
-	
-	
+	public String ksNoti = "¡Ø Some changes will take effect after restart.";
 	
 }

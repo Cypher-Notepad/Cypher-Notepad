@@ -25,6 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import config.Language;
 import config.Property;
 import thread.ThreadManager;
 import thread.TrKsetInitialize;
@@ -47,8 +48,9 @@ public class KSettings extends JDialog {
 	private boolean langColored = false;
 	private boolean invalColored = false;
 	private boolean initColored = false;
-	private String curLang = null;
-
+	//private String curLang = null;
+	private Language lang;
+	
 	private ArrayList<Thread> toDoList;
 	private Thread trLang;
 	private Thread trInval;
@@ -92,11 +94,15 @@ public class KSettings extends JDialog {
 
 	public KSettings() {
 		// TODO Auto-generated method stub
+		/*
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		*/
+		
+		lang = Property.getLanguagePack();
 
 		selectedBorder = new TitledBorder("Reserved");
 		selectedBorder.setBorder(new LineBorder(Color.BLACK, 3));
@@ -130,9 +136,9 @@ public class KSettings extends JDialog {
 
 		panelForBtn = new JPanel();
 		
-		JLabel lblSomeFeaturesMay = new JLabel("\u203B \uC77C\uBD80 \uBCC0\uACBD\uC0AC\uD56D\uC740 \uD504\uB85C\uADF8\uB7A8 \uC7AC\uC2DC\uC791 \uD6C4 \uC801\uC6A9\uB429\uB2C8\uB2E4.");
+		JLabel lblSomeFeaturesMay = new JLabel(lang.ksNoti);
 		lblSomeFeaturesMay.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSomeFeaturesMay.setFont(new Font("MS Gothic", Font.PLAIN, 12));
+		//lblSomeFeaturesMay.setFont(new Font("MS Gothic", Font.PLAIN, 12));
 
 		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -372,7 +378,7 @@ public class KSettings extends JDialog {
 		trInval = new TrKsetInvalidateFile();
 		trInit = new TrKsetInitialize();
 		
-		curLang = Property.getProperties().getProperty(Property.language);
+		//curLang = Property.getProperties().getProperty(Property.language);
 		
 		selectLang = false;
 		selectInvalidate = false;

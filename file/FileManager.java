@@ -108,12 +108,12 @@ public class FileManager {
 				propFile.createNewFile();
 				Property.initialize();
 				saveProperties();
-			} else {
-				// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
-				InputStream inStream = new FileInputStream(FILE_NAME_PROP);
-				Property.load(inStream);
-				inStream.close();
 			}
+			// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
+			InputStream inStream = new FileInputStream(FILE_NAME_PROP);
+			Property.load(inStream);
+			inStream.close();
+			
 		} catch (IOException e) {
 
 		}
