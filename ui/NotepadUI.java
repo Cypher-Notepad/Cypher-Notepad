@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.MenuSelectionManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
@@ -58,9 +61,11 @@ public class NotepadUI extends JFrame implements UI {
 			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem;
+	
 	// Text area
 	public JTextArea textArea;
-
+	public JScrollPane scrollPane;
+	
 	public String fileName;
 	public File directory;
 	public String savedContext;
@@ -74,6 +79,16 @@ public class NotepadUI extends JFrame implements UI {
 	private KSettings st;
 
 	private Language lang;
+	
+	private MouseAdapter menuBarCloser = new MouseAdapter() {
+		public void mouseClicked(MouseEvent e) {
+			if(!menuBar.hasFocus()) {
+				MenuSelectionManager.defaultManager().clearSelectedPath();
+				//menuBar.getSelectionModel().clearSelection();
+				System.out.println("click!");
+			}
+		}
+	};
 	
 	public NotepadUI() {
 		lang = Property.getLanguagePack();
@@ -152,7 +167,7 @@ public class NotepadUI extends JFrame implements UI {
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 		textArea.setFont(textFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
-
+		
 		// Bar
 		menuBar = new JMenuBar();
 		menuBar.setBorder(BorderFactory.createLineBorder(Color.white));
@@ -262,7 +277,8 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setJMenuBar(menuBar);
 		frame.add(textArea);
 
-		JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane = new JScrollPane(textArea);
+		scrollPane.addMouseListener(menuBarCloser);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
@@ -295,7 +311,14 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
+		
+		//frame.getContentPane().(BorderFactory.createLineBorder(Color.blue,10));
+		//frame.getContentPane().addMouseListener(menuBarCloser);
+		frame.addMouseListener(menuBarCloser);
+		textArea.addMouseListener(menuBarCloser);
+		//scrollPane.addMouseListener(menuBarCloser);
 
+		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
