@@ -61,12 +61,12 @@ public abstract class Language {
 	public String kfiUppLow = "Upper/Lower";
 	
 	//KReplacer
-	public String kreReplce = "Replace : ";
-	public String krebtnReplce = "Replace";
+	public String kreReplce = "Replace";
+	public String krelblReplce = "Replace: ";
 	public String kreReplceAll = "Replace All";
 	
 	//KFontChooser
-	public String kfcFamily = "Family:";
+	public String kfcFamily = "Font Family:";
 	public String kfcStyle = "Style:";
 	public String kfcSize = "Size:";
 	public String kfcView = "View";

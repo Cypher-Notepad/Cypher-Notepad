@@ -129,7 +129,7 @@ public class KReplacer extends JDialog {
 		JButton cancelButton = new JButton(lang.btnCancel);
 		cancelButton.addActionListener(e->setVisible(false));
 		
-		JLabel lblReplace = new JLabel(lang.kreReplce);
+		JLabel lblReplace = new JLabel(lang.krelblReplce);
 		
 		txtToReplace = new JTextField();
 		txtToReplace.setColumns(10);
