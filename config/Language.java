@@ -74,8 +74,8 @@ public abstract class Language {
 	public String kfcColor = "Color";
 
 	//KSettings
-	public String ksLang = " Language";
-	public String ksLangHover = " English -> ÇÑ±¹¾î";
+	public String ksLang = " \uC5B8\uC5B4";
+	public String ksLangHover = " \uC601\uC5B4 -> \uD55C\uAD6D\uC5B4";
 	public String ksInval = "Invalidate every encrypted files";
 	public String ksInit = "Initialize settings";
 	public String ksNoti = "¡Ø Some changes will take effect after restart.";

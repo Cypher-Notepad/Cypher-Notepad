@@ -18,6 +18,10 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import config.Language;
+import config.Property;
+
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
@@ -33,7 +37,10 @@ public class KFinder extends JDialog implements ActionListener {
 	private int findIdx;
 	private int startToFind;
 	private String direction;
-	ButtonGroup bgDirection;
+	private ButtonGroup bgDirection;
+	
+	private Language lang;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -47,27 +54,29 @@ public class KFinder extends JDialog implements ActionListener {
 	 * Create the dialog.
 	 */
 	public KFinder(JTextArea textArea) {
+		lang = Property.getLanguagePack();
+		
 		this.textArea = textArea;
 		findIdx = -1;
 		strToFind = "";
-		setTitle("Find");
+		setTitle(lang.kfiFind);
 		setBounds(100, 100, 594, 223);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
-			findButton = new JButton("Find Next");
+			findButton = new JButton(lang.kfiFindNxt);
 			findButton.addActionListener(this);
 			//okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(findButton);
 		}
 		{
-			cancelButton = new JButton("Cancel");
+			cancelButton = new JButton(lang.btnCancel);
 			//cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(e->setVisible(false));
 		}
 		
-		JLabel lblNewLabel = new JLabel("Find");
+		JLabel lblNewLabel = new JLabel(lang.kfiFind);
 		
 		txtToFind = new JTextField();
 		txtToFind.setColumns(10);
@@ -95,11 +104,11 @@ public class KFinder extends JDialog implements ActionListener {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Direction", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(null, lang.kfiDir, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JRadioButton rdbtnUp = new JRadioButton("Up");
+		JRadioButton rdbtnUp = new JRadioButton(lang.kfiDirUp);
 		rdbtnUp.addActionListener(e->direction = "Up");
-		JRadioButton rdbtnDown = new JRadioButton("Down");
+		JRadioButton rdbtnDown = new JRadioButton(lang.kfiDirDown);
 		rdbtnDown.addActionListener(e->direction = "Down");
 		rdbtnDown.setSelected(true);
 		this.direction = "Down";
@@ -107,7 +116,7 @@ public class KFinder extends JDialog implements ActionListener {
 		bgDirection.add(rdbtnUp);
 		bgDirection.add(rdbtnDown);
 
-		JCheckBox chckbxUpperlower = new JCheckBox("Upper/Lower");
+		JCheckBox chckbxUpperlower = new JCheckBox(lang.kfiUppLow);
 		chckbxUpperlower.setEnabled(false);
 		
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);

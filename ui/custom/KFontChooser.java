@@ -31,6 +31,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import config.Language;
+import config.Property;
+
 public class KFontChooser extends JDialog {
 
 	public static final int FONT_SIZE_CORRECTION = 7;
@@ -46,6 +49,8 @@ public class KFontChooser extends JDialog {
 
 	private JLabel txtrScriptView;
 	private JList listFont, listStyle, listSize;
+	
+	private Language lang;
 
 	private ArrayList<String> fontValidation() {
 		//Font test = new Font("Arial", Font.PLAIN, 10);
@@ -63,13 +68,15 @@ public class KFontChooser extends JDialog {
 	}
 	
 	public KFontChooser(JFrame jframe) {
+		lang = Property.getLanguagePack();
+		
 		allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		fonts = new String[] {};
 		fonts = fontValidation().toArray(fonts);
 		styles = new String[] { "Plain", "Italics", "Bold" };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
-		selectedFont = new Font("Courier", Font.PLAIN, 12);
+		selectedFont = new Font("Dialog", Font.PLAIN, 12);
 
 		this.setTitle("Select Font");
 
@@ -78,14 +85,14 @@ public class KFontChooser extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-		JLabel lblFont = new JLabel("Font:");
+		JLabel lblFont = new JLabel(lang.kfcFamily);
 
-		JLabel lblFontStyle = new JLabel("Style:");
+		JLabel lblFontStyle = new JLabel(lang.kfcStyle);
 
-		JLabel lblFontSize = new JLabel("Size:");
+		JLabel lblFontSize = new JLabel(lang.kfcSize);
 
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "\uBCF4\uAE30", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(null, lang.kfcView, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		txtrScriptView = new JLabel();
 		panel.setLayout(new BorderLayout(0, 0));
@@ -136,7 +143,7 @@ public class KFontChooser extends JDialog {
 			}
 		});
 
-		JLabel lblScript = new JLabel("\uC2A4\uD06C\uB9BD\uD2B8");
+		JLabel lblScript = new JLabel(lang.kfcScript);
 		JTextField txtScript = new JTextField();
 		txtScript.setText(TEST_STRING);
 		txtScript.setColumns(10);
@@ -161,7 +168,7 @@ public class KFontChooser extends JDialog {
 			}
 		});
 
-		JButton btnColor = new JButton("Color");
+		JButton btnColor = new JButton(lang.kfcColor);
 		JColorChooser cc = null;
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -220,7 +227,7 @@ public class KFontChooser extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton(lang.btnOK);
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 				okButton.addActionListener(e -> {
@@ -230,7 +237,7 @@ public class KFontChooser extends JDialog {
 
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton(lang.btnCancel);
 				buttonPane.add(cancelButton);
 				cancelButton.addActionListener(e -> {
 					isConfirmed = false;

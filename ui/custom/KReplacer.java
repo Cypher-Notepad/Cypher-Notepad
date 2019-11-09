@@ -20,6 +20,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import config.Language;
+import config.Property;
+
 public class KReplacer extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -34,6 +37,8 @@ public class KReplacer extends JDialog {
 	private String direction;
 	ButtonGroup bgDirection;
 	private JTextField txtToReplace;
+	
+	private Language lang;
 	
 	/**
 	 * Launch the application.
@@ -53,27 +58,29 @@ public class KReplacer extends JDialog {
 	 */
 	
 	public KReplacer(JTextArea textArea){
+		lang = Property.getLanguagePack();
+		
 		this.textArea = textArea;
 		findIdx = -1;
 		strToFind = "";
 		strToReplace = "";
-		setTitle("Find");
-		setBounds(100, 100, 599, 282);
+		setTitle(lang.kreReplce);
+		setBounds(100, 100, 620, 282);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
-			findButton = new JButton("Find Next");
+			findButton = new JButton(lang.kfiFindNxt);
 			findButton.addActionListener(e->find());
 			//okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(findButton);
 		}
 		{
-			replaceButton = new JButton("Replace");
+			replaceButton = new JButton(lang.kreReplce);
 			replaceButton.addActionListener(e->replace());
 		}
 		
-		JLabel lblNewLabel = new JLabel("Find");
+		JLabel lblNewLabel = new JLabel(lang.kfiFind);
 		
 		txtToFind = new JTextField();
 		txtToFind.setColumns(10);
@@ -101,11 +108,11 @@ public class KReplacer extends JDialog {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Direction", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(null, lang.kfiDir, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JRadioButton rdbtnUp = new JRadioButton("Up");
+		JRadioButton rdbtnUp = new JRadioButton(lang.kfiDirUp);
 		rdbtnUp.addActionListener(e->direction = "Up");
-		JRadioButton rdbtnDown = new JRadioButton("Down");
+		JRadioButton rdbtnDown = new JRadioButton(lang.kfiDirDown);
 		rdbtnDown.addActionListener(e->direction = "Down");
 		rdbtnDown.setSelected(true);
 		this.direction = "Down";
@@ -113,16 +120,16 @@ public class KReplacer extends JDialog {
 		bgDirection.add(rdbtnUp);
 		bgDirection.add(rdbtnDown);
 
-		JCheckBox chckbxUpperlower = new JCheckBox("Upper/Lower");
+		JCheckBox chckbxUpperlower = new JCheckBox(lang.kfiUppLow);
 		chckbxUpperlower.setEnabled(false);
 		
-		JButton replaceAllButton = new JButton("Replace all");
+		JButton replaceAllButton = new JButton(lang.kreReplceAll);
 		replaceAllButton.addActionListener(e->replaceAll());
 		
-		JButton cancelButton = new JButton("Cancel");
+		JButton cancelButton = new JButton(lang.btnCancel);
 		cancelButton.addActionListener(e->setVisible(false));
 		
-		JLabel lblReplace = new JLabel("Replace");
+		JLabel lblReplace = new JLabel(lang.kreReplce);
 		
 		txtToReplace = new JTextField();
 		txtToReplace.setColumns(10);
@@ -309,6 +316,6 @@ public class KReplacer extends JDialog {
 
 	
 	private void showInfoMessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg, "Notepad", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg, "Crypto Notepad", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

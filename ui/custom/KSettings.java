@@ -117,9 +117,9 @@ public class KSettings extends JDialog {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
-		String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
+		//String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
 
-		JButton btnOk = new JButton("OK");
+		JButton btnOk = new JButton(lang.btnOK);
 		btnOk.addActionListener(e -> {
 			System.out.println("OKAy - kSetting");
 			isConfirmed = true;
@@ -127,7 +127,7 @@ public class KSettings extends JDialog {
 			setVisible(false);
 		});
 
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(lang.btnCancel);
 		btnCancel.addActionListener(e -> {
 			isConfirmed = false;
 			selectedTimer.stop();
@@ -174,7 +174,7 @@ public class KSettings extends JDialog {
 
 		// JButton btnLang = new JButton("New button");
 		btnLang = new KButton();
-		btnLang.setText(" Language");
+		btnLang.setText(lang.ksLang);
 		btnLang.setFocusPainted(true);
 		btnLang.setkAllowGradient(false);
 		btnLang.setkAllowTab(false);
@@ -194,11 +194,11 @@ public class KSettings extends JDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (selectLang) {
 					selectLang = false;
-					btnLang.setText(" Language");
+					btnLang.setText(lang.ksLang);
 					toDoList.remove(trLang);
 				} else {
 					selectLang = true;
-					btnLang.setText(" English -> 한국어");
+					btnLang.setText(lang.ksLangHover);
 					toDoList.add(trLang);
 				}
 				btnClicked(btnLang, selectLang);
@@ -208,14 +208,14 @@ public class KSettings extends JDialog {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if(!selectLang) {
-				btnLang.setText(" English -> 한국어");
+				btnLang.setText(lang.ksLangHover);
 				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if(!selectLang) {
-					btnLang.setText(" Language");
+					btnLang.setText(lang.ksLang);
 				}
 				
 			}
@@ -225,7 +225,7 @@ public class KSettings extends JDialog {
 
 		// JButton btnInvalidate = new JButton("New button");
 		btnInvalidate = new KButton();
-		btnInvalidate.setText("  Invalidate every encrypted files");
+		btnInvalidate.setText(lang.ksInval);
 		btnInvalidate.setFocusPainted(true);
 		btnInvalidate.setkAllowGradient(false);
 		btnInvalidate.setkAllowTab(false);
@@ -260,7 +260,7 @@ public class KSettings extends JDialog {
 
 		// JButton btnInit = new JButton("New button");
 		btnInit = new KButton();
-		btnInit.setText(" Initialize settings");
+		btnInit.setText(lang.ksInit);
 		btnInit.setFocusPainted(true);
 		btnInit.setkAllowGradient(false);
 		btnInit.setkAllowTab(false);
