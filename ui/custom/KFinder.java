@@ -59,7 +59,7 @@ public class KFinder extends JDialog implements ActionListener {
 		this.textArea = textArea;
 		findIdx = -1;
 		strToFind = "";
-		setTitle(lang.kfiFind);
+		setTitle(lang.kfiTitle);
 		setBounds(100, 100, 594, 223);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

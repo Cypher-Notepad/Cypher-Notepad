@@ -53,7 +53,8 @@ public abstract class Language {
 	public String miSetting = "Settings";
 	
 	//KFinder
-	public String kfiFind = "Find : ";
+	public String kfiTitle = "Find";
+	public String kfiFind = "Find:";
 	public String kfiFindNxt = "Find Next";
 	public String kfiDir = "Direction";
 	public String kfiDirUp = "Up";
@@ -62,10 +63,11 @@ public abstract class Language {
 	
 	//KReplacer
 	public String kreReplce = "Replace";
-	public String krelblReplce = "Replace: ";
+	public String krelblReplce = "Replace:";
 	public String kreReplceAll = "Replace All";
 	
 	//KFontChooser
+	public String kfcTitle = "Select Font";
 	public String kfcFamily = "Font Family:";
 	public String kfcStyle = "Style:";
 	public String kfcSize = "Size:";

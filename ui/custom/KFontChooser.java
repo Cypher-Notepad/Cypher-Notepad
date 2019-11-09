@@ -51,6 +51,8 @@ public class KFontChooser extends JDialog {
 	private JList listFont, listStyle, listSize;
 	
 	private Language lang;
+	
+	JButton btnColor;
 
 	private ArrayList<String> fontValidation() {
 		//Font test = new Font("Arial", Font.PLAIN, 10);
@@ -78,7 +80,7 @@ public class KFontChooser extends JDialog {
 				"36", "48", "72" };
 		selectedFont = new Font("Dialog", Font.PLAIN, 12);
 
-		this.setTitle("Select Font");
+		this.setTitle(lang.kfcTitle);
 
 		setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
@@ -168,7 +170,8 @@ public class KFontChooser extends JDialog {
 			}
 		});
 
-		JButton btnColor = new JButton(lang.kfcColor);
+		btnColor = new JButton(lang.kfcColor);
+		btnColor.setMinimumSize(new Dimension(86,27));
 		JColorChooser cc = null;
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -181,45 +184,53 @@ public class KFontChooser extends JDialog {
 		});
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addGap(24)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addComponent(lblFont)
-								.addComponent(
-										listFontScroll, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnColor))
-						.addGap(27)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addComponent(lblScript)
-								.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblFontStyle).addComponent(listStyleScroll,
-														GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblFontSize).addComponent(listSizeScroll,
-														GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(txtScript, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 269,
-										Short.MAX_VALUE)
-								.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 269,
-										Short.MAX_VALUE))
-						.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
-				.createSequentialGroup().addGap(22)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblFont)
-						.addComponent(lblFontStyle).addComponent(lblFontSize))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+		gl_contentPanel.setHorizontalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(24)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnColor)
+						.addComponent(lblFont))
+					.addGap(27)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblScript)
+						.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(listStyleScroll, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblFontStyle))
+							.addPreferredGap(ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblFontSize)
+								.addComponent(listSizeScroll, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(txtScript, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_contentPanel.setVerticalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addContainerGap(20, Short.MAX_VALUE)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblFont)
+						.addComponent(lblFontStyle)
+						.addComponent(lblFontSize))
+					.addGap(2)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listStyleScroll, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listSizeScroll, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
-				.addGap(50)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+					.addGap(50)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-								.addGap(39).addComponent(lblScript).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(txtScript, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+							.addGap(39)
+							.addComponent(lblScript)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtScript, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnColor))
-				.addContainerGap(73, Short.MAX_VALUE)));
+					.addContainerGap(109, Short.MAX_VALUE))
+		);
 
 		contentPanel.setLayout(gl_contentPanel);
 		{
@@ -228,6 +239,8 @@ public class KFontChooser extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton(lang.btnOK);
+				//okButton.setMinimumSize(new Dimension(86,27));
+				okButton.setPreferredSize(new Dimension(86,27));
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 				okButton.addActionListener(e -> {
@@ -239,6 +252,7 @@ public class KFontChooser extends JDialog {
 			{
 				JButton cancelButton = new JButton(lang.btnCancel);
 				buttonPane.add(cancelButton);
+				cancelButton.setMinimumSize(new Dimension(86,27));
 				cancelButton.addActionListener(e -> {
 					isConfirmed = false;
 					setVisible(false);

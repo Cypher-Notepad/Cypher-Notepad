@@ -22,7 +22,8 @@ import javax.swing.border.EmptyBorder;
 public class KInformation extends JDialog {
 
 	private JPanel contentPane;
-
+	JButton btnOk;
+	
 	public KInformation() {
 		// TODO Auto-generated method stub
 		try {
@@ -41,7 +42,7 @@ public class KInformation extends JDialog {
 		panel.setBackground(new Color(0x68217A));
 		String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
 
-		JButton btnOk = new JButton("OK");
+		btnOk = new JButton("OK");
 		btnOk.addActionListener(e -> this.dispose());
 
 		JTextPane txtpnCryptonotepadVersion = new JTextPane();
@@ -167,6 +168,7 @@ public class KInformation extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		setVisible(true);
+		
+		System.out.println(btnOk.getSize());
 	}
-
 }

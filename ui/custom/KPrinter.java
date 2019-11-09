@@ -3,9 +3,13 @@ package ui.custom;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.*;
+import java.lang.reflect.Field;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JTextArea;
+
 
 public class KPrinter implements ActionListener, Printable {
 
@@ -13,6 +17,7 @@ public class KPrinter implements ActionListener, Printable {
 
 	public KPrinter(JTextArea textArea) {
 		this.textArea = textArea;
+		
 	}
 
 	public int print(Graphics gx, PageFormat pf, int page) throws PrinterException {
