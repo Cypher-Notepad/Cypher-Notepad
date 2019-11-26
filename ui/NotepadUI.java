@@ -63,7 +63,7 @@ public class NotepadUI extends JFrame implements UI {
 	public JCheckBoxMenuItem wordWrapMenuItem;
 	
 	// Text area
-	public JTextArea textArea;
+	public static JTextArea textArea;
 	public JScrollPane scrollPane;
 	
 	public String fileName;
@@ -443,6 +443,9 @@ public class NotepadUI extends JFrame implements UI {
 					textArea.setFont(fontChooser.getSelctedFont());
 					textArea.setForeground(fontChooser.getSelectedColor());
 					Property.setFont(fontChooser.getSelctedFont(), fontChooser.getSelectedColor());
+					
+					//바로 저장하는게 효율이 맞나?
+					FileManager.getInstance().saveProperties();
 				}
 			}
 		});

@@ -5,15 +5,27 @@ import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
+
 import file.FileManager;
+import ui.NotepadUI;
 import ui.custom.KFontChooser;
 
 public class Property {
-	
+
 	public static String version = "VERSION";
 	public static String language = "LANGUAGE";
 	public static String isEncrypted = "ENCRYPTED";
@@ -23,31 +35,106 @@ public class Property {
 	public static String fontStyle = "FONT_STYLE";
 	public static String fontSize = "FONT_SIZE";
 	public static String fontColor = "FONT_COLOR";
-			
+
 	private static Property property = null;
 	private Properties prop;
+	private PropertyUpdater updater;
 	private Language languagePack;
-	
+
+	private class PropertyUpdater {
+
+		private WatchService ws;
+		private WatchKey watchKey;
+		private Thread updater;
+
+		// make catch-throw clear...
+		public PropertyUpdater() {
+			ws = null;
+			try {
+				ws = FileSystems.getDefault().newWatchService();
+				Path path = Paths.get(FileManager.DIR_NAME);
+				path.register(ws, StandardWatchEventKinds.ENTRY_MODIFY);
+
+				updater = new Thread(() -> {
+					while (true) {
+						try {
+							watchKey = ws.take();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+
+						List<WatchEvent<?>> events = watchKey.pollEvents();
+
+						for (WatchEvent<?> event : events) {
+							Kind<?> kind = event.kind();
+							Path paths = (Path) event.context();
+							System.out.println(paths.toAbsolutePath());
+							if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+								// do something.
+								// 지금 notepadUI의 textarea를 임시로 static설정해서 접근가능하게해놨음
+								// 스레드상으로 ㅁ많이 불안정함 고쳐야함
+								// 또한 FOntchhooser로 부터 확인을 눌러서 폰트를 바꾸면 바로 설정파일에 write하도록 토드를 바꿧는데 효율성따져보기.
+								System.out.println("MODIFIED" + paths.getFileName());
+								if (paths.getFileName().toString().equals(FileManager.FILE_NAME_PROP)) {
+									FileManager.getInstance().loadProperties();
+									applyReloadedProp();
+								}
+							}
+						}
+
+						if (!watchKey.reset()) {
+							try {
+								ws.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+					}
+				});
+			} catch (IOException e) {
+				try {
+					ws.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				e.printStackTrace();
+			}
+
+		}
+
+		public void startUpdater() {
+			updater.start();
+			System.out.println("Updater Start!");
+		}
+
+	}
+
 	private Property() {
 		prop = new Properties();
+
+		updater = new PropertyUpdater();
+		updater.startUpdater();
 	}
-	
+
 	private static class LazyHolder {
-	    private static final Property INSTANCE = new Property();  
+		private static final Property INSTANCE = new Property();
 	}
-	
+
 	public static Properties getProperties() {
 		return LazyHolder.INSTANCE.prop;
 	}
-	
+
 	public static Language getLanguagePack() {
 		return LazyHolder.INSTANCE.languagePack;
-	} 
-	
+	}
+
 	public static void load(InputStream inStream) {
 		try {
 			Property.getProperties().load(inStream);
-			switch(Property.getProperties().getProperty(Property.language)){
+			switch (Property.getProperties().getProperty(Property.language)) {
 			case "KOREAN":
 				System.out.println("###set lang");
 				LazyHolder.INSTANCE.languagePack = new KoreanPack();
@@ -57,13 +144,20 @@ public class Property {
 				LazyHolder.INSTANCE.languagePack = new EnglishPack();
 				break;
 			}
-			
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 			e.printStackTrace();
-		};
+		}
+
 	}
-	
+
 	public static void store(OutputStream out, String comments) {
 		try {
 			Property.getProperties().store(out, comments);
@@ -72,7 +166,7 @@ public class Property {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
 		prop.setProperty(isEncrypted, "TRUE");
@@ -82,7 +176,7 @@ public class Property {
 		prop.setProperty(fontSize, String.valueOf(11));
 		prop.setProperty(fontColor, "0");
 	}
-	
+
 	public static void initialize() {
 		Properties prop = Property.getProperties();
 		prop.setProperty(version, "1.0");
@@ -94,7 +188,7 @@ public class Property {
 		prop.setProperty(fontSize, String.valueOf(11));
 		prop.setProperty(fontColor, "0");
 	}
-	
+
 	public static void setFont(Font font, Color color) {
 		Properties prop = Property.getProperties();
 		prop.setProperty(fontFamily, font.getFamily());
@@ -102,32 +196,43 @@ public class Property {
 		prop.setProperty(fontSize, String.valueOf(font.getSize() - KFontChooser.FONT_SIZE_CORRECTION));
 		prop.setProperty(fontColor, String.valueOf(color.getRGB()));
 	}
-	
+
+	private void applyReloadedProp() {
+		Properties p = Property.getProperties();
+		Font textFont = new Font(p.getProperty(Property.fontFamily),
+				Integer.parseInt(p.getProperty(Property.fontStyle)),
+				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
+
+		NotepadUI.textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
+		NotepadUI.textArea.setFont(textFont);
+	}
+
 	public static void addRecentFiles(String newFilePath) {
 		Properties prop = Property.getProperties();
 		int i;
-		
+
 		i = 0;
-		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
+		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
 			String path = prop.getProperty(rcntFile + i, null);
-			if(newFilePath.equals(path)) break;
+			if (newFilePath.equals(path))
+				break;
 			i++;
 		}
 		removeRecentFile(i);
-		
-		i = Integer.parseInt(prop.getProperty(nOfRcntFiles))-2;
-		while(i >= 0) {
+
+		i = Integer.parseInt(prop.getProperty(nOfRcntFiles)) - 2;
+		while (i >= 0) {
 			String moveDown = prop.getProperty(rcntFile + i, null);
-			if(moveDown != null) {
-				prop.setProperty(rcntFile + (i+1), moveDown);
+			if (moveDown != null) {
+				prop.setProperty(rcntFile + (i + 1), moveDown);
 			}
 			i--;
 		}
 		prop.setProperty(rcntFile + "0", newFilePath);
-		
-		//debug
-		i=0;
-		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
+
+		// debug
+		i = 0;
+		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
 			String path = prop.getProperty(rcntFile + i, null);
 			System.out.println("rcnt File  : " + path);
 			i++;
@@ -135,31 +240,31 @@ public class Property {
 
 		FileManager.getInstance().saveProperties();
 	}
-	
+
 	public static void removeAllRecentFiles() {
 		Properties prop = Property.getProperties();
-		
+
 		int i = 0;
-		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
+		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
 			prop.remove(rcntFile + i);
 			i++;
 		}
 
 		FileManager.getInstance().saveProperties();
 	}
-	
+
 	public static void removeRecentFile(int idx) {
 		Properties prop = Property.getProperties();
-		
-		int max = Integer.parseInt(prop.getProperty(nOfRcntFiles))-1;
-		if(idx < 0 || idx > max) return;
+
+		int max = Integer.parseInt(prop.getProperty(nOfRcntFiles)) - 1;
+		if (idx < 0 || idx > max)
+			return;
 		prop.remove(rcntFile + idx);
-		while(idx < max) {
-			String moveUp = prop.getProperty(rcntFile + (idx+1), null);
-			if(moveUp != null) {
+		while (idx < max) {
+			String moveUp = prop.getProperty(rcntFile + (idx + 1), null);
+			if (moveUp != null) {
 				prop.setProperty(rcntFile + idx, moveUp);
-			} 
-			else {
+			} else {
 				prop.remove(rcntFile + idx);
 				break;
 			}
@@ -168,21 +273,22 @@ public class Property {
 
 		FileManager.getInstance().saveProperties();
 	}
-	
+
 	public static ArrayList<String> getRecentFilePaths() {
 		ArrayList<String> rcntFiles = new ArrayList<String>();
 		Properties prop = Property.getProperties();
 		System.out.println(prop.getProperty(nOfRcntFiles));
-		
+
 		int i = 0;
-		while(i < Integer.parseInt(prop.getProperty(nOfRcntFiles))){
+		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
 			String path = prop.getProperty(rcntFile + i);
-			if(path != null) {
+			if (path != null) {
 				rcntFiles.add(prop.getProperty(rcntFile + i));
 			}
 			i++;
 		}
-		
+
 		return rcntFiles;
 	}
+
 }

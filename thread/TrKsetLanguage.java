@@ -1,6 +1,7 @@
 package thread;
 
 import config.Property;
+import file.FileManager;
 
 public class TrKsetLanguage extends Thread{
 
@@ -12,5 +13,7 @@ public class TrKsetLanguage extends Thread{
 		} else {
 			Property.getProperties().setProperty(Property.language, "KOREAN");
 		}
+		
+		FileManager.getInstance().saveProperties();
 	}
 }

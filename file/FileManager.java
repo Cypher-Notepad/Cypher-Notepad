@@ -28,8 +28,9 @@ import vo.MemoVO;
 
 public class FileManager {
 
-	private static final String FILE_NAME_PROP = "crypto-notepad.properties";
-	private static final String FILE_NAME_KEYS = "crypto-notepad.keys";
+	public static final String DIR_NAME = "etc\\";
+	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
+	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
 	private static final int NUM_HEADER_LINE = 9;
 	private static final String HEADER_WARNING = "####################################################\r\n"
@@ -64,14 +65,20 @@ public class FileManager {
 	}
 
 	public void loadKeys() {
+		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
+		
 		try {
-			File keyFile = new File(FILE_NAME_KEYS);
+			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
 				System.out.println("Create crypto-notepad.keys");
+				File parentDir = keyFile.getParentFile();
+				if(!parentDir.exists()) {
+					parentDir.mkdir();
+				}
 				keyFile.createNewFile();
 			}
 
-			BufferedReader keyReader = new BufferedReader(new FileReader(FILE_NAME_KEYS));
+			BufferedReader keyReader = new BufferedReader(new FileReader(keyFilePath));
 			keys = new ArrayList<String>();
 			String keyLine = null;
 			while ((keyLine = keyReader.readLine()) != null) {
@@ -79,7 +86,7 @@ public class FileManager {
 			}
 			keyReader.close();
 
-			PrintWriter keyWriter = new PrintWriter(new FileWriter(FILE_NAME_KEYS, true));
+			PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
 			keyWriter.println(RSAImpl.getInstance().getPrivateKey());
 			keyWriter.close();
 			keys.add(RSAImpl.getInstance().getPrivateKey());
@@ -91,7 +98,7 @@ public class FileManager {
 	}
 
 	public void invalidateKeys() {
-		File keyFile = new File(FILE_NAME_KEYS);
+		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
 			System.out.println("Re-create crypto-notepad.keys");
 			keyFile.delete();
@@ -100,17 +107,22 @@ public class FileManager {
 	}
 
 	public void loadProperties() {
-
+		String propFilePath = DIR_NAME + FILE_NAME_PROP;
+		
 		try {
-			File propFile = new File(FILE_NAME_PROP);
+			File propFile = new File(propFilePath);
 			if (!propFile.exists()) {
 				System.out.println("Create crypto-notepad.properties");
+				File parentDir = propFile.getParentFile();
+				if(!parentDir.exists()) {
+					parentDir.mkdir();
+				}
 				propFile.createNewFile();
 				Property.initialize();
 				saveProperties();
 			}
 			// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
-			InputStream inStream = new FileInputStream(FILE_NAME_PROP);
+			InputStream inStream = new FileInputStream(propFilePath);
 			Property.load(inStream);
 			inStream.close();
 			
@@ -122,7 +134,7 @@ public class FileManager {
 	public void saveProperties() {
 		OutputStream outStream;
 		try {
-			outStream = new FileOutputStream(FILE_NAME_PROP);
+			outStream = new FileOutputStream(DIR_NAME + FILE_NAME_PROP);
 			Property.store(outStream, "Crypto-notepad User Properties");
 			outStream.close();
 		} catch (IOException e) {
