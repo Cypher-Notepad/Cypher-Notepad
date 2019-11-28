@@ -12,7 +12,6 @@ public class ThreadManager {
 
 	private ThreadManager() {
 		listTr = new ArrayList<Thread>();
-
 	}
 
 	public static ThreadManager getInstance() {

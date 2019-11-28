@@ -65,34 +65,63 @@ public class FileManager {
 	}
 
 	public void loadKeys() {
+		loadKeys(false);
+	}
+	public void loadKeys(boolean reload) {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
-		
+		String keyLine = null;
 		try {
 			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
 				System.out.println("Create crypto-notepad.keys");
 				File parentDir = keyFile.getParentFile();
-				if(!parentDir.exists()) {
+				if (!parentDir.exists()) {
 					parentDir.mkdir();
 				}
 				keyFile.createNewFile();
 			}
 
 			BufferedReader keyReader = new BufferedReader(new FileReader(keyFilePath));
-			keys = new ArrayList<String>();
-			String keyLine = null;
-			while ((keyLine = keyReader.readLine()) != null) {
-				keys.add(keyLine);
+			if (reload) {
+				ArrayList<String> reloaded = new ArrayList<String>();
+				while ((keyLine = keyReader.readLine()) != null) {
+					reloaded.add(keyLine);
+				}
+				if(reloaded.size() > keys.size()) {
+					keys = reloaded;
+				}
+			}
+			else {
+				keys = new ArrayList<String>();
+				while ((keyLine = keyReader.readLine()) != null) {
+					keys.add(keyLine);
+				}
+
+				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
+				keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+				keyWriter.close();
+				keys.add(RSAImpl.getInstance().getPrivateKey());
 			}
 			keyReader.close();
-
-			PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
-			keyWriter.println(RSAImpl.getInstance().getPrivateKey());
-			keyWriter.close();
-			keys.add(RSAImpl.getInstance().getPrivateKey());
-
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void saveKeys() {
+		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
+		PrintWriter keyWriter;
+		
+		try {
+			keyWriter = new PrintWriter(new FileWriter(keyFilePath, false));
+			for(String key : keys) {
+				keyWriter.println(key);
+			}
+			keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+			keyWriter.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -100,21 +129,33 @@ public class FileManager {
 	public void invalidateKeys() {
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
-			System.out.println("Re-create crypto-notepad.keys");
-			keyFile.delete();
-			loadKeys();
+			try {
+				System.out.println("Clear crypto-notepad.keys");
+				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFile, false));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			// System.out.println("Re-create crypto-notepad.keys");
+			// keyFile.delete();
+			// loadKeys();
 		}
 	}
 
 	public void loadProperties() {
+		loadProperties(false);
+	}
+
+	public void loadProperties(boolean reload) {
 		String propFilePath = DIR_NAME + FILE_NAME_PROP;
-		
+
 		try {
 			File propFile = new File(propFilePath);
 			if (!propFile.exists()) {
 				System.out.println("Create crypto-notepad.properties");
 				File parentDir = propFile.getParentFile();
-				if(!parentDir.exists()) {
+				if (!parentDir.exists()) {
 					parentDir.mkdir();
 				}
 				propFile.createNewFile();
@@ -123,9 +164,13 @@ public class FileManager {
 			}
 			// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
 			InputStream inStream = new FileInputStream(propFilePath);
-			Property.load(inStream);
+			if (reload) {
+				Property.reload(inStream);
+			} else {
+				Property.load(inStream);
+			}
 			inStream.close();
-			
+
 		} catch (IOException e) {
 
 		}
@@ -193,8 +238,8 @@ public class FileManager {
 					}
 					readMemo.setContent(content);
 				}
-				
-			//Return null not to show up notepadUI(= stay MainUI).
+
+				// Return null not to show up notepadUI(= stay MainUI).
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(
 						frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
@@ -226,8 +271,8 @@ public class FileManager {
 				JOptionPane.showMessageDialog(frame,
 						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
 								+ "\nPlease contact developer via email with error name below."
-								+ "\n(E-mail : matth1996@hanmail.net)"
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
+								+ "\n(E-mail : matth1996@hanmail.net)" + "\n(Error Name : " + e.getClass().getName()
+								+ ")",
 						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			}

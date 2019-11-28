@@ -39,6 +39,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import config.Language;
 import config.Property;
 import file.FileManager;
+import thread.ThreadManager;
 import ui.custom.KFinder;
 import ui.custom.KFontChooser;
 import ui.custom.KInformation;
@@ -61,11 +62,11 @@ public class NotepadUI extends JFrame implements UI {
 			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem;
-	
+
 	// Text area
-	public static JTextArea textArea;
+	public static JTextArea textArea = new JTextArea();
 	public JScrollPane scrollPane;
-	
+
 	public String fileName;
 	public File directory;
 	public String savedContext;
@@ -79,31 +80,31 @@ public class NotepadUI extends JFrame implements UI {
 	private KSettings st;
 
 	private Language lang;
-	
+
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
-			if(!menuBar.hasFocus()) {
+			if (!menuBar.hasFocus()) {
 				MenuSelectionManager.defaultManager().clearSelectedPath();
-				//menuBar.getSelectionModel().clearSelection();
+				// menuBar.getSelectionModel().clearSelection();
 				System.out.println("click!");
 			}
 		}
 	};
-	
+
 	public NotepadUI() {
 		lang = Property.getLanguagePack();
-		
+
 		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
-		//textArea = new JTextArea();
-		textArea = new JTextArea();
+		// textArea = new JTextArea();
+		// textArea = new JTextArea();
 		savedContext = "";
 
 	}
 
 	public NotepadUI(File file) {
 		this();
-		
+
 		String path;
 		try {
 			path = file.getCanonicalPath();
@@ -128,7 +129,7 @@ public class NotepadUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		try {
 			String[][] icons = { { "OptionPane.errorIcon", "65581" }, { "OptionPane.warningIcon", "65577" },
 					{ "OptionPane.questionIcon", "65579" }, { "OptionPane.informationIcon", "65583" } };
@@ -167,7 +168,7 @@ public class NotepadUI extends JFrame implements UI {
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 		textArea.setFont(textFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
-		
+
 		// Bar
 		menuBar = new JMenuBar();
 		menuBar.setBorder(BorderFactory.createLineBorder(Color.white));
@@ -217,12 +218,13 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
 		settingsMenuItem = new JMenuItem(lang.miSetting);
 
-		//리스너가 스레드에서 붙기에 리스너 추가전 UI가 떠서 버튼이 동작안하는 순간이 있음.
-		//스레드를 풀어서 같이 join시키면 UI표시가 지연될 수있음..
+		// 리스너가 스레드에서 붙기에 리스너 추가전 UI가 떠서 버튼이 동작안하는 순간이 있음.
+		// 스레드를 풀어서 같이 join시키면 UI표시가 지연될 수있음..
 		new Thread() {
 			public void run() {
 				System.out.println("[Frame] settings()");
 				settings();
+
 			}
 		}.start();
 
@@ -232,11 +234,11 @@ public class NotepadUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		ImageIcon originIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");	
+		ImageIcon originIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");
 		Image originImg = originIcon.getImage();
 		Image changedImg = originImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		frame.setIconImage(changedImg);
-		
+
 		// add items to menus
 		fileMenu.add(newMenuItem);
 		fileMenu.add(openMenuItem);
@@ -288,7 +290,7 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
+
 		System.out.println("text FONT: " + textArea.getFont().getFamily());
 	}
 
@@ -297,8 +299,9 @@ public class NotepadUI extends JFrame implements UI {
 		// TODO Auto-generated method stub
 		if (checkSave()) {
 			System.out.println("[Frame] Close Window");
-			this.dispose();
+			ThreadManager.getInstance().joinThreads();
 			FileManager.getInstance().saveProperties();
+			this.dispose();
 			System.exit(0);
 		}
 	}
@@ -311,14 +314,13 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
-		
-		//frame.getContentPane().(BorderFactory.createLineBorder(Color.blue,10));
-		//frame.getContentPane().addMouseListener(menuBarCloser);
+
+		// frame.getContentPane().(BorderFactory.createLineBorder(Color.blue,10));
+		// frame.getContentPane().addMouseListener(menuBarCloser);
 		frame.addMouseListener(menuBarCloser);
 		textArea.addMouseListener(menuBarCloser);
-		//scrollPane.addMouseListener(menuBarCloser);
+		// scrollPane.addMouseListener(menuBarCloser);
 
-		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
@@ -443,8 +445,8 @@ public class NotepadUI extends JFrame implements UI {
 					textArea.setFont(fontChooser.getSelctedFont());
 					textArea.setForeground(fontChooser.getSelectedColor());
 					Property.setFont(fontChooser.getSelctedFont(), fontChooser.getSelectedColor());
-					
-					//바로 저장하는게 효율이 맞나?
+
+					// 바로 저장하는게 효율이 맞나?
 					FileManager.getInstance().saveProperties();
 				}
 			}
@@ -599,6 +601,5 @@ public class NotepadUI extends JFrame implements UI {
 		}
 		return false;
 	}
-	
 
 }

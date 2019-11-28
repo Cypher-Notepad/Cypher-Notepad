@@ -47,7 +47,7 @@ public class MainUI extends JFrame implements UI {
 	public MainUI() {
 		System.out.println("####got lang");
 		lang = Property.getLanguagePack();
-		
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -83,12 +83,12 @@ public class MainUI extends JFrame implements UI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
-		ImageIcon frameIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");	
+
+		ImageIcon frameIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");
 		Image originFrameImg = frameIcon.getImage();
 		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		setIconImage(changedFrameImg);
-		
+
 		setBounds(100, 100, 550, 719);
 		// setBounds(100, 100, 440, 576);
 		this.setLocationRelativeTo(null);
@@ -188,7 +188,7 @@ public class MainUI extends JFrame implements UI {
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon = new ImageIcon("resource\\encrypted_white_origin.png");	
+		ImageIcon originIcon = new ImageIcon("resource\\encrypted_white_origin.png");
 		Image originImg = originIcon.getImage();
 		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
@@ -249,7 +249,6 @@ public class MainUI extends JFrame implements UI {
 	@Override
 	public void erase() {
 		this.dispose();
-
 	}
 
 	public void addListeners() {
@@ -262,7 +261,7 @@ public class MainUI extends JFrame implements UI {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
 					boolean isLoaded = notepadUI.loadMemo(new File(path));
-					if(isLoaded) {
+					if (isLoaded) {
 						Property.addRecentFiles(path);
 						ThreadManager.getInstance().joinThreads();
 						UIManager.getInstance().setUI(notepadUI);
@@ -283,7 +282,7 @@ public class MainUI extends JFrame implements UI {
 			if (response == fc.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
 				boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
-				if(isLoaded) {
+				if (isLoaded) {
 					try {
 						Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
 					} catch (IOException e1) {
@@ -295,7 +294,13 @@ public class MainUI extends JFrame implements UI {
 			}
 		});
 
-		btnX.addActionListener(e -> UIManager.getInstance().closeWindow());
+		btnX.addActionListener(e -> {
+			System.out.println("[Frame] Close Window on Main UI");
+			ThreadManager.getInstance().joinThreads();
+			FileManager.getInstance().saveProperties();
+			UIManager.getInstance().closeWindow();
+			System.exit(0);
+		});
 	}
 
 }

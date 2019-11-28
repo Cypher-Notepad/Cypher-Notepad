@@ -43,6 +43,8 @@ public class Property {
 
 	private class PropertyUpdater {
 
+		private static final int DUPLICATION_INTERVAL = 50;
+		
 		private WatchService ws;
 		private WatchKey watchKey;
 		private Thread updater;
@@ -53,32 +55,50 @@ public class Property {
 			try {
 				ws = FileSystems.getDefault().newWatchService();
 				Path path = Paths.get(FileManager.DIR_NAME);
-				path.register(ws, StandardWatchEventKinds.ENTRY_MODIFY);
+				path.register(ws, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
 
 				updater = new Thread(() -> {
 					while (true) {
 						try {
 							watchKey = ws.take();
+							Thread.sleep( DUPLICATION_INTERVAL );
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-
+						
 						List<WatchEvent<?>> events = watchKey.pollEvents();
 
 						for (WatchEvent<?> event : events) {
 							Kind<?> kind = event.kind();
 							Path paths = (Path) event.context();
-							System.out.println(paths.toAbsolutePath());
-							if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-								// do something.
-								// 지금 notepadUI의 textarea를 임시로 static설정해서 접근가능하게해놨음
-								// 스레드상으로 ㅁ많이 불안정함 고쳐야함
-								// 또한 FOntchhooser로 부터 확인을 눌러서 폰트를 바꾸면 바로 설정파일에 write하도록 토드를 바꿧는데 효율성따져보기.
-								System.out.println("MODIFIED" + paths.getFileName());
-								if (paths.getFileName().toString().equals(FileManager.FILE_NAME_PROP)) {
-									FileManager.getInstance().loadProperties();
+							String eventFile = paths.getFileName().toString();
+							
+							switch(eventFile) {
+							case FileManager.FILE_NAME_PROP:
+								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+									// Reload new property and apply.
+									System.out.println("MODIFIED" + paths.getFileName());
+									FileManager.getInstance().loadProperties(true);
 									applyReloadedProp();
+									
+								} else if(kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+									System.out.println("***Prop Deleted");
+									FileManager.getInstance().saveProperties();
 								}
+								break;
+								
+							case FileManager.FILE_NAME_KEYS:
+								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+									FileManager.getInstance().loadKeys(true);
+									
+								} else if(kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+									System.out.println("***Key Deleted");
+									FileManager.getInstance().saveKeys();
+								}
+								break;
+								
+							default:
+								
 							}
 						}
 
@@ -155,10 +175,19 @@ public class Property {
 			}
 			e.printStackTrace();
 		}
-
+	}
+	
+	public static void reload(InputStream inStream) {
+		try {
+			Property.getProperties().load(inStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void store(OutputStream out, String comments) {
+		System.out.println("###Proprty store");
 		try {
 			Property.getProperties().store(out, comments);
 		} catch (IOException e) {
@@ -198,13 +227,17 @@ public class Property {
 	}
 
 	private void applyReloadedProp() {
-		Properties p = Property.getProperties();
-		Font textFont = new Font(p.getProperty(Property.fontFamily),
-				Integer.parseInt(p.getProperty(Property.fontStyle)),
-				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
+		try {
+			Properties p = Property.getProperties();
+			Font textFont = new Font(p.getProperty(Property.fontFamily),
+					Integer.parseInt(p.getProperty(Property.fontStyle)),
+					Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
 
-		NotepadUI.textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
-		NotepadUI.textArea.setFont(textFont);
+			NotepadUI.textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
+			NotepadUI.textArea.setFont(textFont);
+		} catch (NullPointerException e) {
+			//not critical.
+		}
 	}
 
 	public static void addRecentFiles(String newFilePath) {
