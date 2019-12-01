@@ -44,17 +44,18 @@ public class FileManager {
 			+ "## message or you will never recover its original ##\r\n"
 			+ "## content.		_LEEDONGGEON1996_	  ##\r\n"
 			+ "####################################################\r\n";
+
 	private static FileManager instance = null;
 	private ArrayList<String> keys = new ArrayList<String>();
+
 	public void printshowkey() {
 		System.out.println("############################");
-		for(String k : keys) {
+		for (String k : keys) {
 			System.out.println(k);
 		}
 	}
-	
-	
-	//Index of Keys.
+
+	// Index of Keys.
 	private int processID = 0;
 	// private Properties property;
 
@@ -73,6 +74,7 @@ public class FileManager {
 	}
 
 	private String getKey(int idx) {
+		System.out.println("idx : " + idx);
 		System.out.println("Returned key : " + this.keys.get(idx));
 		return this.keys.get(idx);
 	}
@@ -104,34 +106,36 @@ public class FileManager {
 				while ((keyLine = keyReader.readLine()) != null) {
 					reloaded.add(keyLine);
 				}
-				
-				//case of key file invalidation.
-				if(reloaded.size() < keys.size()) {
-					//In the case of key invalidation, RSA must be recreated to make new key-pair. 
-					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
-					processID = reloaded.size();
-					reloaded.add(RSAImpl.getInstance().getPrivateKey());
 
-					System.out.println("RELOAD INVAL");
-				}
-				else {
+				if (reloaded.size() < keys.size()) {
+					/*
+					 * The case of key file invalidation.
+					 * In the case of key invalidation, the RSA must be re-created to make new key-pair.
+					 **/
+					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
+					//processID = reloaded.size();
+					reloaded.add(RSAImpl.getInstance().getPrivateKey());
+					System.out.println("RELOAD INVAL ID : " + processID);
+				} else {
 					System.out.println("RELOAD");
 				}
 				keys = reloaded;
+				processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
+
 				System.out.println("RELOADED SIZE : " + keys.size());
-				
+
 			} else {
-				//keys = new ArrayList<String>();
+				// keys = new ArrayList<String>();
 				while ((keyLine = keyReader.readLine()) != null) {
 					keys.add(keyLine);
 				}
-				
+
 				addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
 				/*
-				keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
-				keyWriter.println(RSAImpl.getInstance().getPrivateKey());
-				*/
-				
+				 * keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
+				 * keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+				 */
+
 				processID = keys.size();
 				keys.add(RSAImpl.getInstance().getPrivateKey());
 			}
@@ -166,21 +170,21 @@ public class FileManager {
 
 				try {
 					keyWriter = new PrintWriter(fout);
-					for(String content : contents) {
+					for (String content : contents) {
 						keyWriter.println(content);
 					}
-					//keyWriter.println(add);
+					// keyWriter.println(add);
 				} catch (Exception e) {
 				} finally {
 					lock.release();
 					closeIO(keyWriter);
 					fout = null;
-					
+
 				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				closeIO(fout);
 			}
 
@@ -195,21 +199,14 @@ public class FileManager {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
 		PrintWriter keyWriter = null;
 		String[] a = new String[] {};
-		
+
 		addToKeyFile(false, keys.toArray(a));
-		
+
 		/*
-		try {
-			keyWriter = new PrintWriter(new FileWriter(keyFilePath, false));
-			for (String key : keys) {
-				keyWriter.println(key);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			closeIO(keyWriter);
-		}
-		*/
+		 * try { keyWriter = new PrintWriter(new FileWriter(keyFilePath, false)); for
+		 * (String key : keys) { keyWriter.println(key); } } catch (IOException e) {
+		 * e.printStackTrace(); } finally { closeIO(keyWriter); }
+		 */
 	}
 
 	public void invalidateKeys() {
@@ -218,7 +215,7 @@ public class FileManager {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
 				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFile, false));
-				//keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+				// keyWriter.println(RSAImpl.getInstance().getPrivateKey());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -280,9 +277,12 @@ public class FileManager {
 			CryptoFacade crypto = new CryptoFacade();
 			crypto.encrypt(memo);
 
+			System.out.println("이걸로 암호화함 : \n processID : " + processID +"\n"+ RSAImpl.getInstance().getPrivateKey());
+			System.out.println("그런데 키의 인덱스는 : "  + keys.indexOf(RSAImpl.getInstance().getPrivateKey()));
+			
 			memoWriter.println(HEADER_WARNING);
-			memoWriter.println(
-					String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
+			memoWriter
+					.println(String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
 			memoWriter.println(memo.getKey());
 			memoWriter.println(memo.getContent());
 			memoWriter.close();
