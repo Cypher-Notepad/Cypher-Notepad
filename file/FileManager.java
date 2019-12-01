@@ -45,7 +45,14 @@ public class FileManager {
 			+ "## content.		_LEEDONGGEON1996_	  ##\r\n"
 			+ "####################################################\r\n";
 	private static FileManager instance = null;
-	private ArrayList<String> keys;
+	private ArrayList<String> keys = new ArrayList<String>();
+	public void printshowkey() {
+		System.out.println("############################");
+		for(String k : keys) {
+			System.out.println(k);
+		}
+	}
+	
 	
 	//Index of Keys.
 	private int processID = 0;
@@ -66,6 +73,7 @@ public class FileManager {
 	}
 
 	private String getKey(int idx) {
+		System.out.println("Returned key : " + this.keys.get(idx));
 		return this.keys.get(idx);
 	}
 
@@ -96,14 +104,11 @@ public class FileManager {
 				while ((keyLine = keyReader.readLine()) != null) {
 					reloaded.add(keyLine);
 				}
-				/*
-				 * if(reloaded.size() > keys.size()) { keys = reloaded; }
-				 */
-
 				
 				//case of key file invalidation.
-				if(reloaded.size() < keys.size()) {					
-					addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
+				if(reloaded.size() < keys.size()) {
+					//In the case of key invalidation, RSA must be recreated to make new key-pair. 
+					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 					processID = reloaded.size();
 					reloaded.add(RSAImpl.getInstance().getPrivateKey());
 
@@ -116,7 +121,7 @@ public class FileManager {
 				System.out.println("RELOADED SIZE : " + keys.size());
 				
 			} else {
-				keys = new ArrayList<String>();
+				//keys = new ArrayList<String>();
 				while ((keyLine = keyReader.readLine()) != null) {
 					keys.add(keyLine);
 				}

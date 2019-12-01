@@ -87,6 +87,7 @@ public class NotepadUI extends JFrame implements UI {
 				MenuSelectionManager.defaultManager().clearSelectedPath();
 				// menuBar.getSelectionModel().clearSelection();
 				System.out.println("click!");
+				FileManager.getInstance().printshowkey();
 			}
 		}
 	};
