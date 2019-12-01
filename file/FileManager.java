@@ -1,6 +1,7 @@
 package file;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.channels.Channel;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -43,6 +46,9 @@ public class FileManager {
 			+ "####################################################\r\n";
 	private static FileManager instance = null;
 	private ArrayList<String> keys;
+	
+	//Index of Keys.
+	private int processID = 0;
 	// private Properties property;
 
 	private FileManager() {
@@ -53,7 +59,6 @@ public class FileManager {
 	}
 
 	public static FileManager getInstance() {
-
 		if (instance == null) {
 			instance = new FileManager();
 		}
@@ -67,9 +72,13 @@ public class FileManager {
 	public void loadKeys() {
 		loadKeys(false);
 	}
+
 	public void loadKeys(boolean reload) {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
+		BufferedReader keyReader = null;
+		PrintWriter keyWriter = null;
 		String keyLine = null;
+
 		try {
 			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
@@ -81,49 +90,121 @@ public class FileManager {
 				keyFile.createNewFile();
 			}
 
-			BufferedReader keyReader = new BufferedReader(new FileReader(keyFilePath));
+			keyReader = new BufferedReader(new FileReader(keyFilePath));
 			if (reload) {
 				ArrayList<String> reloaded = new ArrayList<String>();
 				while ((keyLine = keyReader.readLine()) != null) {
 					reloaded.add(keyLine);
 				}
-				if(reloaded.size() > keys.size()) {
-					keys = reloaded;
+				/*
+				 * if(reloaded.size() > keys.size()) { keys = reloaded; }
+				 */
+
+				
+				//case of key file invalidation.
+				if(reloaded.size() < keys.size()) {					
+					addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
+					processID = reloaded.size();
+					reloaded.add(RSAImpl.getInstance().getPrivateKey());
+
+					System.out.println("RELOAD INVAL");
 				}
-			}
-			else {
+				else {
+					System.out.println("RELOAD");
+				}
+				keys = reloaded;
+				System.out.println("RELOADED SIZE : " + keys.size());
+				
+			} else {
 				keys = new ArrayList<String>();
 				while ((keyLine = keyReader.readLine()) != null) {
 					keys.add(keyLine);
 				}
-
-				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
+				
+				addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
+				/*
+				keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
 				keyWriter.println(RSAImpl.getInstance().getPrivateKey());
-				keyWriter.close();
+				*/
+				
+				processID = keys.size();
 				keys.add(RSAImpl.getInstance().getPrivateKey());
 			}
-			keyReader.close();
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			closeIO(keyReader, keyWriter);
+		}
+	}
+
+	private void closeIO(Closeable... IOs) {
+		for (Closeable io : IOs) {
+			try {
+				if (io != null)
+					io.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void addToKeyFile(boolean append, String... contents) {
+		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
+		FileOutputStream fout = null;
+		PrintWriter keyWriter = null;
+
+		try {
+			fout = new FileOutputStream(keyFilePath, append);
+			try {
+				FileLock lock = fout.getChannel().lock();
+
+				try {
+					keyWriter = new PrintWriter(fout);
+					for(String content : contents) {
+						keyWriter.println(content);
+					}
+					//keyWriter.println(add);
+				} catch (Exception e) {
+				} finally {
+					lock.release();
+					closeIO(keyWriter);
+					fout = null;
+					
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally {
+				closeIO(fout);
+			}
+
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} finally {
+			closeIO(fout);
 		}
 	}
 
 	public void saveKeys() {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
-		PrintWriter keyWriter;
+		PrintWriter keyWriter = null;
+		String[] a = new String[] {};
 		
+		addToKeyFile(false, keys.toArray(a));
+		
+		/*
 		try {
 			keyWriter = new PrintWriter(new FileWriter(keyFilePath, false));
-			for(String key : keys) {
+			for (String key : keys) {
 				keyWriter.println(key);
 			}
-			keyWriter.println(RSAImpl.getInstance().getPrivateKey());
-			keyWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			closeIO(keyWriter);
 		}
+		*/
 	}
 
 	public void invalidateKeys() {
@@ -132,14 +213,11 @@ public class FileManager {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
 				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFile, false));
+				//keyWriter.println(RSAImpl.getInstance().getPrivateKey());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			// System.out.println("Re-create crypto-notepad.keys");
-			// keyFile.delete();
-			// loadKeys();
 		}
 	}
 
@@ -199,7 +277,7 @@ public class FileManager {
 
 			memoWriter.println(HEADER_WARNING);
 			memoWriter.println(
-					String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(keys.size() - 1).getBytes())));
+					String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
 			memoWriter.println(memo.getKey());
 			memoWriter.println(memo.getContent());
 			memoWriter.close();
@@ -263,6 +341,8 @@ public class FileManager {
 						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
+				e.printStackTrace();
+				System.out.println("BADPADDING : " + keys.size());
 				JOptionPane.showMessageDialog(frame,
 						"[ERROR]" + "\nUnable to decrypt this file." + "\nThe configuration file may be corrupted."
 								+ "\n(Error Name : " + e.getClass().getName() + ")",

@@ -44,7 +44,7 @@ public class Property {
 	private class PropertyUpdater {
 
 		private static final int DUPLICATION_INTERVAL = 50;
-		
+
 		private WatchService ws;
 		private WatchKey watchKey;
 		private Thread updater;
@@ -61,44 +61,45 @@ public class Property {
 					while (true) {
 						try {
 							watchKey = ws.take();
-							Thread.sleep( DUPLICATION_INTERVAL );
+							Thread.sleep(DUPLICATION_INTERVAL);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						
+
 						List<WatchEvent<?>> events = watchKey.pollEvents();
 
 						for (WatchEvent<?> event : events) {
 							Kind<?> kind = event.kind();
 							Path paths = (Path) event.context();
 							String eventFile = paths.getFileName().toString();
-							
-							switch(eventFile) {
+
+							switch (eventFile) {
 							case FileManager.FILE_NAME_PROP:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 									// Reload new property and apply.
 									System.out.println("MODIFIED" + paths.getFileName());
 									FileManager.getInstance().loadProperties(true);
 									applyReloadedProp();
-									
-								} else if(kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+
+								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 									System.out.println("***Prop Deleted");
 									FileManager.getInstance().saveProperties();
 								}
 								break;
-								
+
 							case FileManager.FILE_NAME_KEYS:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+									System.out.println("***Key Modi");
 									FileManager.getInstance().loadKeys(true);
-									
-								} else if(kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+
+								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
 									System.out.println("***Key Deleted");
 									FileManager.getInstance().saveKeys();
 								}
 								break;
-								
+
 							default:
-								
+
 							}
 						}
 
@@ -176,7 +177,7 @@ public class Property {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void reload(InputStream inStream) {
 		try {
 			Property.getProperties().load(inStream);
@@ -236,7 +237,7 @@ public class Property {
 			NotepadUI.textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
 			NotepadUI.textArea.setFont(textFont);
 		} catch (NullPointerException e) {
-			//not critical.
+			// not critical.
 		}
 	}
 
