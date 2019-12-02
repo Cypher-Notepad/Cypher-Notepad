@@ -113,7 +113,6 @@ public class FileManager {
 					 * In the case of key invalidation, the RSA must be re-created to make new key-pair.
 					 **/
 					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
-					//processID = reloaded.size();
 					reloaded.add(RSAImpl.getInstance().getPrivateKey());
 					System.out.println("RELOAD INVAL ID : " + processID);
 				} else {

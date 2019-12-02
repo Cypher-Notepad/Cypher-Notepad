@@ -1,9 +1,12 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -57,9 +60,57 @@ public class MainUI extends JFrame implements UI {
 		});
 
 		addMouseMotionListener(new MouseMotionAdapter() {
+			private static final int ESCAPE_THRESHOLD = 17;
+			Insets taskBar;// = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+			Point curFramePos;
+			int screenXSize = Toolkit.getDefaultToolkit().getScreenSize().width;
+			int screenYSize = Toolkit.getDefaultToolkit().getScreenSize().height;
+			int frameWidth, frameHeight;
+			int posX, posY;
+			int left, right, top, bottom;
+			int distanceX, distanceY;
+
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				setLocation(getLocation().x + e.getX() - mpX, getLocation().y + e.getY() - mpY);
+				taskBar = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+				curFramePos = getLocation();
+				frameWidth = getWidth();
+				frameHeight = getHeight();
+				distanceX = e.getX() - mpX;
+				distanceY = e.getY() - mpY;
+				posX = curFramePos.x + distanceX;
+				posY = curFramePos.y + distanceY;
+
+				//calc the distance from the boundaries of the screen.
+				left = curFramePos.x - taskBar.left;
+				right = screenXSize - left - frameWidth - taskBar.right - taskBar.left;
+				top = curFramePos.y - taskBar.top;
+				bottom = screenYSize - top - frameHeight - taskBar.bottom - taskBar.top;
+
+				// Horizontal magnet frame.
+				if (Math.abs(left) < ESCAPE_THRESHOLD) {
+					posX = 0 + taskBar.left;
+					if (distanceX > ESCAPE_THRESHOLD) posX = ESCAPE_THRESHOLD + taskBar.left;
+					if (distanceX < -ESCAPE_THRESHOLD) posX = -ESCAPE_THRESHOLD + taskBar.left;
+				} else if (Math.abs(right) < ESCAPE_THRESHOLD) {
+					posX = screenXSize - frameWidth - taskBar.right;
+					if (distanceX > ESCAPE_THRESHOLD) posX = screenXSize - frameWidth +  ESCAPE_THRESHOLD - taskBar.right; 
+					if (distanceX < -ESCAPE_THRESHOLD) posX = screenXSize - frameWidth - ESCAPE_THRESHOLD - taskBar.right;
+				}
+
+				// Vertical magnet frame.
+				if (Math.abs(top) < ESCAPE_THRESHOLD) {
+					posY = 0 + taskBar.top;
+					if (distanceY > ESCAPE_THRESHOLD) posY = ESCAPE_THRESHOLD + taskBar.top;
+					if (distanceY < -ESCAPE_THRESHOLD) posY = -ESCAPE_THRESHOLD + taskBar.top;
+				} else if (Math.abs(bottom) < ESCAPE_THRESHOLD) {
+					posY = screenYSize - frameHeight - taskBar.bottom;
+					if (distanceY > ESCAPE_THRESHOLD) posY = screenYSize - frameHeight + ESCAPE_THRESHOLD - taskBar.bottom;
+					if (distanceY < -ESCAPE_THRESHOLD) posY = screenYSize - frameHeight - ESCAPE_THRESHOLD - taskBar.bottom;
+				}
+				
+				setLocation(posX, posY);
+				
 			}
 		});
 
