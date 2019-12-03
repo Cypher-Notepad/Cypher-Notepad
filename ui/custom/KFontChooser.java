@@ -10,10 +10,12 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -28,8 +30,12 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import config.Language;
 import config.Property;
@@ -46,14 +52,27 @@ public class KFontChooser extends JDialog {
 	private Font selectedFont;
 	private Color selectedColor;
 	private boolean isConfirmed;
-
+	
+	private JButton btnColor;
+	private JTextField txtScript;
 	private JLabel txtrScriptView;
 	private JList listFont, listStyle, listSize;
 	
 	private Language lang;
 	
-	JButton btnColor;
+	private ListSelectionListener familyListListener = new ListSelectionListener() {
 
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			System.out.println("getSelectedIndex() : " + listFont.getSelectedIndex());
+			selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(),
+					selectedFont.getSize());
+			txtScript.setText(fonts[listFont.getSelectedIndex()]); 
+			txtrScriptView.setFont(selectedFont);
+		}
+		
+	};
+	
 	private ArrayList<String> fontValidation() {
 		//Font test = new Font("Arial", Font.PLAIN, 10);
 		Font test;
@@ -73,8 +92,9 @@ public class KFontChooser extends JDialog {
 		lang = Property.getLanguagePack();
 		
 		allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		fonts = new String[] {};
-		fonts = fontValidation().toArray(fonts);
+		fonts = allfonts;
+		//fonts = new String[] {};
+		//fonts = fontValidation().toArray(fonts);
 		styles = new String[] { "Plain", "Italics", "Bold" };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
@@ -112,14 +132,7 @@ public class KFontChooser extends JDialog {
 		JScrollPane listFontScroll = new JScrollPane(listFont);
 		listFontScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listFont.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listFont.addListSelectionListener(e -> {
-			if (!e.getValueIsAdjusting()) {
-				//derive font로 코드량 줄일수 있을듯
-				selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(),
-						selectedFont.getSize());
-				txtrScriptView.setFont(selectedFont);
-			}
-		});
+		listFont.addListSelectionListener(familyListListener);
 
 		listStyle = new JList(styles);
 		JScrollPane listStyleScroll = new JScrollPane(listStyle);
@@ -146,7 +159,7 @@ public class KFontChooser extends JDialog {
 		});
 
 		JLabel lblScript = new JLabel(lang.kfcScript);
-		JTextField txtScript = new JTextField();
+		txtScript = new JTextField();
 		txtScript.setText(TEST_STRING);
 		txtScript.setColumns(10);
 		txtScript.getDocument().addDocumentListener(new DocumentListener() {
@@ -182,16 +195,41 @@ public class KFontChooser extends JDialog {
 				}
 			}
 		});
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox(lang.kfKoreanFont);
+		chckbxNewCheckBox.addActionListener(new ActionListener() {
+			ArrayList<String> filtered;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(chckbxNewCheckBox.isSelected()) {
+					System.out.println("Sle");
+					filtered = fontValidation();
+					
+					fonts  = filtered.toArray(new String[] {});
+				}
+				else {
+					fonts = allfonts;
+				}
+				listFont.removeListSelectionListener(familyListListener);
+				listFont.setListData(fonts);
+				listFont.addListSelectionListener(familyListListener);
+				listFont.setSelectedIndex(0);
+			}
+			
+		});
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
 					.addGap(24)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnColor)
-						.addComponent(lblFont))
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(chckbxNewCheckBox, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(listFontScroll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+						.addComponent(btnColor, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblFont, Alignment.LEADING))
 					.addGap(27)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblScript)
@@ -210,7 +248,7 @@ public class KFontChooser extends JDialog {
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addContainerGap(20, Short.MAX_VALUE)
+					.addContainerGap(18, Short.MAX_VALUE)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblFont)
 						.addComponent(lblFontStyle)
@@ -220,7 +258,9 @@ public class KFontChooser extends JDialog {
 						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listStyleScroll, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listSizeScroll, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
-					.addGap(50)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(chckbxNewCheckBox)
+					.addGap(25)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
 							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
@@ -228,8 +268,8 @@ public class KFontChooser extends JDialog {
 							.addComponent(lblScript)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtScript, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnColor))
-					.addContainerGap(109, Short.MAX_VALUE))
+						.addComponent(btnColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(107, Short.MAX_VALUE))
 		);
 
 		contentPanel.setLayout(gl_contentPanel);

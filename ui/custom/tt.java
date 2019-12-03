@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 
 import config.Language;
 import config.Property;
+import javax.swing.JCheckBox;
 
 public class tt extends JDialog {
 
@@ -51,6 +52,8 @@ public class tt extends JDialog {
 	private JList listFont, listStyle, listSize;
 	
 	private Language lang;
+	
+	JButton btnColor;
 
 	private ArrayList<String> fontValidation() {
 		//Font test = new Font("Arial", Font.PLAIN, 10);
@@ -68,17 +71,18 @@ public class tt extends JDialog {
 	}
 	
 	public tt(JFrame jframe) {
-		lang = Property.getLanguagePack();
+lang = Property.getLanguagePack();
 		
 		allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		fonts = new String[] {};
-		fonts = fontValidation().toArray(fonts);
+		fonts = allfonts;
+		//fonts = new String[] {};
+		//fonts = fontValidation().toArray(fonts);
 		styles = new String[] { "Plain", "Italics", "Bold" };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
 		selectedFont = new Font("Dialog", Font.PLAIN, 12);
 
-		this.setTitle("Select Font");
+		this.setTitle(lang.kfcTitle);
 
 		setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
@@ -168,7 +172,8 @@ public class tt extends JDialog {
 			}
 		});
 
-		JButton btnColor = new JButton(lang.kfcColor);
+		btnColor = new JButton(lang.kfcColor);
+		btnColor.setMinimumSize(new Dimension(86,27));
 		JColorChooser cc = null;
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -179,20 +184,40 @@ public class tt extends JDialog {
 				}
 			}
 		});
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox(lang.kfKoreanFont);
+		chckbxNewCheckBox.addActionListener(new ActionListener() {
+			
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(chckbxNewCheckBox.isSelected()) {
+					System.out.println("Sle");
+					fonts  = fontValidation().toArray(new String[] {});
+				}
+				else {
+					fonts = allfonts;
+				}
+				listFont.setListData(fonts);
+			}
+			
+		});
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
 					.addGap(24)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblFont)
-						.addComponent(btnColor))
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(chckbxNewCheckBox, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(listFontScroll, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+						.addComponent(btnColor, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblFont, Alignment.LEADING))
 					.addGap(27)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblScript)
-						.addGroup(gl_contentPanel.createSequentialGroup()
+						.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
 							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 								.addComponent(listStyleScroll, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblFontStyle))
@@ -200,14 +225,14 @@ public class tt extends JDialog {
 							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblFontSize)
 								.addComponent(listSizeScroll, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(txtScript, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+						.addComponent(txtScript, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addContainerGap(20, Short.MAX_VALUE)
+					.addContainerGap(18, Short.MAX_VALUE)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblFont)
 						.addComponent(lblFontStyle)
@@ -217,7 +242,9 @@ public class tt extends JDialog {
 						.addComponent(listFontScroll, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listStyleScroll, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
 						.addComponent(listSizeScroll, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
-					.addGap(50)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(chckbxNewCheckBox)
+					.addGap(25)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
 							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
@@ -225,8 +252,8 @@ public class tt extends JDialog {
 							.addComponent(lblScript)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtScript, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnColor))
-					.addContainerGap(109, Short.MAX_VALUE))
+						.addComponent(btnColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(107, Short.MAX_VALUE))
 		);
 
 		contentPanel.setLayout(gl_contentPanel);
@@ -236,6 +263,8 @@ public class tt extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton(lang.btnOK);
+				//okButton.setMinimumSize(new Dimension(86,27));
+				okButton.setPreferredSize(new Dimension(86,27));
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 				okButton.addActionListener(e -> {
@@ -247,6 +276,7 @@ public class tt extends JDialog {
 			{
 				JButton cancelButton = new JButton(lang.btnCancel);
 				buttonPane.add(cancelButton);
+				cancelButton.setMinimumSize(new Dimension(86,27));
 				cancelButton.addActionListener(e -> {
 					isConfirmed = false;
 					setVisible(false);
@@ -311,5 +341,4 @@ public class tt extends JDialog {
 	public Color getSelectedColor() {
 		return selectedColor;
 	}
-
 }
