@@ -83,4 +83,8 @@ public abstract class Language {
 	public String ksInit = "Initialize settings";
 	public String ksNoti = "¡Ø Some changes will take effect after restart.";
 	
+	//Date
+	public String am = "AM";
+	public String pm = "PM";
+	
 }

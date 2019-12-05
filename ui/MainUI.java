@@ -166,6 +166,18 @@ public class MainUI extends JFrame implements UI {
 		table.setSelectionBackground(new Color(0x451651));
 		table.setSelectionForeground(new Color(0xffffff));
 		table.setRowHeight(50);
+		
+		//table.getColumnModel().getColumn(0).setResizable(true);
+		//table.getColumnModel().getColumn(0).setPreferredWidth(140);
+		//table.getColumnModel().getColumn(0).setMaxWidth(140);
+		
+		table.getColumnModel().getColumn(1).setPreferredWidth(160);
+		table.getColumnModel().getColumn(1).setMaxWidth(160);
+		
+		table.getColumnModel().getColumn(2).setPreferredWidth(80);
+		table.getColumnModel().getColumn(2).setMaxWidth(80);
+		table.getColumnModel().getColumn(3).setPreferredWidth(50);
+
 
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -306,7 +318,7 @@ public class MainUI extends JFrame implements UI {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getColumnModel().getColumn(0).setResizable(false);
+		//table.getColumnModel().getColumn(0).setResizable(false);
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {

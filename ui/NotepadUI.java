@@ -421,13 +421,19 @@ public class NotepadUI extends JFrame implements UI {
 			int year = cal.get(Calendar.YEAR);
 			String ampm = "";
 			if (amPm == 0) {
-				ampm = "AM";
+				ampm = lang.am;
 			} else {
-				ampm = "PM";
+				ampm = lang.pm;
 			}
 
-			int pos = textArea.getCaretPosition();
-			textArea.insert(String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour, minute, month, day, year), pos);
+			String date;
+			if(Property.getProperties().get(Property.language).equals("KOREAN")) {
+				date = String.format("%4d/%02d/%02d " + ampm + "%02d:%02d ", year, month, day, hour, minute);
+			}
+			else {
+				date = String.format("%02d/%02d/%4d " + "%02d:%02d " + ampm + " ", day, month, year, hour, minute);
+			}
+			textArea.insert(date, textArea.getCaretPosition());
 		});
 
 		// wordwrap

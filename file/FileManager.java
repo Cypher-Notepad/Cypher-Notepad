@@ -23,6 +23,7 @@ import javax.crypto.BadPaddingException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
@@ -30,7 +31,7 @@ import ui.NotepadUI;
 import vo.MemoVO;
 
 public class FileManager {
-
+	
 	public static final String DIR_NAME = "etc\\";
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
@@ -47,6 +48,7 @@ public class FileManager {
 
 	private static FileManager instance = null;
 	private ArrayList<String> keys = new ArrayList<String>();
+	private Language lang;
 
 	public void printshowkey() {
 		System.out.println("############################");
@@ -247,6 +249,7 @@ public class FileManager {
 				Property.reload(inStream);
 			} else {
 				Property.load(inStream);
+				lang = Property.getLanguagePack();
 			}
 			inStream.close();
 
@@ -428,13 +431,17 @@ public class FileManager {
 		int year = cal.get(Calendar.YEAR);
 		String ampm = "";
 		if (amPm == 0) {
-			ampm = "AM";
+			ampm = lang.am;
 		} else {
-			ampm = "PM";
+			ampm = lang.pm;
 		}
 
-		// int pos = textArea.getCaretPosition();
-		return String.format("%2d:%2d " + ampm + "%2d/%2d/%4d", hour, minute, month, day, year);
+		if(Property.getProperties().get(Property.language).equals("KOREAN")) {
+			return String.format("%4d/%02d/%02d " + ampm + "%02d:%02d ", year, month, day, hour, minute);
+		}
+		else {
+			return String.format("%02d/%02d/%4d " + "%02d:%02d" + ampm, day, month, year, hour, minute);
+		}
 	}
 
 	private String getFileSize(int filesize) {
