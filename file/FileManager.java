@@ -32,7 +32,7 @@ import vo.MemoVO;
 
 public class FileManager {
 	
-	public static final String DIR_NAME = "etc\\";
+	public static final String DIR_NAME = System.getProperty("user.home") + "\\Crypto-Notepad\\";
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";

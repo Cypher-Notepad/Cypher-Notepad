@@ -528,7 +528,8 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
 		
-
+		settingsMenuItem.setMnemonic(KeyEvent.VK_S);
+		
 		if(Property.getProperties().get(Property.language).equals("ENGLISH")) {
 			findNextMenuItem.setDisplayedMnemonicIndex(5);
 			saveAsMenuItem.setDisplayedMnemonicIndex(5);
