@@ -17,40 +17,40 @@ public abstract class Language {
 	public String btnCancel = "Cancel";
 	
 	public String frmUntitled = "Untitled";
-	public String mbFile = "File";
-	public String mbEdit = "Edit";
-	public String mbFormat = "Format";
-	public String mbView = "View";
-	public String mbHelp = "Help";
+	public String mbFile = " File ";
+	public String mbEdit = " Edit ";
+	public String mbFormat = " Format ";
+	public String mbView = " View ";
+	public String mbHelp = " Help ";
 	
-	public String miNew = "New";
-	public String miOpen = "Open";
-	public String miSave = "Save";
-	public String miSaveAs = "Save as...";
-	public String miPageSet = "Page Setup...";
-	public String miPrint = "Print...";
-	public String miExit = "Exit";
+	public String miNew = "New        ";
+	public String miOpen = "Open        ";
+	public String miSave = "Save        ";
+	public String miSaveAs = "Save as...        ";
+	public String miPageSet = "Page Setup...        ";
+	public String miPrint = "Print...        ";
+	public String miExit = "Exit        ";
 	
-	public String miUndo = "Undo";
-	public String miCut = "Cut";
-	public String miCopy = "Copy";
-	public String miPaste = "Paste";
-	public String miDelete = "Delete";
-	public String miFind = "Find...";
-	public String miFindNxt = "Find Next";
-	public String miReplce = "Replace...";
-	public String miGoto = "Go To...";
-	public String miSlctAll = "Select All";
-	public String miTimeDate = "Time/Date";
+	public String miUndo = "Undo        ";
+	public String miCut = "Cut        ";
+	public String miCopy = "Copy        ";
+	public String miPaste = "Paste        ";
+	public String miDelete = "Delete        ";
+	public String miFind = "Find...        ";
+	public String miFindNxt = "Find Next        ";
+	public String miReplce = "Replace...        ";
+	public String miGoto = "Go To...        ";
+	public String miSlctAll = "Select All        ";
+	public String miTimeDate = "Time/Date        ";
 	
-	public String miWordWrap = "Word Wrap";
-	public String miFont = "Font...";
+	public String miWordWrap = "Word Wrap        ";
+	public String miFont = "Font...        ";
 	
-	public String miStsBar = "Status Bar";
+	public String miStsBar = "Status Bar        ";
 	
-	public String miViewHelp = "View Help";
-	public String miAbtCN = "About Crypto Notepad";
-	public String miSetting = "Settings";
+	public String miViewHelp = "View Help        ";
+	public String miAbtCN = "About Crypto Notepad        ";
+	public String miSetting = "Settings        ";
 	
 	//KFinder
 	public String kfiTitle = "Find";
