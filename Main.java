@@ -1,6 +1,8 @@
-import Crypto.CryptoFacade;
-import File.FileManager;
-import UI.UIManager;
+import java.awt.Font;
+
+import crypto.CryptoFacade;
+import file.FileManager;
+import ui.UIManager;
 
 public class Main {
 
