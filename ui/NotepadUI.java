@@ -503,7 +503,7 @@ public class NotepadUI extends JFrame implements UI {
 		openMenuItem.setMnemonic(KeyEvent.VK_O);
 		saveMenuItem.setMnemonic(KeyEvent.VK_S);
 		saveAsMenuItem.setMnemonic(KeyEvent.VK_A);
-		saveAsMenuItem.setDisplayedMnemonicIndex(5);
+		
 		pageSetupMenuItem.setMnemonic(KeyEvent.VK_U);
 		printMenuItem.setMnemonic(KeyEvent.VK_P);
 		exitMenuItem.setMnemonic(KeyEvent.VK_X);
@@ -515,7 +515,6 @@ public class NotepadUI extends JFrame implements UI {
 		deleteMenuItem.setMnemonic(KeyEvent.VK_L);
 		findMenuItem.setMnemonic(KeyEvent.VK_F);
 		findNextMenuItem.setMnemonic(KeyEvent.VK_N);
-		findNextMenuItem.setDisplayedMnemonicIndex(5);
 		replaceMenuItem.setMnemonic(KeyEvent.VK_R);
 		goToMenuItem.setMnemonic(KeyEvent.VK_G);
 		selectAllMenuItem.setMnemonic(KeyEvent.VK_A);
@@ -528,7 +527,12 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
+		
 
+		if(Property.getProperties().get(Property.language).equals("ENGLISH")) {
+			findNextMenuItem.setDisplayedMnemonicIndex(5);
+			saveAsMenuItem.setDisplayedMnemonicIndex(5);
+		}
 	}
 
 	public boolean saveAsAction() {

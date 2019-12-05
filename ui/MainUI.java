@@ -178,7 +178,6 @@ public class MainUI extends JFrame implements UI {
 		table.getColumnModel().getColumn(2).setMinWidth(60);
 		table.getColumnModel().getColumn(2).setPreferredWidth(80);
 		table.getColumnModel().getColumn(2).setMaxWidth(80);
-
 		
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
