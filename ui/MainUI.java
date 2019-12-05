@@ -167,18 +167,19 @@ public class MainUI extends JFrame implements UI {
 		table.setSelectionForeground(new Color(0xffffff));
 		table.setRowHeight(50);
 		
-		//table.getColumnModel().getColumn(0).setResizable(true);
-		//table.getColumnModel().getColumn(0).setPreferredWidth(140);
-		//table.getColumnModel().getColumn(0).setMaxWidth(140);
+		table.getColumnModel().getColumn(0).setMinWidth(60);
+		table.getColumnModel().getColumn(0).setPreferredWidth(120);
+		table.getColumnModel().getColumn(0).setMaxWidth(400);
 		
+		table.getColumnModel().getColumn(1).setMinWidth(60);
 		table.getColumnModel().getColumn(1).setPreferredWidth(160);
 		table.getColumnModel().getColumn(1).setMaxWidth(160);
 		
+		table.getColumnModel().getColumn(2).setMinWidth(60);
 		table.getColumnModel().getColumn(2).setPreferredWidth(80);
 		table.getColumnModel().getColumn(2).setMaxWidth(80);
-		table.getColumnModel().getColumn(3).setPreferredWidth(50);
 
-
+		
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 		TableColumnModel tcmSchedule = table.getColumnModel();
