@@ -17,40 +17,40 @@ class KoreanPack extends Language {
 		btnCancel = "\uCDE8\uC18C";
 
 		frmUntitled = "\uC81C\uBAA9 \uC5C6\uC74C";
-		mbFile = "\uD30C\uC77C";
-		mbEdit = "\uD3B8\uC9D1";
-		mbFormat = "\uC11C\uC2DD";
-		mbView = "\uBCF4\uAE30";
-		mbHelp = "\uB3C4\uC6C0\uB9D0";
+		mbFile = "\uD30C\uC77C(F) ";
+		mbEdit = "\uD3B8\uC9D1(E) ";
+		mbFormat = "\uC11C\uC2DD(O) ";
+		mbView = "\uBCF4\uAE30(V) ";
+		mbHelp = "\uB3C4\uC6C0\uB9D0 ";
 
-		miNew = "\uC0C8\uB85C \uB9CC\uB4E4\uAE30        ";
-		miOpen = "\uC5F4\uAE30        ";
-		miSave = "\uC800\uC7A5        ";
-		miSaveAs = "\uB2E4\uB978 \uC774\uB984\uC73C\uB85C \uC800\uC7A5...        ";
-		miPageSet = "\uD398\uC774\uC9C0 \uC124\uC815...        ";
-		miPrint = "\uC778\uC1C4...        ";
-		miExit = "\uB05D\uB0B4\uAE30        ";
+		miNew = "\uC0C8\uB85C \uB9CC\uB4E4\uAE30(N)        ";
+		miOpen = "\uC5F4\uAE30(O)        ";
+		miSave = "\uC800\uC7A5(S)        ";
+		miSaveAs = "\uB2E4\uB978 \uC774\uB984\uC73C\uB85C \uC800\uC7A5(A)...        ";
+		miPageSet = "\uD398\uC774\uC9C0 \uC124\uC815(U)...        ";
+		miPrint = "\uC778\uC1C4(P)...        ";
+		miExit = "\uB05D\uB0B4\uAE30(X)        ";
 
-		miUndo = "\uC2E4\uD589 \uCDE8\uC18C        ";
-		miCut = "\uC798\uB77C\uB0B4\uAE30        ";
-		miCopy = "\uBCF5\uC0AC        ";
-		miPaste = "\uBD99\uC5EC\uB123\uAE30        ";
-		miDelete = "\uC0AD\uC81C        ";
-		miFind = "\uCC3E\uAE30...        ";
-		miFindNxt = "\uB2E4\uC74C \uCC3E\uAE30        ";
-		miReplce = "\uBC14\uAFB8\uAE30...        ";
-		miGoto = "\uC774\uB3D9...        ";
-		miSlctAll = "\uBAA8\uB450 \uC120\uD0DD        ";
-		miTimeDate = "\uC2DC\uAC04/\uB0A0\uC9DC        ";
+		miUndo = "\uC2E4\uD589 \uCDE8\uC18C(U)            ";
+		miCut = "\uC798\uB77C\uB0B4\uAE30(T)            ";
+		miCopy = "\uBCF5\uC0AC(C)            ";
+		miPaste = "\uBD99\uC5EC\uB123\uAE30(P)            ";
+		miDelete = "\uC0AD\uC81C(L)            ";
+		miFind = "\uCC3E\uAE30(F)...            ";
+		miFindNxt = "\uB2E4\uC74C \uCC3E\uAE30(N)            ";
+		miReplce = "\uBC14\uAFB8\uAE30(R)...            ";
+		miGoto = "\uC774\uB3D9(G)...            ";
+		miSlctAll = "\uBAA8\uB450 \uC120\uD0DD(A)            ";
+		miTimeDate = "\uC2DC\uAC04/\uB0A0\uC9DC(D)            ";
 
-		miWordWrap = "\uC790\uB3D9 \uC904 \uBC14\uAFC8        ";
-		miFont = "\uAE00\uAF34...        ";
+		miWordWrap = "\uC790\uB3D9 \uC904 \uBC14\uAFC8(W)        ";
+		miFont = "\uAE00\uAF34(F)...        ";
 
-		miStsBar = "\uC0C1\uD0DC \uD45C\uC2DC\uC904        ";
+		miStsBar = "\uC0C1\uD0DC \uD45C\uC2DC\uC904(S)        ";
 
-		miViewHelp = "\uB3C4\uC6C0\uB9D0 \uBCF4\uAE30        ";
-		miAbtCN = "Crypto Notepad \uC815\uBCF4        ";
-		miSetting = "\uC124\uC815        ";
+		miViewHelp = "\uB3C4\uC6C0\uB9D0 \uBCF4\uAE30(H)        ";
+		miAbtCN = "Crypto Notepad \uC815\uBCF4(A)        ";
+		miSetting = "\uC124\uC815(S)        ";
 
 		// KFinder
 		kfiTitle = "\uCC3E\uAE30";
