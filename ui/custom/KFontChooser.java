@@ -10,6 +10,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,6 +70,7 @@ public class KFontChooser extends JDialog {
 					selectedFont.getSize());
 			txtScript.setText(fonts[listFont.getSelectedIndex()]); 
 			txtrScriptView.setFont(selectedFont);
+
 		}
 		
 	};
@@ -198,24 +200,30 @@ public class KFontChooser extends JDialog {
 		
 		JCheckBox chckbxNewCheckBox = new JCheckBox(lang.kfKoreanFont);
 		chckbxNewCheckBox.addActionListener(new ActionListener() {
-			ArrayList<String> filtered;
-
+			int idx;
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(chckbxNewCheckBox.isSelected()) {
-					System.out.println("Sle");
-					filtered = fontValidation();
-					
-					fonts  = filtered.toArray(new String[] {});
+					fonts  = fontValidation().toArray(new String[] {});
 				}
 				else {
 					fonts = allfonts;
 				}
+				
 				listFont.removeListSelectionListener(familyListListener);
+				
 				listFont.setListData(fonts);
+				if((idx = Arrays.binarySearch(fonts, selectedFont.getFamily())) > -1) {
+					listFont.setSelectedIndex(idx);
+				}
+				else {
+					listFont.setSelectedIndex(0);
+				}
+				listFont.ensureIndexIsVisible(listFont.getSelectedIndex());
+				
 				listFont.addListSelectionListener(familyListListener);
-				listFont.setSelectedIndex(0);
+
 			}
 			
 		});
