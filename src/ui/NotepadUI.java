@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
@@ -18,6 +19,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -61,8 +64,8 @@ public class NotepadUI extends JFrame implements UI {
 	// Menu items
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
-			findNextMenuItem, replaceMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem, fontMenuItem,
-			statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
+			findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
+			fontMenuItem, statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem;
 
@@ -206,6 +209,7 @@ public class NotepadUI extends JFrame implements UI {
 		copyMenuItem = new JMenuItem(lang.miCopy);
 		pasteMenuItem = new JMenuItem(lang.miPaste);
 		deleteMenuItem = new JMenuItem(lang.miDelete);
+		searchMenuItem = new JMenuItem(lang.miSearch);
 		findMenuItem = new JMenuItem(lang.miFind);
 		findNextMenuItem = new JMenuItem(lang.miFindNxt);
 		replaceMenuItem = new JMenuItem(lang.miReplce);
@@ -261,6 +265,7 @@ public class NotepadUI extends JFrame implements UI {
 		editMenu.add(pasteMenuItem);
 		editMenu.add(deleteMenuItem);
 		editMenu.addSeparator();
+		editMenu.add(searchMenuItem);
 		editMenu.add(findMenuItem);
 		editMenu.add(findNextMenuItem);
 		editMenu.add(replaceMenuItem);
@@ -396,6 +401,19 @@ public class NotepadUI extends JFrame implements UI {
 		// delete
 		deleteMenuItem.addActionListener(e -> textArea.replaceSelection(""));
 
+		//search
+		searchMenuItem.addActionListener(e->{
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				try {
+					Desktop.getDesktop().browse(new URI("http://www.google.com"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		// find
 		findMenuItem.addActionListener(e -> fd.showDialog());
 
@@ -491,6 +509,7 @@ public class NotepadUI extends JFrame implements UI {
 		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+        searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
 		findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
 		findNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 		replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
@@ -513,6 +532,7 @@ public class NotepadUI extends JFrame implements UI {
 		copyMenuItem.setMnemonic(KeyEvent.VK_C);
 		pasteMenuItem.setMnemonic(KeyEvent.VK_P);
 		deleteMenuItem.setMnemonic(KeyEvent.VK_L);
+		searchMenuItem.setMnemonic(KeyEvent.VK_S);
 		findMenuItem.setMnemonic(KeyEvent.VK_F);
 		findNextMenuItem.setMnemonic(KeyEvent.VK_N);
 		replaceMenuItem.setMnemonic(KeyEvent.VK_R);
@@ -534,6 +554,10 @@ public class NotepadUI extends JFrame implements UI {
 			findNextMenuItem.setDisplayedMnemonicIndex(5);
 			saveAsMenuItem.setDisplayedMnemonicIndex(5);
 		}
+		else {
+			aboutNotepadMenuItem.setDisplayedMnemonicIndex(18);
+		}
+		
 	}
 
 	public boolean saveAsAction() {

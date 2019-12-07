@@ -18,7 +18,6 @@ public class Main {
 	};
 	
 	public static void main(String[] args) {
-		/*TODO reduce initializing time */
 		FileManager.getInstance().loadProperties();
 		UIManager.getInstance().setDefaultUI();
 		threadInit.start();

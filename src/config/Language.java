@@ -36,6 +36,7 @@ public abstract class Language {
 	public String miCopy = "Copy        ";
 	public String miPaste = "Paste        ";
 	public String miDelete = "Delete        ";
+	public String miSearch = "Search with Google...          ";
 	public String miFind = "Find...        ";
 	public String miFindNxt = "Find Next        ";
 	public String miReplce = "Replace...        ";

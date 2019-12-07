@@ -36,6 +36,7 @@ class KoreanPack extends Language {
 		miCopy = "\uBCF5\uC0AC(C)            ";
 		miPaste = "\uBD99\uC5EC\uB123\uAE30(P)            ";
 		miDelete = "\uC0AD\uC81C(L)            ";
+		miSearch = "Google\uC73C\uB85C \uAC80\uC0C9(S)...          ";
 		miFind = "\uCC3E\uAE30(F)...            ";
 		miFindNxt = "\uB2E4\uC74C \uCC3E\uAE30(N)            ";
 		miReplce = "\uBC14\uAFB8\uAE30(R)...            ";
