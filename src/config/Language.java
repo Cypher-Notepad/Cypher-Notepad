@@ -88,4 +88,10 @@ public abstract class Language {
 	public String am = "AM";
 	public String pm = "PM";
 	
+	//CheckSave
+	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to ";
+	public String checkSave_post = "?";
+	public String save = "Save";
+	public String noSave = "  Don't Save  ";
+	
 }

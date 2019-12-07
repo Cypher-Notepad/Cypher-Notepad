@@ -88,5 +88,12 @@ class KoreanPack extends Language {
 		am = "\uC624\uC804";
 		pm = "\uC624\uD6C4";
 		
+		//CheckSave
+		checkSave_pre = "\uC791\uC5C5\uC774 \uC800\uC7A5\uB418\uC9C0 \uC54A\uC558\uC2B5\uB2C8\uB2E4. \uBCC0\uACBD \uB0B4\uC6A9\uC744 ";
+		checkSave_post = "\uC5D0 \uC800\uC7A5\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?";
+		save = "\uC800\uC7A5";
+		noSave = "  \uC800\uC7A5 \uC548 \uD568  ";
+
+		
 	}
 }

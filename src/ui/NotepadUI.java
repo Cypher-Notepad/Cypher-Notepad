@@ -493,7 +493,6 @@ public class NotepadUI extends JFrame implements UI {
 								+ "10%ec%9d%98+%eb%a9%94%eb%aa%a8%ec%9e%a5%ec%97%90+%eb%8c%80%ed%95%9c+"
 								+ "%eb%8f%84%ec%9b%80%eb%a7%90+%eb%b3%b4%ea%b8%b0&filters=guid%3a%224466414-ko-dia%22+"
 								+ "lang%3a%22ko%22&ocid=HelpPane-BingIA&setmkt=en-us&setlang=en-us"));
-
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -620,10 +619,10 @@ public class NotepadUI extends JFrame implements UI {
 	public boolean checkSave() {
 		boolean rtn = false;
 		if (!savedContext.equals(textArea.getText())) {
-			Object[] options = { "Save", "Don't Save", "Cancel" };
+			Object[] options = { lang.save, lang.noSave, lang.btnCancel };
 
 			int response = JOptionPane.showOptionDialog(frame,
-					"Your work has not been saved. Do you want to save changes to Untitled?", "Crypto Notepad",
+					lang.checkSave_pre + fileName + lang.checkSave_post, "Crypto Notepad",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
 			if (response == JOptionPane.YES_OPTION) {
