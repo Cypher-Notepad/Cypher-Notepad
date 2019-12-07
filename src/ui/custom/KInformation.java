@@ -55,8 +55,8 @@ public class KInformation extends JDialog {
 		
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon1 = new ImageIcon("resource\\\\encrypted_black_origin.png");
-		Image originImg1 = originIcon1.getImage();
+
+		Image originImg1 = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_origin.png")).getImage();
 		Image changedImg1 = originImg1.getScaledInstance(70, 68, Image.SCALE_SMOOTH);
 		ImageIcon Icon1 = new ImageIcon(changedImg1);
 		lblIcon.setIcon(Icon1);
@@ -107,8 +107,8 @@ public class KInformation extends JDialog {
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon = new ImageIcon("resource\\\\encrypted_white_origin.png");
-		Image originImg = originIcon.getImage();
+
+		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_white_origin.png")).getImage();
 		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
 		lblSdf.setIcon(Icon);

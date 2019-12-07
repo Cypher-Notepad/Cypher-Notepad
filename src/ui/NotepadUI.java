@@ -238,8 +238,8 @@ public class NotepadUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		ImageIcon originIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");
-		Image originImg = originIcon.getImage();
+		
+		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png")).getImage();
 		Image changedImg = originImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		frame.setIconImage(changedImg);
 
