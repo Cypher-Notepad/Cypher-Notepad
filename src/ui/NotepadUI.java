@@ -86,7 +86,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KSettings st;
 
 	private Language lang;
-	
+
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
 			if (!menuBar.hasFocus()) {
@@ -242,8 +242,9 @@ public class NotepadUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		
-		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png")).getImage();
+
+		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png"))
+				.getImage();
 		Image changedImg = originImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		frame.setIconImage(changedImg);
 
@@ -314,9 +315,9 @@ public class NotepadUI extends JFrame implements UI {
 			System.exit(0);
 		}
 	}
-	
+
 	public void settings() {
-				
+
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -401,8 +402,8 @@ public class NotepadUI extends JFrame implements UI {
 		// delete
 		deleteMenuItem.addActionListener(e -> textArea.replaceSelection(""));
 
-		//search
-		searchMenuItem.addActionListener(e->{
+		// search
+		searchMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
 					Desktop.getDesktop().browse(new URI("http://www.google.com"));
@@ -413,7 +414,7 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
-		
+
 		// find
 		findMenuItem.addActionListener(e -> fd.showDialog());
 
@@ -445,10 +446,9 @@ public class NotepadUI extends JFrame implements UI {
 			}
 
 			String date;
-			if(Property.getProperties().get(Property.language).equals("KOREAN")) {
+			if (Property.getProperties().get(Property.language).equals("KOREAN")) {
 				date = String.format("%4d/%02d/%02d " + ampm + "%02d:%02d ", year, month, day, hour, minute);
-			}
-			else {
+			} else {
 				date = String.format("%02d/%02d/%4d " + "%02d:%02d " + ampm + " ", day, month, year, hour, minute);
 			}
 			textArea.insert(date, textArea.getCaretPosition());
@@ -481,9 +481,32 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		// statusbar
+		statusBarMenuItem.setEnabled(false);
 		// view
+		viewHelpMenuItem.addActionListener(e -> {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				try {
+					if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
+						Desktop.getDesktop().browse(new URI("https://www.bing.com/search?q=windows+10+notepad+help&FORM=AWRE"));
+					} else {
+						Desktop.getDesktop().browse(new URI("https://www.bing.com/search?q=windows+"
+								+ "10%ec%9d%98+%eb%a9%94%eb%aa%a8%ec%9e%a5%ec%97%90+%eb%8c%80%ed%95%9c+"
+								+ "%eb%8f%84%ec%9b%80%eb%a7%90+%eb%b3%b4%ea%b8%b0&filters=guid%3a%224466414-ko-dia%22+"
+								+ "lang%3a%22ko%22&ocid=HelpPane-BingIA&setmkt=en-us&setlang=en-us"));
+
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+
 		// about
 		aboutNotepadMenuItem.addActionListener(e -> info.showDialog());
+
+		// settings
 		settingsMenuItem.addActionListener(e -> {
 			if (st.showDialog()) {
 				System.out.println("confirmed");
@@ -509,7 +532,7 @@ public class NotepadUI extends JFrame implements UI {
 		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-        searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
+		searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
 		findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
 		findNextMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 		replaceMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
@@ -522,7 +545,7 @@ public class NotepadUI extends JFrame implements UI {
 		openMenuItem.setMnemonic(KeyEvent.VK_O);
 		saveMenuItem.setMnemonic(KeyEvent.VK_S);
 		saveAsMenuItem.setMnemonic(KeyEvent.VK_A);
-		
+
 		pageSetupMenuItem.setMnemonic(KeyEvent.VK_U);
 		printMenuItem.setMnemonic(KeyEvent.VK_P);
 		exitMenuItem.setMnemonic(KeyEvent.VK_X);
@@ -547,17 +570,16 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
-		
+
 		settingsMenuItem.setMnemonic(KeyEvent.VK_S);
-		
-		if(Property.getProperties().get(Property.language).equals("ENGLISH")) {
+
+		if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
 			findNextMenuItem.setDisplayedMnemonicIndex(5);
 			saveAsMenuItem.setDisplayedMnemonicIndex(5);
-		}
-		else {
+		} else {
 			aboutNotepadMenuItem.setDisplayedMnemonicIndex(18);
 		}
-		
+
 	}
 
 	public boolean saveAsAction() {
