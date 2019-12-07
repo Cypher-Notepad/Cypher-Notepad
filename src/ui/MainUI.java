@@ -135,11 +135,18 @@ public class MainUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
+		
+		Image originFrameImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png")).getImage();
+		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+		setIconImage(changedFrameImg);
+		
+		/*
 		ImageIcon frameIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");
 		Image originFrameImg = frameIcon.getImage();
 		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		setIconImage(changedFrameImg);
-
+		*/
+		
 		setBounds(100, 100, 550, 719);
 		// setBounds(100, 100, 440, 576);
 		this.setLocationRelativeTo(null);
@@ -251,8 +258,9 @@ public class MainUI extends JFrame implements UI {
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon originIcon = new ImageIcon("resource\\encrypted_white_origin.png");
-		Image originImg = originIcon.getImage();
+		//ImageIcon originIcon = new ImageIcon("resource\\encrypted_white_origin.png");
+		//Image originImg = originIcon.getImage();
+		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_white_origin.png")).getImage();
 		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
 		lblSdf.setIcon(Icon);
