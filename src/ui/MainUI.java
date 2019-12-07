@@ -60,7 +60,7 @@ public class MainUI extends JFrame implements UI {
 		});
 
 		addMouseMotionListener(new MouseMotionAdapter() {
-			private static final int ESCAPE_THRESHOLD = 17;
+			private static final int STICKY_THRESHOLD = 17;
 			Insets taskBar;// = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
 			Point curFramePos;
 			int screenXSize = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -88,25 +88,25 @@ public class MainUI extends JFrame implements UI {
 				bottom = screenYSize - top - frameHeight - taskBar.bottom - taskBar.top;
 
 				// Horizontal magnet frame.
-				if (Math.abs(left) < ESCAPE_THRESHOLD) {
+				if (Math.abs(left) < STICKY_THRESHOLD) {
 					posX = 0 + taskBar.left;
-					if (distanceX > ESCAPE_THRESHOLD) posX = ESCAPE_THRESHOLD + taskBar.left;
-					if (distanceX < -ESCAPE_THRESHOLD) posX = -ESCAPE_THRESHOLD + taskBar.left;
-				} else if (Math.abs(right) < ESCAPE_THRESHOLD) {
+					if (distanceX > STICKY_THRESHOLD) posX = STICKY_THRESHOLD + taskBar.left;
+					if (distanceX < -STICKY_THRESHOLD) posX = -STICKY_THRESHOLD + taskBar.left;
+				} else if (Math.abs(right) < STICKY_THRESHOLD) {
 					posX = screenXSize - frameWidth - taskBar.right;
-					if (distanceX > ESCAPE_THRESHOLD) posX = screenXSize - frameWidth +  ESCAPE_THRESHOLD - taskBar.right; 
-					if (distanceX < -ESCAPE_THRESHOLD) posX = screenXSize - frameWidth - ESCAPE_THRESHOLD - taskBar.right;
+					if (distanceX > STICKY_THRESHOLD) posX = screenXSize - frameWidth +  STICKY_THRESHOLD - taskBar.right; 
+					if (distanceX < -STICKY_THRESHOLD) posX = screenXSize - frameWidth - STICKY_THRESHOLD - taskBar.right;
 				}
 
 				// Vertical magnet frame.
-				if (Math.abs(top) < ESCAPE_THRESHOLD) {
+				if (Math.abs(top) < STICKY_THRESHOLD) {
 					posY = 0 + taskBar.top;
-					if (distanceY > ESCAPE_THRESHOLD) posY = ESCAPE_THRESHOLD + taskBar.top;
-					if (distanceY < -ESCAPE_THRESHOLD) posY = -ESCAPE_THRESHOLD + taskBar.top;
-				} else if (Math.abs(bottom) < ESCAPE_THRESHOLD) {
+					if (distanceY > STICKY_THRESHOLD) posY = STICKY_THRESHOLD + taskBar.top;
+					if (distanceY < -STICKY_THRESHOLD) posY = -STICKY_THRESHOLD + taskBar.top;
+				} else if (Math.abs(bottom) < STICKY_THRESHOLD) {
 					posY = screenYSize - frameHeight - taskBar.bottom;
-					if (distanceY > ESCAPE_THRESHOLD) posY = screenYSize - frameHeight + ESCAPE_THRESHOLD - taskBar.bottom;
-					if (distanceY < -ESCAPE_THRESHOLD) posY = screenYSize - frameHeight - ESCAPE_THRESHOLD - taskBar.bottom;
+					if (distanceY > STICKY_THRESHOLD) posY = screenYSize - frameHeight + STICKY_THRESHOLD - taskBar.bottom;
+					if (distanceY < -STICKY_THRESHOLD) posY = screenYSize - frameHeight - STICKY_THRESHOLD - taskBar.bottom;
 				}
 				
 				setLocation(posX, posY);
@@ -139,13 +139,6 @@ public class MainUI extends JFrame implements UI {
 		Image originFrameImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png")).getImage();
 		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		setIconImage(changedFrameImg);
-		
-		/*
-		ImageIcon frameIcon = new ImageIcon("resource\\encrypted_black_crop_bg.png");
-		Image originFrameImg = frameIcon.getImage();
-		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-		setIconImage(changedFrameImg);
-		*/
 		
 		setBounds(100, 100, 550, 719);
 		// setBounds(100, 100, 440, 576);
@@ -258,8 +251,6 @@ public class MainUI extends JFrame implements UI {
 
 		JLabel lblSdf = new JLabel("sdf");
 		lblSdf.setHorizontalAlignment(SwingConstants.CENTER);
-		//ImageIcon originIcon = new ImageIcon("resource\\encrypted_white_origin.png");
-		//Image originImg = originIcon.getImage();
 		Image originImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_white_origin.png")).getImage();
 		Image changedImg = originImg.getScaledInstance(71, 90, Image.SCALE_SMOOTH);
 		ImageIcon Icon = new ImageIcon(changedImg);
