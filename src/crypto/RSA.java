@@ -7,10 +7,13 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
@@ -26,7 +29,6 @@ abstract public class RSA {
 	private byte[] publicKey = null;
 	private byte[] privateKey = null;
 
-
 	public RSA() {
 		System.out.println("RSA initialize.");
 		initialize();
@@ -34,7 +36,7 @@ abstract public class RSA {
 
 	private void initialize() {
 
-		//create a pair of key
+		// create a pair of key
 		try {
 			KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance(ENCRYPT_ALGO);
 			keyGenerator.initialize(KEY_SIZE);
@@ -43,7 +45,7 @@ abstract public class RSA {
 			this.publicKey = keyPair.getPublic().getEncoded();
 			this.privateKey = keyPair.getPrivate().getEncoded();
 
-			//another way to create key
+			// another way to create key
 			/*
 			 * KeyFactory keyFactory = KeyFactory.getInstance(ENCRYPT_ALGO);
 			 * this.publicKeySpec = keyFactory.getKeySpec(this.publicKey.,
@@ -54,7 +56,6 @@ abstract public class RSA {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public String generatePublicKey() {
 
@@ -63,9 +64,8 @@ abstract public class RSA {
 		return publicKeyStr;
 	}
 
-	//get public key from server
+	// get public key from server
 	abstract protected String getPublicKey();
-
 
 	protected String getPrivateKey() {
 
@@ -77,18 +77,47 @@ abstract public class RSA {
 		return new RSA.RSAEncryptor(getPublicKey());
 	}
 
+	public Encryptor getEncryptor(String privateKey) {
+		PublicKey publicKey= derivePublicKey(privateKey);
+		String publicKeyStr = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+		
+		return new RSA.RSAEncryptor(publicKeyStr);
+	}
+
 	public Decryptor getDecryptor() {
 		return new RSA.RSADecryptor(getPrivateKey());
 	}
+
 	public Decryptor getDecryptor(String privateKey) {
 		return new RSA.RSADecryptor(privateKey);
 	}
 
-	private class RSAEncryptor extends Encryptor {
+	private PublicKey derivePublicKey(String privateKey) {
+		PublicKey derivedPublicKey = null;
+		RSAPrivateCrtKey privk = (RSAPrivateCrtKey) getDecryptor(privateKey).getKey();
+		RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privk.getModulus(), privk.getPublicExponent());
+
+		KeyFactory keyFactory;
+		try {
+			keyFactory = KeyFactory.getInstance(ENCRYPT_ALGO);
+			derivedPublicKey = keyFactory.generatePublic(publicKeySpec);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+
+		return derivedPublicKey;
+	}
+
+	private class RSAEncryptor extends Encryptor {
+
 		private RSAEncryptor(String publicKeyStr) {
 
-			//convert string as parameter into public key.
+			// convert string as parameter into public key.
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyStr));
 			try {
 				KeyFactory factory = KeyFactory.getInstance(ENCRYPT_ALGO);
@@ -109,7 +138,7 @@ abstract public class RSA {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.ENCRYPT_MODE, (RSAPublicKey) getKey());
 
-				//be careful about encoding, charset, flag of base64
+				// be careful about encoding, charset, flag of base64
 				encrypted = Base64.getEncoder()
 						.encodeToString(cipher.doFinal(rawValue.getBytes(StandardCharsets.UTF_8)));
 
@@ -153,7 +182,7 @@ abstract public class RSA {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.DECRYPT_MODE, (RSAPrivateKey) getKey());
 
-				//make sure to specify charset when creating string.
+				// make sure to specify charset when creating string.
 				decoded = new String(
 						cipher.doFinal(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))),
 						StandardCharsets.UTF_8);
@@ -165,7 +194,7 @@ abstract public class RSA {
 			} catch (IllegalBlockSizeException e) {
 				e.printStackTrace();
 			}
-			
+
 			System.out.println(decoded);
 			return decoded;
 		}

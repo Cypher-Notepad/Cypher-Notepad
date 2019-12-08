@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.swing.JFrame;
@@ -31,8 +32,10 @@ import ui.NotepadUI;
 import vo.MemoVO;
 
 public class FileManager {
-	
-	public static final String DIR_NAME = System.getProperty("user.home") + "\\Crypto-Notepad\\";
+
+	public static final String SEPARATOR = File.separator;
+	public static final String HOME_DIR = System.getProperty("user.home") + SEPARATOR;
+	public static final String DIR_NAME = HOME_DIR + "Crypto-Notepad" + SEPARATOR;
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final String EXT_MEMO = ".txt";
@@ -50,16 +53,17 @@ public class FileManager {
 	private ArrayList<String> keys = new ArrayList<String>();
 	private Language lang;
 
+	// Index of Keys.
+	private int processID = 0;
+	private int maxKey = 50;
+	private boolean recycleKey = false;
+
 	public void printshowkey() {
 		System.out.println("############################");
 		for (String k : keys) {
 			System.out.println(k);
 		}
 	}
-
-	// Index of Keys.
-	private int processID = 0;
-	// private Properties property;
 
 	private FileManager() {
 		// keys = new ArrayList<String>();
@@ -109,36 +113,46 @@ public class FileManager {
 					reloaded.add(keyLine);
 				}
 
-				if (reloaded.size() < keys.size()) {
+				/*
+				 * The program uses the key below the maximum index to encrypt.
+				 * But the number of key in the key file may be exceed max idx.
+				 * */
+				if (reloaded.size() < maxKey) {
 					/*
-					 * The case of key file invalidation.
-					 * In the case of key invalidation, the RSA must be re-created to make new key-pair.
+					 * The case of key file invalidation. In the case of key invalidation, the RSA
+					 * must be re-created to make new key-pair.
 					 **/
-					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
-					reloaded.add(RSAImpl.getInstance().getPrivateKey());
-					System.out.println("RELOAD INVAL ID : " + processID);
+					if (reloaded.size() < keys.size()) {
+						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
+						reloaded.add(RSAImpl.getInstance().getPrivateKey());
+						System.out.println("RELOAD INVAL ID : " + processID);
+					} else {
+						System.out.println("RELOAD");
+					}
+					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
+					recycleKey = false;
 				} else {
-					System.out.println("RELOAD");
+					processID = new Random().nextInt(maxKey);
+					recycleKey = true;
 				}
 				keys = reloaded;
-				processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
 
-				System.out.println("RELOADED SIZE : " + keys.size());
+				
+				System.out.println("RELOADED SIZE : " + keys.size() + "final id : " + processID);
 
 			} else {
-				// keys = new ArrayList<String>();
 				while ((keyLine = keyReader.readLine()) != null) {
 					keys.add(keyLine);
 				}
-
-				addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
-				/*
-				 * keyWriter = new PrintWriter(new FileWriter(keyFilePath, true));
-				 * keyWriter.println(RSAImpl.getInstance().getPrivateKey());
-				 */
-
-				processID = keys.size();
-				keys.add(RSAImpl.getInstance().getPrivateKey());
+				if (keys.size() < maxKey) {
+					addToKeyFile(true, RSAImpl.getInstance().getPrivateKey());
+					processID = keys.size();
+					keys.add(RSAImpl.getInstance().getPrivateKey());
+					recycleKey = false;
+				} else {
+					processID = new Random().nextInt(maxKey);
+					recycleKey = true;
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -163,7 +177,7 @@ public class FileManager {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
 		FileOutputStream fout = null;
 		PrintWriter keyWriter = null;
-
+		
 		try {
 			fout = new FileOutputStream(keyFilePath, append);
 			try {
@@ -253,6 +267,9 @@ public class FileManager {
 			}
 			inStream.close();
 
+			//maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
+			maxKey = 2;
+			
 		} catch (IOException e) {
 
 		}
@@ -277,11 +294,15 @@ public class FileManager {
 
 			// Encrypt.
 			CryptoFacade crypto = new CryptoFacade();
-			crypto.encrypt(memo);
-
-			System.out.println("이걸로 암호화함 : \n processID : " + processID +"\n"+ RSAImpl.getInstance().getPrivateKey());
-			System.out.println("그런데 키의 인덱스는 : "  + keys.indexOf(RSAImpl.getInstance().getPrivateKey()));
+			if (recycleKey) {
+				crypto.encrypt(memo, keys.get(processID));
+			} else {
+				crypto.encrypt(memo);
+			}
 			
+			System.out.println("이걸로 암호화함 : \n processID : " + processID + "\n" + RSAImpl.getInstance().getPrivateKey());
+			System.out.println("그런데 키의 인덱스는 : " + keys.indexOf(RSAImpl.getInstance().getPrivateKey()));
+
 			memoWriter.println(HEADER_WARNING);
 			memoWriter
 					.println(String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
@@ -326,40 +347,41 @@ public class FileManager {
 
 				// Return null not to show up notepadUI(= stay MainUI).
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(
-						frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
+										+ "\n(" + e.getClass().getName() + ")",
+								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(frame,
-						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(frame,
+								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+										+ "\n(" + e.getClass().getName() + ")",
+								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 			} catch (IllegalArgumentException e) {
-				JOptionPane.showMessageDialog(frame,
-						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(frame,
+								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+										+ "\n(" + e.getClass().getName() + ")",
+								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(frame,
-						"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(frame,
+								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
+										+ "\n(" + e.getClass().getName() + ")",
+								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
-				e.printStackTrace();
-				System.out.println("BADPADDING : " + keys.size());
-				JOptionPane.showMessageDialog(frame,
-						"[ERROR]" + "\nUnable to decrypt this file." + "\nThe configuration file may be corrupted."
-								+ "\n(Error Name : " + e.getClass().getName() + ")",
+				JOptionPane.showMessageDialog(
+						frame, "[ERROR]" + "\nUnable to decrypt this file."
+								+ "\nThe configuration file may be corrupted." + "\n(" + e.getClass().getName() + ")",
 						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(frame,
 						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
 								+ "\nPlease contact developer via email with error name below."
-								+ "\n(E-mail : matth1996@hanmail.net)" + "\n(Error Name : " + e.getClass().getName()
-								+ ")",
+								+ "\n*E-mail : matth1996@hanmail.net" + "\n**Error Name : " + e.getClass().getName(),
 						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			}
@@ -436,10 +458,9 @@ public class FileManager {
 			ampm = lang.pm;
 		}
 
-		if(Property.getProperties().get(Property.language).equals("KOREAN")) {
+		if (Property.getProperties().get(Property.language).equals("KOREAN")) {
 			return String.format("%4d/%02d/%02d " + ampm + "%02d:%02d ", year, month, day, hour, minute);
-		}
-		else {
+		} else {
 			return String.format("%02d/%02d/%4d " + "%02d:%02d" + ampm, day, month, year, hour, minute);
 		}
 	}

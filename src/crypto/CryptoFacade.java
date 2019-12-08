@@ -19,12 +19,20 @@ public class CryptoFacade {
 	}
 
 	public void encrypt(MemoVO memo) {
-
+		encrypt(memo, null);
+	}
+	
+	public void encrypt(MemoVO memo, String privateKey) {
 		String secretKey = this.aes.generateSecretKey();
 		Encryptor aesEncryptor = aes.getEncryptor(secretKey);
 		memo.setContent(aesEncryptor.encrypt(memo.getContent()));
 
-		Encryptor rsaEncryptor = rsa.getEncryptor();
+		Encryptor rsaEncryptor;
+		if(privateKey != null) {
+			rsaEncryptor = rsa.getEncryptor(privateKey);			
+		}else {
+			rsaEncryptor = rsa.getEncryptor();
+		}
 		memo.setKey(rsaEncryptor.encrypt(secretKey));
 	}
 /*

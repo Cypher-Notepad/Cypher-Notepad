@@ -30,6 +30,7 @@ public class Property {
 	public static String language = "LANGUAGE";
 	public static String isEncrypted = "ENCRYPTED";
 	public static String nOfRcntFiles = "NUMBER_OF_RECENT_FILES";
+	public static String nOfKeys = "NUMBER_OF_KEYS";
 	public static String rcntFile = "Recent File";
 	public static String fontFamily = "FONT_FAMILY";
 	public static String fontStyle = "FONT_STYLE";
@@ -40,98 +41,6 @@ public class Property {
 	private Properties prop;
 	private PropertyUpdater updater;
 	private Language languagePack;
-
-	private class PropertyUpdater {
-
-		private static final int DUPLICATION_INTERVAL = 50;
-
-		private WatchService ws;
-		private WatchKey watchKey;
-		private Thread updater;
-
-		// make catch-throw clear...
-		public PropertyUpdater() {
-			ws = null;
-			try {
-				ws = FileSystems.getDefault().newWatchService();
-				Path path = Paths.get(FileManager.DIR_NAME);
-				path.register(ws, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
-
-				updater = new Thread(() -> {
-					while (true) {
-						try {
-							watchKey = ws.take();
-							Thread.sleep(DUPLICATION_INTERVAL);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-
-						List<WatchEvent<?>> events = watchKey.pollEvents();
-
-						for (WatchEvent<?> event : events) {
-							Kind<?> kind = event.kind();
-							Path paths = (Path) event.context();
-							String eventFile = paths.getFileName().toString();
-
-							switch (eventFile) {
-							case FileManager.FILE_NAME_PROP:
-								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-									// Reload new property and apply.
-									System.out.println("MODIFIED" + paths.getFileName());
-									FileManager.getInstance().loadProperties(true);
-									applyReloadedProp();
-
-								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("***Prop Deleted");
-									FileManager.getInstance().saveProperties();
-								}
-								break;
-
-							case FileManager.FILE_NAME_KEYS:
-								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-									System.out.println("***Key Modi");
-									FileManager.getInstance().loadKeys(true);
-
-								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("***Key Deleted");
-									FileManager.getInstance().saveKeys();
-								}
-								break;
-
-							default:
-
-							}
-						}
-
-						if (!watchKey.reset()) {
-							try {
-								ws.close();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-					}
-				});
-			} catch (IOException e) {
-				try {
-					ws.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
-			}
-
-		}
-
-		public void startUpdater() {
-			updater.start();
-			System.out.println("Updater Start!");
-		}
-
-	}
 
 	private Property() {
 		prop = new Properties();
@@ -201,6 +110,7 @@ public class Property {
 		Properties prop = Property.getProperties();
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
+		prop.setProperty(nOfKeys, "50");
 		prop.setProperty(fontFamily, "Dialog");
 		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
 		prop.setProperty(fontSize, String.valueOf(11));
@@ -213,6 +123,7 @@ public class Property {
 		prop.setProperty(language, "ENGLISH");
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
+		prop.setProperty(nOfKeys, "50");
 		prop.setProperty(fontFamily, "Dialog");
 		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
 		prop.setProperty(fontSize, String.valueOf(11));
@@ -323,6 +234,98 @@ public class Property {
 		}
 
 		return rcntFiles;
+	}
+	
+	private class PropertyUpdater {
+
+		private static final int DUPLICATION_INTERVAL = 50;
+
+		private WatchService ws;
+		private WatchKey watchKey;
+		private Thread updater;
+
+		// make catch-throw clear...
+		public PropertyUpdater() {
+			ws = null;
+			try {
+				ws = FileSystems.getDefault().newWatchService();
+				Path path = Paths.get(FileManager.DIR_NAME);
+				path.register(ws, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+
+				updater = new Thread(() -> {
+					while (true) {
+						try {
+							watchKey = ws.take();
+							Thread.sleep(DUPLICATION_INTERVAL);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+
+						List<WatchEvent<?>> events = watchKey.pollEvents();
+
+						for (WatchEvent<?> event : events) {
+							Kind<?> kind = event.kind();
+							Path paths = (Path) event.context();
+							String eventFile = paths.getFileName().toString();
+
+							switch (eventFile) {
+							case FileManager.FILE_NAME_PROP:
+								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+									// Reload new property and apply.
+									System.out.println("MODIFIED" + paths.getFileName());
+									FileManager.getInstance().loadProperties(true);
+									applyReloadedProp();
+
+								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+									System.out.println("***Prop Deleted");
+									FileManager.getInstance().saveProperties();
+								}
+								break;
+
+							case FileManager.FILE_NAME_KEYS:
+								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
+									System.out.println("***Key Modi");
+									FileManager.getInstance().loadKeys(true);
+
+								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
+									System.out.println("***Key Deleted");
+									FileManager.getInstance().saveKeys();
+								}
+								break;
+
+							default:
+
+							}
+						}
+
+						if (!watchKey.reset()) {
+							try {
+								ws.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+					}
+				});
+			} catch (IOException e) {
+				try {
+					ws.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				e.printStackTrace();
+			}
+
+		}
+
+		public void startUpdater() {
+			updater.start();
+			System.out.println("Updater Start!");
+		}
+
 	}
 
 }
