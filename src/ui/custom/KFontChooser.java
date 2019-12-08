@@ -97,7 +97,7 @@ public class KFontChooser extends JDialog {
 		fonts = allfonts;
 		//fonts = new String[] {};
 		//fonts = fontValidation().toArray(fonts);
-		styles = new String[] { "Plain", "Italics", "Bold" };
+		styles = new String[] { lang.kfcPlain, lang.kfcItalic, lang.kfcBold };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
 		selectedFont = new Font("Dialog", Font.PLAIN, 12);
@@ -331,14 +331,14 @@ public class KFontChooser extends JDialog {
 
 	private int getSelectedStyle(int selectedIdx) {
 		int style = Font.PLAIN;
-		if (styles[selectedIdx].equals("Bold")) {
+		if (styles[selectedIdx].equals(lang.kfcBold)) {
 			style = Font.BOLD;
 		}
-		if (styles[selectedIdx].equals("Plain")) {
+		if (styles[selectedIdx].equals(lang.kfcPlain)) {
 			style = Font.PLAIN;
 
 		}
-		if (styles[selectedIdx].equals("Italics")) {
+		if (styles[selectedIdx].equals(lang.kfcItalic)) {
 			style = Font.ITALIC;
 		}
 		return style;

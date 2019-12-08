@@ -76,6 +76,10 @@ public abstract class Language {
 	public String kfcScript = "Script";
 	public String kfcColor = "Color";
 	public String kfKoreanFont = "Only Korean fonts";
+	public String kfcPlain = "Plain";
+	public String kfcBold = "Bold";
+	public String kfcItalic = "Italics";
+	
 
 	//KSettings
 	public String ksLang = " \uC5B8\uC5B4";

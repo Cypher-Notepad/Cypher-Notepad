@@ -76,6 +76,9 @@ class KoreanPack extends Language {
 		kfcScript = "\uC2A4\uD06C\uB9BD\uD2B8";
 		kfcColor = "\uC0C9 \uC0C1";
 		kfKoreanFont = "\uD55C\uAE00 \uC9C0\uC6D0 \uD3F0\uD2B8";
+		kfcPlain = "\uBCF4\uD1B5";
+		kfcBold = "\uAD75\uAC8C";
+		kfcItalic = "\uAE30\uC6B8\uC784\uAF34";
 
 		// KSettings
 		ksLang = " Language";
