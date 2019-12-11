@@ -1,6 +1,7 @@
 package ui.custom;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -44,6 +45,7 @@ public class KInformation extends JDialog {
 
 		btnOk = new JButton("OK");
 		btnOk.addActionListener(e -> this.dispose());
+		getRootPane().setDefaultButton(btnOk);
 
 		JTextPane txtpnCryptonotepadVersion = new JTextPane();
 		txtpnCryptonotepadVersion.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -51,7 +53,7 @@ public class KInformation extends JDialog {
 		// txtpnCryptonotepadVersion.setForeground(new Color(0x000000));
 		txtpnCryptonotepadVersion.setBackground(new Color(240, 240, 240));
 		txtpnCryptonotepadVersion.setText(
-				"\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\nThe source code of this program may be found on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". It is always welcomed you to press \"Follow\" and \"Star\" button.");
+				"\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\nThe source code of this program may be found on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". You are always welcome to press the \"follow\" and \"star\" button.");
 		
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -62,7 +64,7 @@ public class KInformation extends JDialog {
 		lblIcon.setIcon(Icon1);
 		
 		JTextPane txtpnG = new JTextPane();
-		txtpnG.setText("Crypto-Notepad\r\nVersion 2.0\r\nCreated by \"LEEDONGGEON1996\" on Github");
+		txtpnG.setText("Crypto-Notepad\r\nVersion 2.0\r\nImplemented by \"LEEDONGGEON1996\" on Github");
 		txtpnG.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtpnG.setEditable(false);
 		txtpnG.setBackground(new Color(240, 240, 240));
@@ -162,6 +164,7 @@ public class KInformation extends JDialog {
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 
+		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 
 	public void showDialog() {

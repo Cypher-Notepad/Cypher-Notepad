@@ -41,12 +41,12 @@ public class FileManager {
 	private static final String EXT_MEMO = ".txt";
 	private static final int NUM_HEADER_LINE = 9;
 	private static final String HEADER_WARNING = "####################################################\r\n"
-			+ "## 		      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
+			+ "##             	      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
 			+ "## Notepad, you can not access this file anymore. ##\r\n"
-			+ "## Please open it with Crypto-Notepad. Do not	  ##\r\n"
+			+ "## Please open it with Crypto-Notepad. Do not     ##\r\n"
 			+ "## modify anything in this file including this    ##\r\n"
-			+ "## message or you will never recover its original ##\r\n"
-			+ "## content.		_LEEDONGGEON1996_	  ##\r\n"
+			+ "## message or you will never be able to recover   ##\r\n"
+			+ "## its original content.     _LEEDONGGEON1996_    ##\r\n"
 			+ "####################################################\r\n";
 
 	private static FileManager instance = null;
@@ -114,9 +114,9 @@ public class FileManager {
 				}
 
 				/*
-				 * The program uses the key below the maximum index to encrypt.
-				 * But the number of key in the key file may be exceed max idx.
-				 * */
+				 * The program uses the key below the maximum index to encrypt. But the number
+				 * of key in the key file may be exceed max idx.
+				 */
 				if (reloaded.size() < maxKey) {
 					/*
 					 * The case of key file invalidation. In the case of key invalidation, the RSA
@@ -137,7 +137,6 @@ public class FileManager {
 				}
 				keys = reloaded;
 
-				
 				System.out.println("RELOADED SIZE : " + keys.size() + "final id : " + processID);
 
 			} else {
@@ -177,7 +176,7 @@ public class FileManager {
 		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
 		FileOutputStream fout = null;
 		PrintWriter keyWriter = null;
-		
+
 		try {
 			fout = new FileOutputStream(keyFilePath, append);
 			try {
@@ -268,7 +267,7 @@ public class FileManager {
 			inStream.close();
 
 			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
-			
+
 		} catch (IOException e) {
 
 		}
@@ -298,7 +297,7 @@ public class FileManager {
 			} else {
 				crypto.encrypt(memo);
 			}
-			
+
 			System.out.println("이걸로 암호화함 : \n processID : " + processID + "\n" + RSAImpl.getInstance().getPrivateKey());
 			System.out.println("그런데 키의 인덱스는 : " + keys.indexOf(RSAImpl.getInstance().getPrivateKey()));
 

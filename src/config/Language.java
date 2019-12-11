@@ -84,8 +84,8 @@ public abstract class Language {
 	//KSettings
 	public String ksLang = " \uC5B8\uC5B4";
 	public String ksLangHover = " \uC601\uC5B4 -> \uD55C\uAD6D\uC5B4";
-	public String ksInval = "  Invalidate every encrypted files";
-	public String ksInit = " Initialize settings";
+	public String ksInval = "  Invalidate All Encrypted Files";
+	public String ksInit = " Initialize Settings";
 	public String ksNoti = "¡Ø Some changes will take effect after restart.";
 	
 	//Date
@@ -94,7 +94,7 @@ public abstract class Language {
 	
 	//CheckSave
 	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to ";
-	public String checkSave_post = "?";
+	public String checkSave_post = "?   \n";
 	public String save = "Save";
 	public String noSave = "  Don't Save  ";
 	
