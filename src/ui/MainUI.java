@@ -182,7 +182,7 @@ public class MainUI extends JFrame implements UI {
 		DefaultTableCellRenderer tScheduleCellRenderer = new DefaultTableCellRenderer();
 		tScheduleCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 		TableColumnModel tcmSchedule = table.getColumnModel();
-		for (int i = 1; i < tcmSchedule.getColumnCount(); i++) {
+		for (int i = 1; i < tcmSchedule.getColumnCount()-1; i++) {
 			tcmSchedule.getColumn(i).setCellRenderer(tScheduleCellRenderer);
 		}
 
