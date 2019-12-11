@@ -415,7 +415,12 @@ public class NotepadUI extends JFrame implements UI {
 		searchMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
-					Desktop.getDesktop().browse(new URI("http://www.google.com"));
+				String selected = textArea.getSelectedText();	
+					if(selected == null)
+						Desktop.getDesktop().browse(new URI("http://www.google.com"));
+					else
+						Desktop.getDesktop().browse(new URI("https://www.google.com/search?q=" + selected));
+						
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e1) {
