@@ -44,6 +44,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
 import config.Property;
+import file.FileDrop;
 import file.FileManager;
 import thread.ThreadManager;
 import ui.custom.KFinder;
@@ -326,6 +327,14 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 
+		new FileDrop(textArea, new FileDrop.Listener() {
+			public void filesDropped(java.io.File[] files) {
+				if (checkSave()) {
+					loadMemo(files[0]);
+				}
+			} // end filesDropped
+		}); // end FileDrop.Listener
+
 		// frame.getContentPane().(BorderFactory.createLineBorder(Color.blue,10));
 		// frame.getContentPane().addMouseListener(menuBarCloser);
 		frame.addMouseListener(menuBarCloser);
@@ -487,7 +496,8 @@ public class NotepadUI extends JFrame implements UI {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
 					if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
-						Desktop.getDesktop().browse(new URI("https://www.bing.com/search?q=windows+10+notepad+help&FORM=AWRE"));
+						Desktop.getDesktop()
+								.browse(new URI("https://www.bing.com/search?q=windows+10+notepad+help&FORM=AWRE"));
 					} else {
 						Desktop.getDesktop().browse(new URI("https://www.bing.com/search?q=windows+"
 								+ "10%ec%9d%98+%eb%a9%94%eb%aa%a8%ec%9e%a5%ec%97%90+%eb%8c%80%ed%95%9c+"
@@ -621,9 +631,9 @@ public class NotepadUI extends JFrame implements UI {
 		if (!savedContext.equals(textArea.getText())) {
 			Object[] options = { lang.save, lang.noSave, lang.btnCancel };
 
-			int response = JOptionPane.showOptionDialog(frame,
-					lang.checkSave_pre + fileName + lang.checkSave_post, "Crypto Notepad",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			int response = JOptionPane.showOptionDialog(frame, lang.checkSave_pre + fileName + lang.checkSave_post,
+					"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+					options[0]);
 
 			if (response == JOptionPane.YES_OPTION) {
 				if (directory != null) {
