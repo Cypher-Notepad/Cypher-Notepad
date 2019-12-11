@@ -267,8 +267,7 @@ public class FileManager {
 			}
 			inStream.close();
 
-			//maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
-			maxKey = 2;
+			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
 			
 		} catch (IOException e) {
 
