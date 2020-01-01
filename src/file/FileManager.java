@@ -38,7 +38,7 @@ public class FileManager {
 	public static final String DIR_NAME = HOME_DIR + "Crypto-Notepad" + SEPARATOR;
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
-	private static final String EXT_MEMO = ".txt";
+	//private static final String EXT_MEMO = ".txt";
 	private static final int NUM_HEADER_LINE = 9;
 	private static final String HEADER_WARNING = "####################################################\r\n"
 			+ "##             	      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
@@ -58,18 +58,8 @@ public class FileManager {
 	private int maxKey = 50;
 	private boolean recycleKey = false;
 
-	public void printshowkey() {
-		System.out.println("############################");
-		for (String k : keys) {
-			System.out.println(k);
-		}
-	}
-
 	private FileManager() {
-		// keys = new ArrayList<String>();
-		// property = new Properties();
-		// property = Property.getProperties();
-		// loadKeys();
+		//do nothing.
 	}
 
 	public static FileManager getInstance() {
@@ -80,8 +70,6 @@ public class FileManager {
 	}
 
 	private String getKey(int idx) {
-		System.out.println("idx : " + idx);
-		System.out.println("Returned key : " + this.keys.get(idx));
 		return this.keys.get(idx);
 	}
 
@@ -125,9 +113,6 @@ public class FileManager {
 					if (reloaded.size() < keys.size()) {
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 						reloaded.add(RSAImpl.getInstance().getPrivateKey());
-						System.out.println("RELOAD INVAL ID : " + processID);
-					} else {
-						System.out.println("RELOAD");
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
 					recycleKey = false;
@@ -136,8 +121,6 @@ public class FileManager {
 					recycleKey = true;
 				}
 				keys = reloaded;
-
-				System.out.println("RELOADED SIZE : " + keys.size() + "final id : " + processID);
 
 			} else {
 				while ((keyLine = keyReader.readLine()) != null) {
@@ -154,11 +137,12 @@ public class FileManager {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			closeIO(keyReader, keyWriter);
 		}
+		
+		System.out.println("[KEY] procID : " + processID + ", #ofkeys : " + keys.size());
 	}
 
 	private void closeIO(Closeable... IOs) {
@@ -187,13 +171,11 @@ public class FileManager {
 					for (String content : contents) {
 						keyWriter.println(content);
 					}
-					// keyWriter.println(add);
 				} catch (Exception e) {
 				} finally {
 					lock.release();
 					closeIO(keyWriter);
 					fout = null;
-
 				}
 
 			} catch (IOException e) {
@@ -210,17 +192,8 @@ public class FileManager {
 	}
 
 	public void saveKeys() {
-		String keyFilePath = DIR_NAME + FILE_NAME_KEYS;
-		PrintWriter keyWriter = null;
 		String[] a = new String[] {};
-
 		addToKeyFile(false, keys.toArray(a));
-
-		/*
-		 * try { keyWriter = new PrintWriter(new FileWriter(keyFilePath, false)); for
-		 * (String key : keys) { keyWriter.println(key); } } catch (IOException e) {
-		 * e.printStackTrace(); } finally { closeIO(keyWriter); }
-		 */
 	}
 
 	public void invalidateKeys() {
@@ -228,10 +201,13 @@ public class FileManager {
 		if (keyFile.exists()) {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
+				
+				//Important. This code clears keyFile.====================================
+				@SuppressWarnings("unused")
 				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFile, false));
-				// keyWriter.println(RSAImpl.getInstance().getPrivateKey());
+				//========================================================================
+				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -256,7 +232,6 @@ public class FileManager {
 				Property.initialize();
 				saveProperties();
 			}
-			// InputStream inStream = getClass().getResourceAsStream(FILE_NAME_PROP);
 			InputStream inStream = new FileInputStream(propFilePath);
 			if (reload) {
 				Property.reload(inStream);
@@ -267,9 +242,8 @@ public class FileManager {
 			inStream.close();
 
 			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
-
 		} catch (IOException e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -297,10 +271,6 @@ public class FileManager {
 			} else {
 				crypto.encrypt(memo);
 			}
-
-			System.out.println("이걸로 암호화함 : \n processID : " + processID + "\n" + RSAImpl.getInstance().getPrivateKey());
-			System.out.println("그런데 키의 인덱스는 : " + keys.indexOf(RSAImpl.getInstance().getPrivateKey()));
-
 			memoWriter.println(HEADER_WARNING);
 			memoWriter
 					.println(String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
@@ -309,14 +279,12 @@ public class FileManager {
 			memoWriter.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	public MemoVO loadMemo(JFrame frame, String filename) {
-		// filename = filename + EXT_MEMO;
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
 		if (memo.exists()) {
@@ -416,7 +384,6 @@ public class FileManager {
 		ArrayList<String> paths = Property.getRecentFilePaths();
 		ArrayList<File> files = new ArrayList<File>();
 		for (String path : paths) {
-			System.out.println(path);
 			File f = new File(path);
 			if (f.exists()) {
 				files.add(f);
@@ -432,7 +399,6 @@ public class FileManager {
 			try {
 				rcntFiles[i][3] = f.getCanonicalPath();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

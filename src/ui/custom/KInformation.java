@@ -22,11 +22,11 @@ import javax.swing.border.EmptyBorder;
 
 public class KInformation extends JDialog {
 
+	private static final long serialVersionUID = -7189136707064969558L;
 	private JPanel contentPane;
 	JButton btnOk;
 	
 	public KInformation() {
-		// TODO Auto-generated method stub
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
@@ -41,7 +41,6 @@ public class KInformation extends JDialog {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
-		String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
 
 		btnOk = new JButton("OK");
 		btnOk.addActionListener(e -> this.dispose());
@@ -50,7 +49,6 @@ public class KInformation extends JDialog {
 		JTextPane txtpnCryptonotepadVersion = new JTextPane();
 		txtpnCryptonotepadVersion.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtpnCryptonotepadVersion.setEditable(false);
-		// txtpnCryptonotepadVersion.setForeground(new Color(0x000000));
 		txtpnCryptonotepadVersion.setBackground(new Color(240, 240, 240));
 		txtpnCryptonotepadVersion.setText(
 				"\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\nThe source code of this program may be found on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". You are always welcome to press the \"follow\" and \"star\" button.");
@@ -163,7 +161,7 @@ public class KInformation extends JDialog {
 		);
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
-
+		
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 
@@ -171,7 +169,5 @@ public class KInformation extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		setVisible(true);
-		
-		System.out.println(btnOk.getSize());
 	}
 }

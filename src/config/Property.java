@@ -15,10 +15,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
-
-import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 
 import file.FileManager;
 import ui.NotepadUI;
@@ -37,7 +34,6 @@ public class Property {
 	public static String fontSize = "FONT_SIZE";
 	public static String fontColor = "FONT_COLOR";
 
-	private static Property property = null;
 	private Properties prop;
 	private PropertyUpdater updater;
 	private Language languagePack;
@@ -66,11 +62,9 @@ public class Property {
 			Property.getProperties().load(inStream);
 			switch (Property.getProperties().getProperty(Property.language)) {
 			case "KOREAN":
-				System.out.println("###set lang");
 				LazyHolder.INSTANCE.languagePack = new KoreanPack();
 				break;
 			default:
-				System.out.println("###set lang");
 				LazyHolder.INSTANCE.languagePack = new EnglishPack();
 				break;
 			}
@@ -91,17 +85,14 @@ public class Property {
 		try {
 			Property.getProperties().load(inStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public static void store(OutputStream out, String comments) {
-		System.out.println("###Proprty store");
 		try {
 			Property.getProperties().store(out, comments);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -174,15 +165,7 @@ public class Property {
 			i--;
 		}
 		prop.setProperty(rcntFile + "0", newFilePath);
-
-		// debug
-		i = 0;
-		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
-			String path = prop.getProperty(rcntFile + i, null);
-			System.out.println("rcnt File  : " + path);
-			i++;
-		}
-
+		
 		FileManager.getInstance().saveProperties();
 	}
 
@@ -222,7 +205,6 @@ public class Property {
 	public static ArrayList<String> getRecentFilePaths() {
 		ArrayList<String> rcntFiles = new ArrayList<String>();
 		Properties prop = Property.getProperties();
-		System.out.println(prop.getProperty(nOfRcntFiles));
 
 		int i = 0;
 		while (i < Integer.parseInt(prop.getProperty(nOfRcntFiles))) {
@@ -272,23 +254,23 @@ public class Property {
 							case FileManager.FILE_NAME_PROP:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 									// Reload new property and apply.
-									System.out.println("MODIFIED" + paths.getFileName());
+									System.out.println("[MODIFIED]" + paths.getFileName());
 									FileManager.getInstance().loadProperties(true);
 									applyReloadedProp();
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("***Prop Deleted");
+									System.out.println("[DELETED]" + paths.getFileName());
 									FileManager.getInstance().saveProperties();
 								}
 								break;
 
 							case FileManager.FILE_NAME_KEYS:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-									System.out.println("***Key Modi");
+									System.out.println("[MODIFIED]" + paths.getFileName());
 									FileManager.getInstance().loadKeys(true);
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("***Key Deleted");
+									System.out.println("[DELETED]" + paths.getFileName());
 									FileManager.getInstance().saveKeys();
 								}
 								break;
@@ -302,7 +284,6 @@ public class Property {
 							try {
 								ws.close();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
@@ -313,7 +294,6 @@ public class Property {
 				try {
 					ws.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				e.printStackTrace();
@@ -323,7 +303,7 @@ public class Property {
 
 		public void startUpdater() {
 			updater.start();
-			System.out.println("Updater Start!");
+			System.out.println("[Property]Updater Start!");
 		}
 
 	}

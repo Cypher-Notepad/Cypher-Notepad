@@ -11,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -31,8 +29,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -43,6 +39,7 @@ import config.Property;
 
 public class KFontChooser extends JDialog {
 
+	private static final long serialVersionUID = -3202168458886792245L;
 	public static final int FONT_SIZE_CORRECTION = 7;
 	private static final String TEST_STRING = "AaBbYyZz";
 	private final JPanel contentPanel = new JPanel();
@@ -57,6 +54,7 @@ public class KFontChooser extends JDialog {
 	private JButton btnColor;
 	private JTextField txtScript;
 	private JLabel txtrScriptView;
+	@SuppressWarnings("rawtypes")
 	private JList listFont, listStyle, listSize;
 	
 	private Language lang;
@@ -90,6 +88,7 @@ public class KFontChooser extends JDialog {
 		return filtered;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public KFontChooser(JFrame jframe) {
 		lang = Property.getLanguagePack();
 		

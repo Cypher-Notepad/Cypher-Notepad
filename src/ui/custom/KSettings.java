@@ -34,6 +34,7 @@ import thread.TrKsetLanguage;
 
 public class KSettings extends JDialog {
 
+	private static final long serialVersionUID = -2123099396815339083L;
 	private JPanel contentPane;
 	JPanel panelForBtn;
 	KButton btnInit, btnInvalidate, btnLang;
@@ -48,7 +49,6 @@ public class KSettings extends JDialog {
 	private boolean langColored = false;
 	private boolean invalColored = false;
 	private boolean initColored = false;
-	//private String curLang = null;
 	private Language lang;
 	
 	private ArrayList<Thread> toDoList;
@@ -97,15 +97,6 @@ public class KSettings extends JDialog {
 	private Timer selectedTimer;
 
 	public KSettings() {
-		// TODO Auto-generated method stub
-		/*
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		*/
-		
 		lang = Property.getLanguagePack();
 
 		selectedBorder = new TitledBorder("Reserved");
@@ -121,11 +112,9 @@ public class KSettings extends JDialog {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
-		//String context = "Crypto-Notepad\n\r" + "Version 2.0\n\r" + "";
 
 		JButton btnOk = new JButton(lang.btnOK);
 		btnOk.addActionListener(e -> {
-			System.out.println("OKAy - kSetting");
 			isConfirmed = true;
 			selectedTimer.stop();
 			setVisible(false);
@@ -142,9 +131,7 @@ public class KSettings extends JDialog {
 		
 		JLabel lblSomeFeaturesMay = new JLabel(lang.ksNoti);
 		lblSomeFeaturesMay.setHorizontalAlignment(SwingConstants.CENTER);
-		//lblSomeFeaturesMay.setFont(new Font("MS Gothic", Font.PLAIN, 12));
 
-		// list.
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -176,7 +163,6 @@ public class KSettings extends JDialog {
 					.addGap(36))
 		);
 
-		// JButton btnLang = new JButton("New button");
 		btnLang = new KButton();
 		btnLang.setText(lang.ksLang);
 		btnLang.setFocusPainted(true);
@@ -186,7 +172,6 @@ public class KSettings extends JDialog {
 		btnLang.setBorderPainted(false);
 		btnLang.setkBorderRadius(0);
 		btnLang.setkPressedColor(new Color(0xebcff2));
-		// btnNew.setBackground(new Color(0x68217A));
 		btnLang.setkBackGroundColor(new Color(0x9730b0));
 		btnLang.setkForeGround(new Color(0xffffff));
 		btnLang.setForeground(new Color(0xffffff));
@@ -230,7 +215,7 @@ public class KSettings extends JDialog {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if(!selectLang) {
-				btnLang.setText(btnLangHoverTxt);
+					btnLang.setText(btnLangHoverTxt);
 				}
 			}
 
@@ -243,8 +228,6 @@ public class KSettings extends JDialog {
 			}
 		});
 		
-
-		// JButton btnInvalidate = new JButton("New button");
 		btnInvalidate = new KButton();
 		btnInvalidate.setText(lang.ksInval);
 		btnInvalidate.setFocusPainted(true);
@@ -254,7 +237,6 @@ public class KSettings extends JDialog {
 		btnInvalidate.setBorderPainted(false);
 		btnInvalidate.setkBorderRadius(0);
 		btnInvalidate.setkPressedColor(new Color(0xebcff2));
-		// btnNew.setBackground(new Color(0x68217A));
 		btnInvalidate.setkBackGroundColor(new Color(0x9730b0));
 		btnInvalidate.setkForeGround(new Color(0xffffff));
 		btnInvalidate.setForeground(new Color(0xffffff));
@@ -265,21 +247,16 @@ public class KSettings extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (selectInvalidate) {
-					System.out.println("btn - re-clicked");
 					selectInvalidate = false;
 					toDoList.remove(trInval);
 				} else {
-
-					System.out.println("btn - clicked");
 					selectInvalidate = true;
 					toDoList.add(trInval);
 				}
 				btnClicked(btnInvalidate, selectInvalidate);
-
 			}
 		});
 
-		// JButton btnInit = new JButton("New button");
 		btnInit = new KButton();
 		btnInit.setText(lang.ksInit);
 		btnInit.setFocusPainted(true);
@@ -289,7 +266,6 @@ public class KSettings extends JDialog {
 		btnInit.setBorderPainted(false);
 		btnInit.setkBorderRadius(0);
 		btnInit.setkPressedColor(new Color(0xebcff2));
-		// btnNew.setBackground(new Color(0x68217A));
 		btnInit.setkBackGroundColor(new Color(0x9730b0));
 		btnInit.setkForeGround(new Color(0xffffff));
 		btnInit.setForeground(new Color(0xffffff));
@@ -307,7 +283,6 @@ public class KSettings extends JDialog {
 					toDoList.add(trInit);
 				}
 				btnClicked(btnInit, selectInit);
-
 			}
 		});
 
@@ -396,8 +371,6 @@ public class KSettings extends JDialog {
 		trInval = new TrKsetInvalidateFile();
 		trInit = new TrKsetInitialize();
 		
-		//curLang = Property.getProperties().getProperty(Property.language);
-		
 		selectLang = false;
 		selectInvalidate = false;
 		selectInit = false;
@@ -418,10 +391,10 @@ public class KSettings extends JDialog {
 	}
 
 	public void applySettings() {
+		System.out.println("[KSettings]Apply settings");
 		if(isConfirmed) {
 			for (Thread t : toDoList) {
 				if(t.getState() == Thread.State.NEW) {
-					System.out.println("task - KSetting");
 					t.start();
 					ThreadManager.getInstance().addThread(t);
 				}
@@ -430,8 +403,6 @@ public class KSettings extends JDialog {
 	}
 
 	private void btnClicked(KButton btn, boolean isSelected) {
-
-		System.out.println("btn listener" + isSelected);
 		if (isSelected) {
 			btn.setBorderPainted(true);
 			btn.setkBackGroundColor(new Color(0xf0f0f0));

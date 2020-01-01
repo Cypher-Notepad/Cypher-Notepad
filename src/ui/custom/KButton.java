@@ -20,6 +20,7 @@ import javax.swing.JButton;
  *
  * @auauthor oXCToo
  */
+@SuppressWarnings("serial")
 public class KButton extends JButton {
 
     public Color kBackGroundColor = Color.magenta;
@@ -267,7 +268,6 @@ public class KButton extends JButton {
 
             }
         }
-        // g2.fillRect(0, 0, getWidth(), getHeight());
         if (isSelected()) {
             g2.setPaint(kSelectedColor);
             setForeground(kForeGround);
@@ -279,12 +279,6 @@ public class KButton extends JButton {
         // The drawString(string) must be put after the setPaint(gradient)
         g2.setPaint(Color.BLACK);
         centerString(g, new Rectangle(getWidth(), getHeight()), getText(), getFont());
-
-        // draw account
-//        try {
-//            getIcon().paintIcon(this, g2, getHeight()/2, 4);
-//        } catch (Exception e) {
-//        }
         drawIcons(g, new Rectangle(0, 0, getWidth(), getHeight()));
         //dispose
         g2.dispose();
@@ -310,32 +304,12 @@ public class KButton extends JButton {
     }
 
     public void drawIcons(Graphics g, Rectangle r) {
-
         try {
-            FontRenderContext frc
-                    = new FontRenderContext(null, true, true);
-
-            Rectangle2D r2D = getFont().getStringBounds(getText(), frc);
-            int rWidth = (int) Math.round(r2D.getWidth());
-            int rHeight = (int) Math.round(r2D.getHeight());
-            int rX = (int) Math.round(r2D.getX());
-            int rY = (int) Math.round(r2D.getY());
-
-            int a = (r.width / 2) - (rWidth / 2) - rX;
-            int b = (r.height / 2) - (rHeight / 2) - rY;
-
+        	//NullPointer Exception.
             getIcon().paintIcon(this, g, getIconTextGap(), (getHeight() / 3));
 
-//            if (getIcon().getIconHeight() > getHeight() / 2) {
-//                int zoomLevel = 10;
-//                int newImageWidth = getIcon().getIconWidth() * zoomLevel;
-//                int newImageHeight = getIcon().getIconHeight() * zoomLevel;
-//                BufferedImage resizedImage = new BufferedImage(newImageWidth, newImageHeight, 0);
-//                 resizedImage.createGraphics();
-//                g.drawImage((Image) getIcon(), 0, 0, newImageWidth, newImageHeight, null);
-//              
-//            }
         } catch (Exception e) {
+        	//do nothing.
         }
 
     }

@@ -22,7 +22,7 @@ public abstract class AES {
 	
 	public AES() {
 		try {
-			System.out.println("AES initialize.");
+			System.out.println("[AES]AES initialize.");
 			keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -52,8 +52,6 @@ public abstract class AES {
 	public Decryptor getDecryptor(String secretKey) {
 		return new AES.AESDecryptor(secretKey);
 	}
-	
-	
 
 	private static class AESEncryptor extends Encryptor {
 		
@@ -123,7 +121,6 @@ public abstract class AES {
 				e.printStackTrace();
 			}
 
-			System.out.println(decoded);
 			return decoded;
 		}
 

@@ -25,6 +25,7 @@ import config.Property;
 
 public class KReplacer extends JDialog {
 
+	private static final long serialVersionUID = 8578949730681943840L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton findButton;
 	private JButton replaceButton;
@@ -39,23 +40,6 @@ public class KReplacer extends JDialog {
 	private JTextField txtToReplace;
 	
 	private Language lang;
-	
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		try {
-			KReplacer dialog = new KReplacer(new JTextArea());
-			dialog.showDialog();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-*/
-	/**
-	 * Create the dialog.
-	 */
 	
 	public KReplacer(JTextArea textArea){
 		lang = Property.getLanguagePack();
@@ -72,7 +56,6 @@ public class KReplacer extends JDialog {
 		{
 			findButton = new JButton(lang.kfiFindNxt);
 			findButton.addActionListener(e->find());
-			//okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(findButton);
 		}
 		{
@@ -87,7 +70,6 @@ public class KReplacer extends JDialog {
 		txtToFind.getDocument().addDocumentListener(new DocumentListener() {
 			private void update() {
 				strToFind = txtToFind.getText();
-				//startToFind = txtToFind.getCaretPosition();
 			}
 
 			@Override
@@ -269,7 +251,6 @@ public class KReplacer extends JDialog {
 			if (!this.isVisible()) {
 				showDialog();
 			}
-			// JOptionPane.showMessageDialog(null, "Nothing");
 		}
 	}
 	
@@ -305,7 +286,6 @@ public class KReplacer extends JDialog {
 			if (!this.isVisible()) {
 				showDialog();
 			}
-			// JOptionPane.showMessageDialog(null, "Nothing");
 		}
 		return rtn;
 	}

@@ -30,7 +30,7 @@ abstract public class RSA {
 	private byte[] privateKey = null;
 
 	public RSA() {
-		System.out.println("RSA initialize.");
+		System.out.println("[RSA]RSA initialize.");
 		initialize();
 	}
 
@@ -45,13 +45,6 @@ abstract public class RSA {
 			this.publicKey = keyPair.getPublic().getEncoded();
 			this.privateKey = keyPair.getPrivate().getEncoded();
 
-			// another way to create key
-			/*
-			 * KeyFactory keyFactory = KeyFactory.getInstance(ENCRYPT_ALGO);
-			 * this.publicKeySpec = keyFactory.getKeySpec(this.publicKey.,
-			 * RSAPublicKeySpec.class); this.privateKeySpec =
-			 * keyFactory.getKeySpec(this.privateKey, RSAPrivateKeySpec.class);
-			 */
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -102,10 +95,8 @@ abstract public class RSA {
 			keyFactory = KeyFactory.getInstance(ENCRYPT_ALGO);
 			derivedPublicKey = keyFactory.generatePublic(publicKeySpec);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -195,7 +186,6 @@ abstract public class RSA {
 				e.printStackTrace();
 			}
 
-			System.out.println(decoded);
 			return decoded;
 		}
 

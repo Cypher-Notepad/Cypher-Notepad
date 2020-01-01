@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
@@ -40,6 +39,7 @@ import ui.custom.KButton;
 
 public class MainUI extends JFrame implements UI {
 
+	private static final long serialVersionUID = -8901510103598913554L;
 	private JPanel contentPane;
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
@@ -48,7 +48,7 @@ public class MainUI extends JFrame implements UI {
 	int mpX, mpY;
 
 	public MainUI() {
-		System.out.println("####got lang");
+		System.out.println("[MainUI]Get langueage setting.");
 		lang = Property.getLanguagePack();
 
 		addMouseListener(new MouseAdapter() {
@@ -61,7 +61,7 @@ public class MainUI extends JFrame implements UI {
 
 		addMouseMotionListener(new MouseMotionAdapter() {
 			private static final int STICKY_THRESHOLD = 17;
-			Insets taskBar;// = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+			Insets taskBar;
 			Point curFramePos;
 			int screenXSize = Toolkit.getDefaultToolkit().getScreenSize().width;
 			int screenYSize = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -110,16 +110,15 @@ public class MainUI extends JFrame implements UI {
 				}
 				
 				setLocation(posX, posY);
-				
 			}
 		});
 
 		Thread prepareNotepad = new Thread() {
 			@Override
 			public void run() {
+				System.out.println("[MainUI]Preload NotepadUI for reducing the time for loading");
 				notepadUI = new NotepadUI();
 				notepadUI.initializeUI();
-				System.out.println("[MainUI] prepareNotepad finish");
 			}
 		};
 		prepareNotepad.start();
@@ -128,7 +127,6 @@ public class MainUI extends JFrame implements UI {
 
 	@Override
 	public void draw() {
-		// TODO Auto-generated method stub
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
@@ -141,7 +139,6 @@ public class MainUI extends JFrame implements UI {
 		setIconImage(changedFrameImg);
 		
 		setBounds(100, 100, 550, 719);
-		// setBounds(100, 100, 440, 576);
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -213,8 +210,6 @@ public class MainUI extends JFrame implements UI {
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
-		// JButton btnNew = new JButton("New");
-
 		btnNew = new KButton();
 		btnNew.setText(lang.btnNew);
 		btnNew.setFocusPainted(true);
@@ -224,14 +219,11 @@ public class MainUI extends JFrame implements UI {
 		btnNew.setBorderPainted(false);
 		btnNew.setkBorderRadius(50);
 		btnNew.setkPressedColor(new Color(0xebcff2));
-		// btnNew.setBackground(new Color(0x68217A));
 		btnNew.setkBackGroundColor(new Color(0x9730b0));
 		btnNew.setkForeGround(new Color(0xffffff));
 		btnNew.setForeground(new Color(0xffffff));
 		btnNew.setkHoverColor(new Color(0xffffff));
 		btnNew.setkHoverForeGround(new Color(0x68217A));
-
-		// JButton btnOpen = new JButton("Open");
 
 		btnOpen = new KButton();
 		btnOpen.setText(lang.btnOpen);
@@ -242,7 +234,6 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.setBorderPainted(false);
 		btnOpen.setkBorderRadius(50);
 		btnOpen.setkPressedColor(new Color(0xebcff2));
-		// btnOpen.setBackground(new Color(0x68217A));
 		btnOpen.setkBackGroundColor(new Color(0x9730b0));
 		btnOpen.setkForeGround(new Color(0xffffff));
 		btnOpen.setForeground(new Color(0xffffff));
@@ -256,7 +247,6 @@ public class MainUI extends JFrame implements UI {
 		ImageIcon Icon = new ImageIcon(changedImg);
 		lblSdf.setIcon(Icon);
 
-		// JButton btnX = new JButton("X");
 		btnX = new KButton();
 		btnX.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
 		btnX.setMargin(new Insets(1, 1, 1, 1));
@@ -268,7 +258,6 @@ public class MainUI extends JFrame implements UI {
 		btnX.setBorderPainted(false);
 		btnX.setkBorderRadius(5);
 		btnX.setkPressedColor(new Color(0xebcff2));
-		// btnOpen.setBackground(new Color(0x68217A));
 		btnX.setkBackGroundColor(new Color(0x9730b0));
 		btnX.setkForeGround(new Color(0xffffff));
 		btnX.setForeground(new Color(0xffffff));
@@ -317,7 +306,6 @@ public class MainUI extends JFrame implements UI {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//table.getColumnModel().getColumn(0).setResizable(false);
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -341,7 +329,7 @@ public class MainUI extends JFrame implements UI {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 			int response = fc.showOpenDialog(this);
-			if (response == fc.APPROVE_OPTION) {
+			if (response == JFileChooser.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
 				boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
 				if (isLoaded) {

@@ -28,6 +28,7 @@ import javax.swing.JCheckBox;
 
 public class KFinder extends JDialog implements ActionListener {
 
+	private static final long serialVersionUID = -9113689274250209739L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton findButton;
 	private JButton cancelButton;
@@ -41,18 +42,6 @@ public class KFinder extends JDialog implements ActionListener {
 	
 	private Language lang;
 	
-	/**
-	 * Launch the application.
-	 */
-
-	/*
-	 * public static void main(String[] args) { try { KFinder dialog = new
-	 * KFinder(); dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	 * dialog.setVisible(true); } catch (Exception e) { e.printStackTrace(); } }
-	 */
-	/**
-	 * Create the dialog.
-	 */
 	public KFinder(JTextArea textArea) {
 		lang = Property.getLanguagePack();
 		
@@ -67,12 +56,10 @@ public class KFinder extends JDialog implements ActionListener {
 		{
 			findButton = new JButton(lang.kfiFindNxt);
 			findButton.addActionListener(this);
-			//okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(findButton);
 		}
 		{
 			cancelButton = new JButton(lang.btnCancel);
-			//cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(e->setVisible(false));
 		}
 		
@@ -83,7 +70,6 @@ public class KFinder extends JDialog implements ActionListener {
 		txtToFind.getDocument().addDocumentListener(new DocumentListener() {
 			private void update() {
 				strToFind = txtToFind.getText();
-				//startToFind = txtToFind.getCaretPosition();
 			}
 
 			@Override
@@ -212,7 +198,6 @@ public class KFinder extends JDialog implements ActionListener {
 			if (!this.isVisible()) {
 				showDialog();
 			}
-			// JOptionPane.showMessageDialog(null, "Nothing");
 		}
 	}
 	

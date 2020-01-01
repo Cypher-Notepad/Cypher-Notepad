@@ -16,5 +16,4 @@ abstract public class Decryptor {
 	}
 
 	public abstract String decrypt(String encrypted) throws BadPaddingException;
-
 }
