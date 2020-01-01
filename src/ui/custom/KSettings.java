@@ -56,6 +56,10 @@ public class KSettings extends JDialog {
 	private Thread trInval;
 	private Thread trInit;
 	
+	private String btnLangTxt;
+	private String btnLangHoverTxt;
+	private boolean supportKorean = true;
+	
 	private ActionListener selectedAction = new ActionListener() {
 
 		@Override
@@ -189,39 +193,56 @@ public class KSettings extends JDialog {
 		btnLang.setkHoverColor(new Color(0xffffff));
 		btnLang.setkHoverForeGround(new Color(0x68217A));
 		btnLang.setBorder(selectedBorder);
+
+		supportKorean = true;
+		btnLangTxt = lang.ksLang;
+		btnLangHoverTxt = lang.ksLangHover;
+		if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
+			if(!btnLang.getFont().canDisplay('¤¡')) {
+				supportKorean = false;
+				btnLangTxt = lang.ksLangWarn;
+				btnLangHoverTxt = lang.ksLangWarnHover;
+				btnLang.setFont(btnLang.getFont().deriveFont(10f));
+				btnLang.setText(btnLangTxt);
+			}
+		}
+		
 		btnLang.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (selectLang) {
 					selectLang = false;
-					btnLang.setText(lang.ksLang);
+					btnLang.setText(btnLangTxt);
 					toDoList.remove(trLang);
 				} else {
 					selectLang = true;
-					btnLang.setText(lang.ksLangHover);
+					btnLang.setText(btnLangHoverTxt);
 					toDoList.add(trLang);
 				}
-				btnClicked(btnLang, selectLang);
+				if(supportKorean) {
+					btnClicked(btnLang, selectLang);
+				} else {
+					NRBtnClicked(btnLang, selectLang);
+				}
 
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				if(!selectLang) {
-				btnLang.setText(lang.ksLangHover);
+				btnLang.setText(btnLangHoverTxt);
 				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				if(!selectLang) {
-					btnLang.setText(lang.ksLang);
+					btnLang.setText(btnLangTxt);
 				}
 				
 			}
-			
-			
 		});
+		
 
 		// JButton btnInvalidate = new JButton("New button");
 		btnInvalidate = new KButton();
@@ -380,7 +401,12 @@ public class KSettings extends JDialog {
 		selectLang = false;
 		selectInvalidate = false;
 		selectInit = false;
-		btnClicked(btnLang, selectLang);
+		
+		if(supportKorean) {
+			btnClicked(btnLang, selectLang);
+		} else {
+			NRBtnClicked(btnLang, selectLang);
+		}
 		btnClicked(btnInvalidate, selectInvalidate);
 		btnClicked(btnInit, selectInit);
 		
@@ -414,6 +440,20 @@ public class KSettings extends JDialog {
 		} else {
 			btn.setBorderPainted(false);
 			btn.setkBackGroundColor(new Color(0x9730b0));
+			btn.setkForeGround(new Color(0xffffff));
+			btn.setkHoverColor(new Color(0xffffff));
+		}
+	}
+	
+	private void NRBtnClicked(KButton btn, boolean isSelected) {
+		if (isSelected) {
+			btn.setBorderPainted(true);
+			btn.setkBackGroundColor(new Color(0xf0f0f0));
+			btn.setkHoverColor(new Color(0xf0f0f0));
+			btnSync();
+		} else {
+			btn.setBorderPainted(false);
+			btn.setkBackGroundColor(new Color(0xaaaaaa));
 			btn.setkForeGround(new Color(0xffffff));
 			btn.setkHoverColor(new Color(0xffffff));
 		}

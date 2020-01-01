@@ -87,6 +87,8 @@ public abstract class Language {
 	public String ksInval = "  Invalidate All Encrypted Files";
 	public String ksInit = " Initialize Settings";
 	public String ksNoti = "¡Ø Some changes will take effect after restart.";
+	public String ksLangWarn = " Language(Not Recommended)";
+	public String ksLangWarnHover = "English -> Korean(Not Recommended)";
 	
 	//Date
 	public String am = "AM";
