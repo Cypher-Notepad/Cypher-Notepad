@@ -62,7 +62,7 @@ public class NotepadUI extends JFrame implements UI {
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
 			findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
-			fontMenuItem, statusBarMenuItem, viewHelpMenuItem, aboutNotepadMenuItem, settingsMenuItem;
+			fontMenuItem, statusBarMenuItem, viewHelpMenuItem , HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem;
 
@@ -211,6 +211,7 @@ public class NotepadUI extends JFrame implements UI {
 		statusBarMenuItem = new JMenuItem(lang.miStsBar);
 
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
+		HomepageMenuItem = new JMenuItem(lang.miCNWeb);
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
 		settingsMenuItem = new JMenuItem(lang.miSetting);
 
@@ -267,6 +268,8 @@ public class NotepadUI extends JFrame implements UI {
 		viewMenu.add(statusBarMenuItem);
 
 		helpMenu.add(viewHelpMenuItem);
+		helpMenu.addSeparator();
+		helpMenu.add(HomepageMenuItem);
 		helpMenu.addSeparator();
 		helpMenu.add(aboutNotepadMenuItem);
 		helpMenu.add(settingsMenuItem);
@@ -484,6 +487,19 @@ public class NotepadUI extends JFrame implements UI {
 								+ "%eb%8f%84%ec%9b%80%eb%a7%90+%eb%b3%b4%ea%b8%b0&filters=guid%3a%224466414-ko-dia%22+"
 								+ "lang%3a%22ko%22&ocid=HelpPane-BingIA&setmkt=en-us&setlang=en-us"));
 					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		HomepageMenuItem.addActionListener(e->{
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				try {
+					Desktop.getDesktop()
+					.browse(new URI("https://leedonggeon1996.github.io/Crypto-Notepad-Web/"));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e1) {

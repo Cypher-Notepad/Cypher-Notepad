@@ -50,6 +50,7 @@ public abstract class Language {
 	public String miStsBar = "Status Bar        ";
 	
 	public String miViewHelp = "View Help        ";
+	public String miCNWeb = "Visit Crypto Notepad Web    ";
 	public String miAbtCN = "About Crypto Notepad        ";
 	public String miSetting = "Settings        ";
 	

@@ -50,6 +50,7 @@ class KoreanPack extends Language {
 		miStsBar = "\uC0C1\uD0DC \uD45C\uC2DC\uC904(S)        ";
 
 		miViewHelp = "\uB3C4\uC6C0\uB9D0 \uBCF4\uAE30(H)        ";
+		miCNWeb = "Crypto Notepad \uD648\uD398\uC774\uC9C0";
 		miAbtCN = "Crypto Notepad \uC815\uBCF4(A)        ";
 		miSetting = "\uC124\uC815(S)        ";
 
