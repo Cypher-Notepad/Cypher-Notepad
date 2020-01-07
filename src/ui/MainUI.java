@@ -345,7 +345,7 @@ public class MainUI extends JFrame implements UI {
 		});
 
 		btnX.addActionListener(e -> {
-			System.out.println("[Frame] Close Window on Main UI");
+			System.out.println("[MainUI] Close Window on Main UI");
 			ThreadManager.getInstance().joinThreads();
 			FileManager.getInstance().saveProperties();
 			UIManager.getInstance().closeWindow();

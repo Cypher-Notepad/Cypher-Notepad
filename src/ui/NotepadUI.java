@@ -34,6 +34,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.MenuSelectionManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
@@ -73,6 +75,7 @@ public class NotepadUI extends JFrame implements UI {
 	public String fileName;
 	public File directory;
 	public String savedContext;
+	public String undoText;
 
 	private JFileChooser fc;
 	private KFontChooser fontChooser;
@@ -98,6 +101,7 @@ public class NotepadUI extends JFrame implements UI {
 		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
 		savedContext = "";
+		undoText = savedContext;
 	}
 
 	public NotepadUI(File file) {
@@ -110,6 +114,7 @@ public class NotepadUI extends JFrame implements UI {
 			frame = new JFrame(fileName + " - Crypto Notepad");
 			MemoVO loadedContent = FileManager.getInstance().loadMemo(frame, path);
 			savedContext = loadedContent.getContent();
+			undoText = savedContext;
 			textArea = new JTextArea();
 			textArea.setText(savedContext);
 
@@ -288,12 +293,39 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		//curText must be set after loading content.
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
+
+			String curText = undoText;
+			
+			private void update() {
+				undoText = curText;
+				curText = textArea.getText();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				update();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				update();	
+			}	
+		});
+		
 	}
 
 	@Override
 	public void erase() {
 		if (checkSave()) {
-			System.out.println("[Frame] Close Window on NotepadUI");
+			System.out.println("[NotepadUI] Close Window on NotepadUI");
 			ThreadManager.getInstance().joinThreads();
 			FileManager.getInstance().saveProperties();
 			this.dispose();
@@ -329,7 +361,7 @@ public class NotepadUI extends JFrame implements UI {
 		rp = new KReplacer(textArea);
 		info = new KInformation();
 		st = new KSettings();
-
+		
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -340,6 +372,7 @@ public class NotepadUI extends JFrame implements UI {
 						directory = null;
 						fileName = "Untitled";
 						savedContext = "";
+						undoText = savedContext;
 						frame.setTitle(fileName + " - Crypto Notepad");
 					}
 				}
@@ -382,6 +415,12 @@ public class NotepadUI extends JFrame implements UI {
 		exitMenuItem.addActionListener(e -> UIManager.getInstance().closeWindow());
 		//
 		// undo
+		undoMenuItem.addActionListener(e -> {
+			String origin = textArea.getText();
+			textArea.setText(undoText);
+			undoText = origin;
+		});
+		
 		// cut
 		cutMenuItem.addActionListener(e -> textArea.cut());
 		// copy
@@ -531,10 +570,10 @@ public class NotepadUI extends JFrame implements UI {
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		printMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
 
-		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
+		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
+		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
 		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		searchMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK));
 		findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
@@ -656,6 +695,7 @@ public class NotepadUI extends JFrame implements UI {
 			MemoVO memo = FileManager.getInstance().loadMemo(frame, selectedPath);
 			if (memo != null) {
 				savedContext = memo.getContent();
+				undoText = savedContext;
 				textArea.setText(memo.getContent());
 				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
 				fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
