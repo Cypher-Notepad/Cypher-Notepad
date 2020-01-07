@@ -234,7 +234,7 @@ public class KReplacer extends JDialog {
 				if(findIdx > -1) {
 					textArea.select(findIdx, findIdx + strToFind.length());
 				}
-				else { showInfoMessage("Cannot find \"" + strToFind +"\""); }
+				else { showInfoMessage(lang.kfNoMoreFD_pre + strToFind +lang.kfNoMoreFD_post); }
 				
 			}
 			else if(direction.equals("Down")) {
@@ -243,7 +243,7 @@ public class KReplacer extends JDialog {
 				if(findIdx > -1) {
 					textArea.select(findIdx, findIdx + strToFind.length());
 				}
-				else { showInfoMessage("Cannot find \"" + strToFind +"\""); }
+				else { showInfoMessage(lang.kfNoMoreFD_pre + strToFind + lang.kfNoMoreFD_post); }
 				
 			}
 
@@ -267,7 +267,7 @@ public class KReplacer extends JDialog {
 					textArea.replaceSelection(strToReplace);
 					rtn = true;
 				}
-				else { showInfoMessage("All is replaced."); }
+				else { showInfoMessage(lang.kreNoMoreRP); }
 				
 			}
 			else if(direction.equals("Down")) {
@@ -278,7 +278,7 @@ public class KReplacer extends JDialog {
 					textArea.replaceSelection(strToReplace);
 					rtn = true;
 				}
-				else { showInfoMessage("All is replaced."); }
+				else { showInfoMessage(lang.kreNoMoreRP); }
 				
 			}
 

@@ -80,7 +80,7 @@ public class KFontChooser extends JDialog {
 		
 		for(String fam : allfonts) {
 			test = new Font(fam,Font.PLAIN, 10);
-			if(test.canDisplay('a') && test.canDisplay('°¡')) {
+			if(test.canDisplay(lang.testChar_EN) && test.canDisplay(lang.testChar_KO)) {
 
 				filtered.add(fam);
 			}

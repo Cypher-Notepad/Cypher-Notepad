@@ -2,6 +2,10 @@ package config;
 
 public abstract class Language {
 	
+	//KoreanSupport
+	public char testChar_EN = 'a';
+	public char testChar_KO = '\uAC00';
+	
 	//MainUI
 	public String btnNew = "New";
 	public String btnOpen = "Open";
@@ -61,12 +65,15 @@ public abstract class Language {
 	public String kfiDir = "Direction";
 	public String kfiDirUp = "Up";
 	public String kfiDirDown = "Down";
-	public String kfiUppLow = "Upper/Lower";
+	public String kfiUppLow = "Match case";
+	public String kfNoMoreFD_pre = "Cannot find \"";
+	public String kfNoMoreFD_post = "\"";
 	
 	//KReplacer
 	public String kreReplce = "Replace";
 	public String krelblReplce = "Replace:";
 	public String kreReplceAll = "Replace All";
+	public String kreNoMoreRP = "No more to replace.";
 	
 	//KFontChooser
 	public String kfcTitle = "Select Font";
@@ -87,7 +94,7 @@ public abstract class Language {
 	public String ksLangHover = " \uC601\uC5B4 -> \uD55C\uAD6D\uC5B4";
 	public String ksInval = "  Invalidate All Encrypted Files";
 	public String ksInit = " Initialize Settings";
-	public String ksNoti = "¡Ø Some changes will take effect after restart.";
+	public String ksNoti = "\u203B Some changes will take effect after restart.";
 	public String ksLangWarn = " Language(Not Recommended)";
 	public String ksLangWarnHover = "English -> Korean(Not Recommended)";
 	
@@ -96,8 +103,8 @@ public abstract class Language {
 	public String pm = "PM";
 	
 	//CheckSave
-	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to ";
-	public String checkSave_post = "?   \n";
+	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to [";
+	public String checkSave_post = "]?   \n";
 	public String save = "Save";
 	public String noSave = "  Don't Save  ";
 	

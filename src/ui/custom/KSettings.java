@@ -183,7 +183,7 @@ public class KSettings extends JDialog {
 		btnLangTxt = lang.ksLang;
 		btnLangHoverTxt = lang.ksLangHover;
 		if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
-			if(!btnLang.getFont().canDisplay('¤¡')) {
+			if(!btnLang.getFont().canDisplay(lang.testChar_KO)) {
 				supportKorean = false;
 				btnLangTxt = lang.ksLangWarn;
 				btnLangHoverTxt = lang.ksLangWarnHover;

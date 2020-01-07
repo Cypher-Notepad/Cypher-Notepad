@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.channels.Channel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -28,7 +27,6 @@ import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
-import ui.NotepadUI;
 import vo.MemoVO;
 
 public class FileManager {
@@ -197,18 +195,22 @@ public class FileManager {
 	}
 
 	public void invalidateKeys() {
+		PrintWriter keyWriter = null;
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
 				
 				//Important. This code clears keyFile.====================================
-				@SuppressWarnings("unused")
-				PrintWriter keyWriter = new PrintWriter(new FileWriter(keyFile, false));
+				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				//========================================================================
 				
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				if(keyWriter != null) {
+					keyWriter.close();
+				}
 			}
 		}
 	}

@@ -202,6 +202,6 @@ public class KFinder extends JDialog implements ActionListener {
 	}
 	
 	private void showNothingMessage() {
-		JOptionPane.showMessageDialog(null, "Cannot find \"" + strToFind +"\"", "Notepad", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, lang.kfNoMoreFD_pre + strToFind +lang.kfNoMoreFD_post, "Crypto Notepad", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
