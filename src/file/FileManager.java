@@ -27,6 +27,7 @@ import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
+import ui.NotepadUI;
 import vo.MemoVO;
 
 public class FileManager {
@@ -36,7 +37,6 @@ public class FileManager {
 	public static final String DIR_NAME = HOME_DIR + "Crypto-Notepad" + SEPARATOR;
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
-	//private static final String EXT_MEMO = ".txt";
 	private static final int NUM_HEADER_LINE = 9;
 	private static final String HEADER_WARNING = "####################################################\r\n"
 			+ "##             	      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
@@ -111,6 +111,7 @@ public class FileManager {
 					if (reloaded.size() < keys.size()) {
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 						reloaded.add(RSAImpl.getInstance().getPrivateKey());
+						NotepadUI.setInvalidationFlag(true);
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
 					recycleKey = false;

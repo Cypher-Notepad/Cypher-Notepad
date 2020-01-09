@@ -86,6 +86,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KSettings st;
 
 	private Language lang;
+	private static boolean invalidationFlag = false;
 
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
@@ -373,6 +374,7 @@ public class NotepadUI extends JFrame implements UI {
 						fileName = "Untitled";
 						savedContext = "";
 						undoText = savedContext;
+						setInvalidationFlag(false);
 						frame.setTitle(fileName + " - Crypto Notepad");
 					}
 				}
@@ -654,6 +656,7 @@ public class NotepadUI extends JFrame implements UI {
 		savedContext = textArea.getText();
 		memo.setContent(savedContext);
 		FileManager.getInstance().saveMemo(filePath, memo);
+		setInvalidationFlag(false);
 	}
 
 	private boolean showFontChooser() {
@@ -662,7 +665,7 @@ public class NotepadUI extends JFrame implements UI {
 
 	public boolean checkSave() {
 		boolean rtn = false;
-		if (!savedContext.equals(textArea.getText())) {
+		if (((!textArea.getText().equals("")) && (invalidationFlag)) || (!savedContext.equals(textArea.getText()))) {
 			Object[] options = { lang.save, lang.noSave, lang.btnCancel };
 
 			int response = JOptionPane.showOptionDialog(frame, lang.checkSave_pre + fileName + lang.checkSave_post,
@@ -696,6 +699,7 @@ public class NotepadUI extends JFrame implements UI {
 			if (memo != null) {
 				savedContext = memo.getContent();
 				undoText = savedContext;
+				setInvalidationFlag(false);
 				textArea.setText(memo.getContent());
 				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
 				fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
@@ -706,6 +710,10 @@ public class NotepadUI extends JFrame implements UI {
 			e1.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static void setInvalidationFlag(boolean b) {
+		invalidationFlag = b;
 	}
 
 }
