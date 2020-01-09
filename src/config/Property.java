@@ -101,7 +101,7 @@ public class Property {
 		Properties prop = Property.getProperties();
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
-		prop.setProperty(nOfKeys, "50");
+		prop.setProperty(nOfKeys, "8192");
 		prop.setProperty(fontFamily, "Dialog");
 		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
 		prop.setProperty(fontSize, String.valueOf(11));
@@ -114,7 +114,7 @@ public class Property {
 		prop.setProperty(language, "ENGLISH");
 		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
-		prop.setProperty(nOfKeys, "50");
+		prop.setProperty(nOfKeys, "8192");
 		prop.setProperty(fontFamily, "Dialog");
 		prop.setProperty(fontStyle, String.valueOf(Font.PLAIN));
 		prop.setProperty(fontSize, String.valueOf(11));

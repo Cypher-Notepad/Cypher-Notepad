@@ -38,14 +38,15 @@ public class FileManager {
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
 	private static final int NUM_HEADER_LINE = 9;
-	private static final String HEADER_WARNING = "####################################################\r\n"
-			+ "##             	      *Warning*			  ##\r\n" + "## This file has been encrypted. By using Windows ##\r\n"
-			+ "## Notepad, you can not access this file anymore. ##\r\n"
-			+ "## Please open it with Crypto-Notepad. Do not     ##\r\n"
-			+ "## modify anything in this file including this    ##\r\n"
-			+ "## message or you will never be able to recover   ##\r\n"
-			+ "## its original content.     _LEEDONGGEON1996_    ##\r\n"
-			+ "####################################################\r\n";
+	private static final String HEADER_WARNING = "####################################################\r\n" + 
+			"##		     *Warning*			  ##\r\n" + 
+			"## This file has been encrypted. By using Windows ##\r\n" +
+			"## Notepad, you can not access this file anymore. ##\r\n" +
+			"## Please open it with valid key. Do not modify	  ##\r\n" +
+			"## anything in this file including this message	  ##\r\n" +
+			"## or you will never be able to recover its	  ##\r\n" +
+			"## original content.       _LEEDONGGEON1996_      ##\r\n" +
+			"####################################################\r\n";
 
 	private static FileManager instance = null;
 	private ArrayList<String> keys = new ArrayList<String>();
@@ -53,11 +54,11 @@ public class FileManager {
 
 	// Index of Keys.
 	private int processID = 0;
-	private int maxKey = 50;
+	private int maxKey = 8192;
 	private boolean recycleKey = false;
 
 	private FileManager() {
-		//do nothing.
+		// do nothing.
 	}
 
 	public static FileManager getInstance() {
@@ -140,7 +141,7 @@ public class FileManager {
 		} finally {
 			closeIO(keyReader, keyWriter);
 		}
-		
+
 		System.out.println("[KEY] procID : " + processID + ", #ofkeys : " + keys.size());
 	}
 
@@ -201,15 +202,15 @@ public class FileManager {
 		if (keyFile.exists()) {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
-				
-				//Important. This code clears keyFile.====================================
+
+				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
-				//========================================================================
-				
+				// ========================================================================
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				if(keyWriter != null) {
+				if (keyWriter != null) {
 					keyWriter.close();
 				}
 			}
@@ -244,7 +245,7 @@ public class FileManager {
 			}
 			inStream.close();
 
-			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "50"));
+			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "8192"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
