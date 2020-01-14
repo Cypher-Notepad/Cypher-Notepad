@@ -195,7 +195,7 @@ public class FileManager {
 		String[] a = new String[] {};
 		addToKeyFile(false, keys.toArray(a));
 	}
-
+	
 	public void invalidateKeys() {
 		PrintWriter keyWriter = null;
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);

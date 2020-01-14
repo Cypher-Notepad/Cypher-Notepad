@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextPane;
 
-public class KeyExporter extends JDialog {
+public class KeyImporter extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JButton okButton;
@@ -39,7 +39,7 @@ public class KeyExporter extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public KeyExporter() {
+	public KeyImporter() {
 		setBounds(100, 100, 520, 370);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,7 +49,7 @@ public class KeyExporter extends JDialog {
 		JLabel lblKey = new JLabel("Key : ");
 		
 		JTextArea txtKey = new JTextArea();
-		txtKey.setText("");
+		txtKey.setText("MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALPNwzWNbVH8kV8CHq8x1jIVn7aX6MAPWIV+NlWnH8ATOHE2nAcjc9Qw8CFzqnchbXyPD2HgCujLCY7hpzAkXLD116t2Cv3FRNPpcOsXxXjF8iuKG49RJfWcnWjBavN2cIw8+0JsJeskGGqiaov1/X05n9Dxu2+3tPF6NbgCtOIZAgMBAAECgYAR0b+Z7BU8fdpuXwhpdnfy6L+2WeHAPwUX3cVGwdRctcrvNWlLL9FH4z25Ivxu6AowwQDWQ1zxa0XcOjLWi5P/7wcuKSltJMFWfhhSrc1l1fwusPBWg0NSTo+c6VsjVrJeiWL645pe+jR0RfLVcZ4DAPY9uH5UpEpXtm6bJ4vB8QJBAOeL+MT6KkgY3HLOq5zlXlZBga4uujeqAkXEJO6eRXiFb+D4jO/Om55zqhQn5slhM00keayYDi5uajZv17eVdGUCQQDGyuHvyomKFLO7QzAkg6ZsTLhR0GV9/7E0o8KfXHAd71GodIdEt2GhVdMasQfuKMdNv4qPMmSL9NIzj5QjRxmlAkEAqRJNzhcVNJvirHo4WVIqdjVS6cr48phTHHpCtXIgLAbTUKRs1NY6T5MJh7ozDKzK9vNBXUOSZ1j8eU9lZonc+QJBAMRSBINdkCsverhLCDZnVWnK8pTJrBGc/JIxz7i1/3twp0Inopb4S5CbQ5oujthiqUFdEieM6sNVCmolN3UHeIkCQAv50JG7zDq3xe1+wB2xB7NJhKD5Q4NqW34/twkvsFekUyFij8tbAxl0ebs390QSUix2PUWNUMYBBIBhanr2YGk=");
 		txtKey.setEditable(false);
 		txtKey.setLineWrap(true);
 		txtKey.setWrapStyleWord(true);
@@ -92,9 +92,9 @@ public class KeyExporter extends JDialog {
 			JPanel buttonPane = new JPanel();
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-			JButton btnNewButton = new JButton("Save");
+			JButton btnNewButton = new JButton("Import");
 			{
-				okButton = new JButton("Copy");
+				okButton = new JButton("Open");
 				okButton.setActionCommand("OK");
 				getRootPane().setDefaultButton(okButton);
 			}

@@ -31,6 +31,8 @@ public abstract class Language {
 	public String miOpen = "Open        ";
 	public String miSave = "Save        ";
 	public String miSaveAs = "Save as...        ";
+	public String miImportKey = "Import key...	";
+	public String miExportKey = "Export key...	";
 	public String miPageSet = "Page Setup...        ";
 	public String miPrint = "Print...        ";
 	public String miExit = "Exit        ";
