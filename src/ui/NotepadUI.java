@@ -49,7 +49,6 @@ import ui.custom.KInformation;
 import ui.custom.KPrinter;
 import ui.custom.KReplacer;
 import ui.custom.KSettings;
-import ui.custom.KeyExporter;
 import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -62,7 +61,7 @@ public class NotepadUI extends JFrame implements UI {
 	// Menus
 	public JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
 	// Menu items
-	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, pageSetupMenuItem, printMenuItem,
+	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
 			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
 			findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
 			fontMenuItem, statusBarMenuItem, viewHelpMenuItem , HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
@@ -195,8 +194,6 @@ public class NotepadUI extends JFrame implements UI {
 		openMenuItem = new JMenuItem(lang.miOpen);
 		saveMenuItem = new JMenuItem(lang.miSave);
 		saveAsMenuItem = new JMenuItem(lang.miSaveAs);
-		keyImportMenuItem = new JMenuItem(lang.miImportKey);
-		keyExportMenuItem = new JMenuItem(lang.miExportKey);
 		pageSetupMenuItem = new JMenuItem(lang.miPageSet);
 		printMenuItem = new JMenuItem(lang.miPrint);
 		exitMenuItem = new JMenuItem(lang.miExit);
@@ -249,9 +246,6 @@ public class NotepadUI extends JFrame implements UI {
 		fileMenu.add(openMenuItem);
 		fileMenu.add(saveMenuItem);
 		fileMenu.add(saveAsMenuItem);
-		fileMenu.addSeparator();
-		fileMenu.add(keyImportMenuItem);
-		fileMenu.add(keyExportMenuItem);
 		fileMenu.addSeparator();
 		fileMenu.add(pageSetupMenuItem);
 		fileMenu.add(printMenuItem);
@@ -410,14 +404,6 @@ public class NotepadUI extends JFrame implements UI {
 			public void actionPerformed(ActionEvent ev) {
 				saveAsAction();
 			}
-		});
-		
-		keyImportMenuItem.addActionListener(e -> {
-			
-		});
-
-		keyExportMenuItem.addActionListener(e -> {
-			new KeyExporter().showDialog();
 		});
 		
 		// pagesetup
