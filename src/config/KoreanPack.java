@@ -46,6 +46,7 @@ class KoreanPack extends Language {
 
 		miWordWrap = "\uC790\uB3D9 \uC904 \uBC14\uAFC8\u0028W\u0029        ";
 		miFont = "\uAE00\uAF34\u0028F\u0029...        ";
+		miCrypto = "\uC554\uD638\uD654        ";
 
 		miStsBar = "\uC0C1\uD0DC \uD45C\uC2DC\uC904\u0028S\u0029        ";
 

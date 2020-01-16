@@ -66,7 +66,7 @@ public class NotepadUI extends JFrame implements UI {
 			findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
 			fontMenuItem, statusBarMenuItem, viewHelpMenuItem , HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
-	public JCheckBoxMenuItem wordWrapMenuItem;
+	public JCheckBoxMenuItem wordWrapMenuItem, cryptoMenuItem;
 
 	// Text area
 	public static JTextArea textArea = new JTextArea();
@@ -86,6 +86,7 @@ public class NotepadUI extends JFrame implements UI {
 	private KSettings st;
 
 	private Language lang;
+	private boolean isEncrypted = true;
 	private static boolean invalidationFlag = false;
 
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
@@ -213,7 +214,7 @@ public class NotepadUI extends JFrame implements UI {
 
 		wordWrapMenuItem = new JCheckBoxMenuItem(lang.miWordWrap);
 		fontMenuItem = new JMenuItem(lang.miFont);
-
+		cryptoMenuItem= new JCheckBoxMenuItem(lang.miCrypto);
 		statusBarMenuItem = new JMenuItem(lang.miStsBar);
 
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
@@ -270,11 +271,13 @@ public class NotepadUI extends JFrame implements UI {
 
 		formatMenu.add(wordWrapMenuItem);
 		formatMenu.add(fontMenuItem);
+		formatMenu.addSeparator();
+		formatMenu.add(cryptoMenuItem);
 
 		viewMenu.add(statusBarMenuItem);
 
-		helpMenu.add(viewHelpMenuItem);
-		helpMenu.addSeparator();
+		//helpMenu.add(viewHelpMenuItem);
+		//helpMenu.addSeparator();
 		helpMenu.add(HomepageMenuItem);
 		helpMenu.addSeparator();
 		helpMenu.add(aboutNotepadMenuItem);
@@ -513,8 +516,22 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
+			
+		cryptoMenuItem.setSelected(true);
+		cryptoMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (cryptoMenuItem.isSelected()) {
+					isEncrypted = true;
+				} else {
+					isEncrypted = false;
+				}
+			}
+		});
+		
 		// statusbar
 		statusBarMenuItem.setEnabled(false);
+		
 		// view
 		viewHelpMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -655,7 +672,7 @@ public class NotepadUI extends JFrame implements UI {
 		MemoVO memo = new MemoVO();
 		savedContext = textArea.getText();
 		memo.setContent(savedContext);
-		FileManager.getInstance().saveMemo(filePath, memo);
+		FileManager.getInstance().saveMemo(filePath, memo, isEncrypted);
 		setInvalidationFlag(false);
 	}
 
@@ -716,4 +733,8 @@ public class NotepadUI extends JFrame implements UI {
 		invalidationFlag = b;
 	}
 
+	public boolean isEncrypted() {
+		return isEncrypted;
+	}
+	
 }

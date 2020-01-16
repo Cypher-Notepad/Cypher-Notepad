@@ -50,6 +50,7 @@ public abstract class Language {
 	
 	public String miWordWrap = "Word Wrap        ";
 	public String miFont = "Font...        ";
+	public String miCrypto = "Encrpytion        ";
 	
 	public String miStsBar = "Status Bar        ";
 	

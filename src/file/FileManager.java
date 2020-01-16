@@ -263,27 +263,41 @@ public class FileManager {
 
 	}
 
+	/*
 	public void saveMemo(String filename, MemoVO memo) {
-		PrintWriter memoWriter;
+		saveMemo(String filename, MemoVO memo, boolean isEncrypted
+	}
+	*/
+	
+	public void saveMemo(String filename, MemoVO memo, boolean isEncrypted) {
+		PrintWriter memoWriter = null;
 		try {
 			memoWriter = new PrintWriter(new FileWriter(filename));
 
-			// Encrypt.
-			CryptoFacade crypto = new CryptoFacade();
-			if (recycleKey) {
-				crypto.encrypt(memo, keys.get(processID));
+			if (isEncrypted) {
+				// Encrypt.
+				CryptoFacade crypto = new CryptoFacade();
+				if (recycleKey) {
+					crypto.encrypt(memo, keys.get(processID));
+				} else {
+					crypto.encrypt(memo);
+				}
+				memoWriter.println(HEADER_WARNING);
+				memoWriter.println(
+						String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
+				memoWriter.println(memo.getKey());
+				memoWriter.println(memo.getContent());
 			} else {
-				crypto.encrypt(memo);
+				memoWriter.println(memo.getContent());
 			}
-			memoWriter.println(HEADER_WARNING);
-			memoWriter
-					.println(String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
-			memoWriter.println(memo.getKey());
-			memoWriter.println(memo.getContent());
-			memoWriter.close();
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if(memoWriter != null) {
+				memoWriter.close();
+			}
 		}
 
 	}

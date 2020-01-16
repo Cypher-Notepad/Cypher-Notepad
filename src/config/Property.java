@@ -25,7 +25,6 @@ public class Property {
 
 	public static String version = "VERSION";
 	public static String language = "LANGUAGE";
-	public static String isEncrypted = "ENCRYPTED";
 	public static String nOfRcntFiles = "NUMBER_OF_RECENT_FILES";
 	public static String nOfKeys = "NUMBER_OF_KEYS";
 	public static String rcntFile = "Recent File";
@@ -99,7 +98,6 @@ public class Property {
 
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
-		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
 		prop.setProperty(nOfKeys, "8192");
 		prop.setProperty(fontFamily, "Dialog");
@@ -110,9 +108,8 @@ public class Property {
 
 	public static void initialize() {
 		Properties prop = Property.getProperties();
-		prop.setProperty(version, "1.0");
+		prop.setProperty(version, "2.1");
 		prop.setProperty(language, "ENGLISH");
-		prop.setProperty(isEncrypted, "TRUE");
 		prop.setProperty(nOfRcntFiles, "5");
 		prop.setProperty(nOfKeys, "8192");
 		prop.setProperty(fontFamily, "Dialog");
@@ -138,6 +135,7 @@ public class Property {
 
 			NotepadUI.textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
 			NotepadUI.textArea.setFont(textFont);
+			
 		} catch (NullPointerException e) {
 			// not critical.
 		}
