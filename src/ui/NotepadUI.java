@@ -111,8 +111,8 @@ public class NotepadUI extends JFrame implements UI {
 		String path;
 		try {
 			path = file.getCanonicalPath();
-			directory = new File(path.substring(0, path.lastIndexOf("\\")));
-			fileName = path.substring(path.lastIndexOf("\\") + 1);
+			directory = new File(path.substring(0, path.lastIndexOf(FileManager.SEPARATOR)));
+			fileName = path.substring(path.lastIndexOf(FileManager.SEPARATOR) + 1);
 			frame = new JFrame(fileName + " - Crypto Notepad");
 			MemoVO loadedContent = FileManager.getInstance().loadMemo(frame, path);
 			savedContext = loadedContent.getContent();
@@ -655,7 +655,7 @@ public class NotepadUI extends JFrame implements UI {
 			directory = fc.getCurrentDirectory();
 			saveMemo();
 
-			Property.addRecentFiles(directory + "\\" + fileName);
+			Property.addRecentFiles(directory + FileManager.SEPARATOR + fileName);
 
 			frame.setTitle(fileName + " - Crypto Notepad");
 			rtn = true;
@@ -668,7 +668,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void saveMemo() {
-		String filePath = directory + "\\" + fileName;
+		String filePath = directory + FileManager.SEPARATOR + fileName;
 		MemoVO memo = new MemoVO();
 		savedContext = textArea.getText();
 		memo.setContent(savedContext);
@@ -718,8 +718,8 @@ public class NotepadUI extends JFrame implements UI {
 				undoText = savedContext;
 				setInvalidationFlag(false);
 				textArea.setText(memo.getContent());
-				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf("\\")));
-				fileName = selectedPath.substring(selectedPath.lastIndexOf("\\") + 1);
+				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf(FileManager.SEPARATOR)));
+				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);
 				frame.setTitle(fileName + " - Crypto Notepad");
 				return true;
 			}
