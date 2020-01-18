@@ -63,7 +63,6 @@ public class KFontChooser extends JDialog {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			System.out.println("getSelectedIndex() : " + listFont.getSelectedIndex());
 			selectedFont = new Font(fonts[listFont.getSelectedIndex()], selectedFont.getStyle(),
 					selectedFont.getSize());
 			txtScript.setText(fonts[listFont.getSelectedIndex()]); 
@@ -81,7 +80,6 @@ public class KFontChooser extends JDialog {
 		for(String fam : allfonts) {
 			test = new Font(fam,Font.PLAIN, 10);
 			if(test.canDisplay(lang.testChar_EN) && test.canDisplay(lang.testChar_KO)) {
-
 				filtered.add(fam);
 			}
 		}
@@ -211,7 +209,6 @@ public class KFontChooser extends JDialog {
 				}
 				
 				listFont.removeListSelectionListener(familyListListener);
-				
 				listFont.setListData(fonts);
 				if((idx = Arrays.binarySearch(fonts, selectedFont.getFamily())) > -1) {
 					listFont.setSelectedIndex(idx);
@@ -286,7 +283,6 @@ public class KFontChooser extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton(lang.btnOK);
-				//okButton.setMinimumSize(new Dimension(86,27));
 				okButton.setPreferredSize(new Dimension(86,27));
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -308,6 +304,7 @@ public class KFontChooser extends JDialog {
 		}
 
 		setLocationRelativeTo(jframe);
+		setResizable(false);
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 

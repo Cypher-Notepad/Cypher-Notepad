@@ -278,9 +278,9 @@ public class NotepadUI extends JFrame implements UI {
 
 		//helpMenu.add(viewHelpMenuItem);
 		//helpMenu.addSeparator();
+		helpMenu.add(aboutNotepadMenuItem);
 		helpMenu.add(HomepageMenuItem);
 		helpMenu.addSeparator();
-		helpMenu.add(aboutNotepadMenuItem);
 		helpMenu.add(settingsMenuItem);
 
 		// sets it
@@ -601,6 +601,12 @@ public class NotepadUI extends JFrame implements UI {
 		goToMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
 		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
 		timeDateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		
+		HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+		
+		
 
 		// sub menu mnemonic keys
 		newMenuItem.setMnemonic(KeyEvent.VK_N);
@@ -630,9 +636,8 @@ public class NotepadUI extends JFrame implements UI {
 
 		statusBarMenuItem.setMnemonic(KeyEvent.VK_S);
 
-		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
+		//viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
-
 		settingsMenuItem.setMnemonic(KeyEvent.VK_S);
 
 		if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
