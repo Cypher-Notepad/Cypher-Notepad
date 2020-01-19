@@ -369,17 +369,15 @@ public class NotepadUI extends JFrame implements UI {
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				if (textArea.getText().trim().length() != 0) {
-					System.out.println("Contains Text");
-					if (checkSave()) {
-						textArea.setText(null);
-						directory = null;
-						fileName = "Untitled";
-						savedContext = "";
-						undoText = savedContext;
-						setInvalidationFlag(false);
-						frame.setTitle(fileName + " - Crypto Notepad");
-					}
+				if (checkSave()) {
+					textArea.setText(null);
+					directory = null;
+					fileName = "Untitled";
+					savedContext = "";
+					undoText = savedContext;
+					setInvalidationFlag(false);
+					FileManager.getInstance().newBtnProcedure();
+					frame.setTitle(fileName + " - Crypto Notepad");
 				}
 			}
 		});

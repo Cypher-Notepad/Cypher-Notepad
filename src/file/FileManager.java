@@ -52,9 +52,9 @@ public class FileManager {
 	private ArrayList<String> keys = new ArrayList<String>();
 	private Language lang;
 
-	// Index of Keys.
-	private int processID = 0;
-	private int maxKey = 8192;
+	private int processID = 0; // Index of Keys. (to be used.)
+	private int keyID = 0;	   // Index of Keys. (being used.)
+	private int maxKey = 8192; // Allocated again after loading the prop.
 	private boolean recycleKey = false;
 
 	private FileManager() {
@@ -112,10 +112,12 @@ public class FileManager {
 					if (reloaded.size() < keys.size()) {
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 						reloaded.add(RSAImpl.getInstance().getPrivateKey());
+						keyID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
 						NotepadUI.setInvalidationFlag(true);
+						
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
-					recycleKey = false;
+					//recycleKey = false;
 				} else {
 					processID = new Random().nextInt(maxKey);
 					recycleKey = true;
@@ -135,6 +137,7 @@ public class FileManager {
 					processID = new Random().nextInt(maxKey);
 					recycleKey = true;
 				}
+				keyID = processID;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -206,7 +209,6 @@ public class FileManager {
 				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				// ========================================================================
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
@@ -278,13 +280,19 @@ public class FileManager {
 				// Encrypt.
 				CryptoFacade crypto = new CryptoFacade();
 				if (recycleKey) {
-					crypto.encrypt(memo, keys.get(processID));
+					crypto.encrypt(memo, keys.get(keyID));
 				} else {
 					crypto.encrypt(memo);
+					
+					//umm...make new key for the next file.
+					recycleKey = true;
+					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
+					keys.add(RSAImpl.getInstance().getPrivateKey());
+					processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
 				}
 				memoWriter.println(HEADER_WARNING);
 				memoWriter.println(
-						String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(processID).getBytes())));
+						String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(keyID).getBytes())));
 				memoWriter.println(memo.getKey());
 				memoWriter.println(memo.getContent());
 			} else {
@@ -317,6 +325,11 @@ public class FileManager {
 					// Decrypt.
 					int idx = Integer.parseInt(new String(Base64.getDecoder().decode(strIdx)));
 					new CryptoFacade().decrypt(readMemo, getKey(idx));
+					
+					// And use again its key which was used to encrypt at the first.
+					recycleKey = true;
+					keyID = idx;
+					
 				} else {
 					memoReader.close();
 					memoReader = new BufferedReader(new FileReader(filename));
@@ -327,6 +340,10 @@ public class FileManager {
 						read = memoReader.readLine();
 					}
 					readMemo.setContent(content);
+					
+					// In this case, have to use new key explicitly.
+					recycleKey = false;
+					keyID = processID;
 				}
 
 				// Return null not to show up notepadUI(= stay MainUI).
@@ -378,6 +395,14 @@ public class FileManager {
 		}
 
 		return readMemo;
+	}
+	
+	/**
+	 * This function is only used for when the [new] button is pressed on NotepadUI.
+	 */
+	public void newBtnProcedure() {
+		recycleKey = false;
+		keyID = processID;
 	}
 
 	private Boolean isEncrypted(BufferedReader reader) {

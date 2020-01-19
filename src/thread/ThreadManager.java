@@ -17,7 +17,7 @@ public class ThreadManager {
 	public static ThreadManager getInstance() {
 		return ThreadManager.LazyHolder.INSTANCE;
 	}
-
+	
 	public void addThread(Thread t) {
 		listTr.add(t);
 	}
