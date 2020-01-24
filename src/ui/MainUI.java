@@ -310,6 +310,7 @@ public class MainUI extends JFrame implements UI {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
+					ThreadManager.getInstance().joinInitThread();
 					boolean isLoaded = notepadUI.loadMemo(new File(path));
 					if (isLoaded) {
 						Property.addRecentFiles(path);
@@ -321,6 +322,7 @@ public class MainUI extends JFrame implements UI {
 		});
 
 		btnNew.addActionListener(e -> {
+			ThreadManager.getInstance().joinInitThread();
 			ThreadManager.getInstance().joinThreads();
 			UIManager.getInstance().setUI(notepadUI);
 		});
@@ -331,6 +333,7 @@ public class MainUI extends JFrame implements UI {
 			int response = fc.showOpenDialog(this);
 			if (response == JFileChooser.APPROVE_OPTION) {
 				System.out.println(fc.getSelectedFile());
+				ThreadManager.getInstance().joinInitThread();
 				boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
 				if (isLoaded) {
 					try {
@@ -346,6 +349,7 @@ public class MainUI extends JFrame implements UI {
 
 		btnX.addActionListener(e -> {
 			System.out.println("[MainUI] Close Window on Main UI");
+			ThreadManager.getInstance().joinInitThread();
 			ThreadManager.getInstance().joinThreads();
 			FileManager.getInstance().saveProperties();
 			UIManager.getInstance().closeWindow();
