@@ -49,6 +49,7 @@ import ui.custom.KInformation;
 import ui.custom.KPrinter;
 import ui.custom.KReplacer;
 import ui.custom.KSettings;
+import ui.custom.KeyExporter;
 import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -61,10 +62,11 @@ public class NotepadUI extends JFrame implements UI {
 	// Menus
 	public JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
 	// Menu items
-	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, pageSetupMenuItem, printMenuItem,
-			exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, deleteMenuItem, findMenuItem,
-			findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, selectAllMenuItem, timeDateMenuItem,
-			fontMenuItem, statusBarMenuItem, viewHelpMenuItem , HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
+	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, 
+			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
+			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
+			selectAllMenuItem, timeDateMenuItem, fontMenuItem, statusBarMenuItem, viewHelpMenuItem , 
+			HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
 	public JCheckBoxMenuItem wordWrapMenuItem, cryptoMenuItem;
 
@@ -195,6 +197,9 @@ public class NotepadUI extends JFrame implements UI {
 		openMenuItem = new JMenuItem(lang.miOpen);
 		saveMenuItem = new JMenuItem(lang.miSave);
 		saveAsMenuItem = new JMenuItem(lang.miSaveAs);
+		keyImportMenuItem = new JMenuItem(lang.miImporter);
+		keyExportMenuItem = new JMenuItem(lang.miExporter);
+		keyExportMenuItem.setEnabled(false);
 		pageSetupMenuItem = new JMenuItem(lang.miPageSet);
 		printMenuItem = new JMenuItem(lang.miPrint);
 		exitMenuItem = new JMenuItem(lang.miExit);
@@ -247,6 +252,9 @@ public class NotepadUI extends JFrame implements UI {
 		fileMenu.add(openMenuItem);
 		fileMenu.add(saveMenuItem);
 		fileMenu.add(saveAsMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(keyImportMenuItem);
+		fileMenu.add(keyExportMenuItem);
 		fileMenu.addSeparator();
 		fileMenu.add(pageSetupMenuItem);
 		fileMenu.add(printMenuItem);
@@ -375,8 +383,11 @@ public class NotepadUI extends JFrame implements UI {
 					fileName = "Untitled";
 					savedContext = "";
 					undoText = savedContext;
+
+					keyExportMenuItem.setEnabled(false);
 					setInvalidationFlag(false);
 					FileManager.getInstance().newBtnProcedure();
+					
 					frame.setTitle(fileName + " - Crypto Notepad");
 				}
 			}
@@ -404,6 +415,17 @@ public class NotepadUI extends JFrame implements UI {
 		saveAsMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				saveAsAction();
+			}
+		});
+		
+		keyImportMenuItem.addActionListener(e->{
+			
+		});
+		
+		keyExportMenuItem.addActionListener(e->{
+			if(checkSave()) {
+				System.out.println(directory);
+				new KeyExporter().showDialog(this);
 			}
 		});
 		
@@ -677,6 +699,12 @@ public class NotepadUI extends JFrame implements UI {
 		memo.setContent(savedContext);
 		FileManager.getInstance().saveMemo(filePath, memo, isEncrypted);
 		setInvalidationFlag(false);
+		if(isEncrypted) {
+			keyExportMenuItem.setEnabled(true);
+		} else {
+			keyExportMenuItem.setEnabled(false);
+		}
+		
 	}
 
 	private boolean showFontChooser() {
@@ -720,6 +748,11 @@ public class NotepadUI extends JFrame implements UI {
 				savedContext = memo.getContent();
 				undoText = savedContext;
 				setInvalidationFlag(false);
+				if(memo.getKey() == null) {
+					keyExportMenuItem.setEnabled(false);
+				} else {
+					keyExportMenuItem.setEnabled(true);
+				}
 				textArea.setText(memo.getContent());
 				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf(FileManager.SEPARATOR)));
 				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);

@@ -47,6 +47,9 @@ public class FileManager {
 			"## or you will never be able to recover its	  ##\r\n" +
 			"## original content.       _LEEDONGGEON1996_      ##\r\n" +
 			"####################################################\r\n";
+	private static final String HEADER_KEY = "-----BEGIN RSA PRIVATE KEY-----";
+	private static final String FOOTER_KEY = "-----END RSA PRIVATE KEY-----";
+	
 
 	private static FileManager instance = null;
 	private ArrayList<String> keys = new ArrayList<String>();
@@ -218,6 +221,10 @@ public class FileManager {
 			}
 		}
 	}
+	
+	public String getCurKey() {
+		return keys.get(keyID);
+	}
 
 	public void loadProperties() {
 		loadProperties(false);
@@ -296,6 +303,8 @@ public class FileManager {
 				memoWriter.println(memo.getKey());
 				memoWriter.println(memo.getContent());
 			} else {
+				recycleKey = false;
+				keyID = processID;
 				memoWriter.println(memo.getContent());
 			}
 			
@@ -313,6 +322,7 @@ public class FileManager {
 	public MemoVO loadMemo(JFrame frame, String filename) {
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
+		readMemo.setKey(null);
 		if (memo.exists()) {
 			try {
 				BufferedReader memoReader = new BufferedReader(new FileReader(filename));
@@ -395,6 +405,23 @@ public class FileManager {
 		}
 
 		return readMemo;
+	}
+	
+	public void exportKey(String filename, String key) {
+		PrintWriter writer = null;
+		
+		try {
+			writer = new PrintWriter(new FileWriter(filename));
+			writer.println(HEADER_KEY);
+			writer.println(key);
+			writer.print(FOOTER_KEY);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if(writer != null) {
+				writer.close();
+			}
+		}
 	}
 	
 	/**
