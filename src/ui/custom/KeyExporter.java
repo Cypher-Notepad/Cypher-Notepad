@@ -123,7 +123,7 @@ public class KeyExporter extends JDialog {
 		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("pem File (*.pem)", "pem"));
-		
+		fc.setAcceptAllFileFilterUsed(false);
 		btnNewButton.addActionListener(e->{
 			String filePath = null;
 			//Filemanger에서 pem파일 저장하는 거 잘연결 시키기
@@ -151,7 +151,10 @@ public class KeyExporter extends JDialog {
 	
 	public void showDialog(NotepadUI frame) {
 		txtKey.setText(FileManager.getInstance().getCurKey());	
-		fc.setCurrentDirectory(new File(frame.directory + FileManager.SEPARATOR + frame.fileName));
+		//fc.setCurrentDirectory(new File(frame.directory + FileManager.SEPARATOR + frame.fileName));
+		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
+		keyFileName = keyFileName.substring(0, keyFileName.lastIndexOf('.')) + ".pem";
+		fc.setSelectedFile(new File(keyFileName));
 		
 		
 		setVisible(true);
