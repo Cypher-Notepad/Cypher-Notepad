@@ -119,7 +119,7 @@ public class KSettings extends JDialog {
 			selectedTimer.stop();
 			setVisible(false);
 		});
-
+		
 		JButton btnCancel = new JButton(lang.btnCancel);
 		btnCancel.addActionListener(e -> {
 			isConfirmed = false;

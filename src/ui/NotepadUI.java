@@ -50,6 +50,7 @@ import ui.custom.KPrinter;
 import ui.custom.KReplacer;
 import ui.custom.KSettings;
 import ui.custom.KeyExporter;
+import ui.custom.KeyOpener;
 import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -590,7 +591,7 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		keyImportMenuItem.addActionListener(e->{
-			
+			new KeyOpener().showDialog(this);
 		});
 		
 		keyExportMenuItem.addActionListener(e->{

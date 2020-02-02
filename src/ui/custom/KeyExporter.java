@@ -141,7 +141,11 @@ public class KeyExporter extends JDialog {
 
 		txtKey.setText(FileManager.getInstance().getCurKey());
 		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
-		keyFileName = keyFileName.substring(0, keyFileName.lastIndexOf('.')) + ".pem";
+		int fileExtensionIdx = keyFileName.lastIndexOf('.');
+		if(fileExtensionIdx == -1) {
+			fileExtensionIdx = keyFileName.length();
+		}
+		keyFileName = keyFileName.substring(0, fileExtensionIdx) + ".pem";
 		fc.setSelectedFile(new File(keyFileName));
 
 		setVisible(true);
