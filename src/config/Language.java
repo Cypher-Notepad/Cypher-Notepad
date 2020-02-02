@@ -107,6 +107,7 @@ public abstract class Language {
 	
 	//CheckSave
 	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to [";
+	public String checkSaveToExport_pre = "Your work have to be saved to export key. Do you want to save changes to [";
 	public String checkSave_post = "]?   \n";
 	public String save = "Save";
 	public String noSave = "  Don't Save  ";

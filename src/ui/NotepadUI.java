@@ -236,7 +236,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}.start();
 
-		System.out.println("[NotepainUI]Finish innitializeUI() in thread. But the thread for settings() may be alive.");
+		System.out.println("[NotepainUI]Finish initializeUI() in thread. But the thread for settings() may be alive.");
 	}
 
 	@Override
@@ -390,42 +390,6 @@ public class NotepadUI extends JFrame implements UI {
 					
 					frame.setTitle(fileName + " - Crypto Notepad");
 				}
-			}
-		});
-
-		openMenuItem.addActionListener(e -> {
-			if (checkSave()) {
-				int response = fc.showOpenDialog(frame);
-				if (response == JFileChooser.APPROVE_OPTION) {
-					loadMemo(fc.getSelectedFile());
-				}
-			}
-		});
-
-		saveMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				if (directory != null) {
-					saveMemo();
-				} else {
-					saveAsAction();
-				}
-			}
-		});
-
-		saveAsMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				saveAsAction();
-			}
-		});
-		
-		keyImportMenuItem.addActionListener(e->{
-			
-		});
-		
-		keyExportMenuItem.addActionListener(e->{
-			if(checkSave()) {
-				System.out.println(directory);
-				new KeyExporter().showDialog(this);
 			}
 		});
 		
@@ -595,6 +559,47 @@ public class NotepadUI extends JFrame implements UI {
 				st.applySettings();
 			}
 		});
+		
+		
+		// These listeners must be added after joining init-thread.
+		//[Block A - start]*****************************************************************************
+		ThreadManager.getInstance().joinInitThread();
+		openMenuItem.addActionListener(e -> {
+			if (checkSave()) {
+				int response = fc.showOpenDialog(frame);
+				if (response == JFileChooser.APPROVE_OPTION) {
+					loadMemo(fc.getSelectedFile());
+				}
+			}
+		});
+
+		saveMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				if (directory != null) {
+					saveMemo();
+				} else {
+					saveAsAction();
+				}
+			}
+		});
+
+		saveAsMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				saveAsAction();
+			}
+		});
+		
+		keyImportMenuItem.addActionListener(e->{
+			
+		});
+		
+		keyExportMenuItem.addActionListener(e->{
+			if(checkSaveToExport()) {
+				System.out.println(directory);
+				new KeyExporter().showDialog(this);
+			}
+		});
+		//[Block A - end]*****************************************************************************
 
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -666,7 +671,7 @@ public class NotepadUI extends JFrame implements UI {
 		} else {
 			aboutNotepadMenuItem.setDisplayedMnemonicIndex(18);
 		}
-
+		
 	}
 
 	public boolean saveAsAction() {
@@ -735,6 +740,33 @@ public class NotepadUI extends JFrame implements UI {
 		} else {
 			rtn = true;
 		}
+		return rtn;
+	}
+	
+	public boolean checkSaveToExport() {
+		boolean rtn = false;
+		if (((!textArea.getText().equals("")) && (invalidationFlag)) || (!savedContext.equals(textArea.getText()))) {
+			/*to make looks better, add space*/
+			Object[] options = { "      " +lang.save + "      ", lang.btnCancel };
+
+			int response = JOptionPane.showOptionDialog(frame, lang.checkSaveToExport_pre + fileName + lang.checkSave_post,
+					"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+					options[1]);
+
+			if (response == JOptionPane.YES_OPTION) {
+				if (directory != null) {
+					saveMemo();
+					rtn = true;
+				} else {
+					rtn = saveAsAction();
+				}
+			} else if (response == JOptionPane.NO_OPTION) {
+				rtn = false;
+			}
+		} else {
+			rtn = true;
+		}
+		
 		return rtn;
 	}
 

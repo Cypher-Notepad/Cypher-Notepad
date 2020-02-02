@@ -322,7 +322,6 @@ public class MainUI extends JFrame implements UI {
 		});
 
 		btnNew.addActionListener(e -> {
-			ThreadManager.getInstance().joinInitThread();
 			ThreadManager.getInstance().joinThreads();
 			UIManager.getInstance().setUI(notepadUI);
 		});
