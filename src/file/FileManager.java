@@ -424,6 +424,10 @@ public class FileManager {
 		}
 	}
 	
+	public void loadPEMFile(String fileName) {
+		
+	}
+	
 	/**
 	 * This function is only used for when the [new] button is pressed on NotepadUI.
 	 */

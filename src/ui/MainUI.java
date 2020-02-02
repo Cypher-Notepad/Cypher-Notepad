@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -329,19 +330,33 @@ public class MainUI extends JFrame implements UI {
 		btnOpen.addActionListener(e -> {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
-			int response = fc.showOpenDialog(this);
-			if (response == JFileChooser.APPROVE_OPTION) {
-				System.out.println(fc.getSelectedFile());
-				ThreadManager.getInstance().joinInitThread();
-				boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
-				if (isLoaded) {
-					try {
-						Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
-					} catch (IOException e1) {
-						e1.printStackTrace();
+			boolean toBeSelected = true;
+			while(toBeSelected) {
+				int response = fc.showOpenDialog(this);
+				if (response == JFileChooser.APPROVE_OPTION) {
+					if (fc.getSelectedFile().exists()) {
+						toBeSelected = false;
+						System.out.println(fc.getSelectedFile());
+						ThreadManager.getInstance().joinInitThread();
+						boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
+						if (isLoaded) {
+							try {
+								Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							ThreadManager.getInstance().joinThreads();
+							UIManager.getInstance().setUI(notepadUI);
+						}
+					} else {
+						toBeSelected = true;
+						JOptionPane.showMessageDialog(this,
+								"The file does not exist." + " Please check your file name.", "Crypto Notepad",
+								JOptionPane.ERROR_MESSAGE);
 					}
-					ThreadManager.getInstance().joinThreads();
-					UIManager.getInstance().setUI(notepadUI);
+				}
+				else {
+					toBeSelected = false;
 				}
 			}
 		});
