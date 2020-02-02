@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,12 +25,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Property;
+import file.FileDrop;
 import file.FileManager;
+import thread.ThreadManager;
 import ui.NotepadUI;
+import ui.UIManager;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
@@ -135,22 +140,37 @@ public class KeyOpener extends JDialog {
 			buttonPane.add(btnCancel);
 
 		}
-
+		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("pem File (*.pem)", "pem"));
 		fc.setAcceptAllFileFilterUsed(true);
 		btnSave.addActionListener(e -> {
-			String filePath = null;
-			int userSelection = fc.showSaveDialog(this);
-			if (userSelection == JFileChooser.APPROVE_OPTION) {
-				filePath = fc.getSelectedFile().getAbsolutePath();
-				if (!filePath.endsWith(".pem")) {
-					filePath += ".pem";
+			boolean toBeSelected = true;
+			while(toBeSelected) {
+				int response = fc.showOpenDialog(this);
+				if (response == JFileChooser.APPROVE_OPTION) {
+					if (fc.getSelectedFile().exists()) {						
+						boolean isLoaded = loadPEMFile(fc.getSelectedFile());
+						if(isLoaded) {
+							toBeSelected = false;
+						}
+					} else {
+						toBeSelected = true;
+						JOptionPane.showMessageDialog(this,
+								"The file does not exist." + " Please check your file.", "Crypto Notepad",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
-				FileManager.getInstance().exportKey(filePath, txtKey.getText());
-				setVisible(false);
-			} else if (userSelection == JFileChooser.CANCEL_OPTION) {/* do nothing.*/}
-			else if (userSelection == JFileChooser.ERROR_OPTION) {/* do nothing.*/}
+				else {
+					toBeSelected = false;
+				}
+			}
+		});
+
+		new FileDrop(txtKey, new FileDrop.Listener() {
+			public void filesDropped(java.io.File[] files) {
+				boolean isLoaded = loadPEMFile(files[0]);
+			}
 		});
 
 		btnCancel.addActionListener(e->{
@@ -165,14 +185,22 @@ public class KeyOpener extends JDialog {
 		});
 	}
 
+	private boolean loadPEMFile(File pem) {
+		boolean isSucceed = false;
+		String loadedKey = FileManager.getInstance().loadPEMFile(pem);
+		if (loadedKey != null) {
+			txtKey.setText(loadedKey);
+			isSucceed = true;
+		} else {
+			JOptionPane.showMessageDialog(this,
+					"Invalid keyfile." + " Please check your file format.", "Crypto Notepad",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return isSucceed;
+	}
+	
 	public void showDialog(NotepadUI frame) {
-
-		/*
-		txtKey.setText(FileManager.getInstance().getCurKey());
-		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
-		keyFileName = keyFileName.substring(0, keyFileName.lastIndexOf('.')) + ".pem";
-		fc.setSelectedFile(new File(keyFileName));
-		 */
 		setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

@@ -424,8 +424,43 @@ public class FileManager {
 		}
 	}
 	
-	public void loadPEMFile(String fileName) {
-		
+	public String loadPEMFile(File pem) {
+		//File pem = new File(fileName);
+		BufferedReader pemReader= null;
+		if (pem.exists()) {
+			try {
+				pemReader = new BufferedReader(new FileReader(pem));
+				String content = "";
+				String read = pemReader.readLine();
+				System.out.println("1" + read);
+				if(read != null) {
+					if(read.equals(HEADER_KEY)) {
+						read = pemReader.readLine();
+						while (read != null) {
+							System.out.println("22" + read);
+							content += read + "\r\n";
+							read = pemReader.readLine();
+						}
+						if(content.endsWith(FOOTER_KEY + "\r\n")) {
+							System.out.println("333" + content);
+							return content.substring(0, content.lastIndexOf(FOOTER_KEY));
+						}
+					}
+				}
+				
+			} catch(Exception e) {
+				return null;
+			} finally {
+				if(pemReader != null) {
+					try {
+						pemReader.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
