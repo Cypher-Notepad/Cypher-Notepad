@@ -2,6 +2,7 @@ package ui.custom;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -42,13 +44,18 @@ import javax.swing.JTextPane;
 
 public class KeyOpener extends JDialog {
 
+	public static final int DECRYPT_OPTION = 1;
+	public static final int CANCEL_OPTION = 0;
+	
 	private final JPanel contentPanel = new JPanel();
-	private JButton btnSave, btnCancel;
+	private JButton btnOpen, btnDecrypt;
 	private JTextArea txtKey;
 
 	private JFileChooser fc;
 	private JLabel lblNewLabel;
-
+	
+	private int result = CANCEL_OPTION;
+	
 	public KeyOpener() {
 		setBounds(100, 100, 520, 300);
 		this.setMinimumSize(new Dimension(520,300));
@@ -61,13 +68,15 @@ public class KeyOpener extends JDialog {
 		JLabel lblKey = new JLabel("Enter the key to use for decryption : ");
 
 		txtKey = new JTextArea();
-		txtKey.setText("");
 		txtKey.setEditable(true);
 		txtKey.setLineWrap(true);
 		txtKey.setWrapStyleWord(true);
+		txtKey.setBackground(new Color(0xE8E8E8));
+		txtKey.setForeground(txtKey.getDisabledTextColor());
+		txtKey.setText("Drag or Open the keyFile.");
 		txtKey.addFocusListener(new FocusListener() {
 
-			boolean isPlaceholder = false;
+			boolean isPlaceholder = true;
 			
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -77,27 +86,23 @@ public class KeyOpener extends JDialog {
 			@Override
 			public void focusLost(FocusEvent e) {
 				setPlaceholder();
+				//lblKey.requestFocusInWindow();
 			}
 			
 			public void setPlaceholder() {
+				System.out.println("lost");
 				txtKey.setBackground(new Color(0xE8E8E8));
 				txtKey.setForeground(txtKey.getDisabledTextColor());
 				if(txtKey.getText().equals("")) {
-					System.out.println("SET F");
-					isPlaceholder = true;
 					txtKey.setText("Drag or Open the keyFile.");
 				}
 			}
 
 			public void erasePlaceholder() {
-
+				System.out.println("gain");
 				txtKey.setBackground(Color.WHITE);
 				txtKey.setForeground(Color.BLACK);
-				if (isPlaceholder) {
-					System.out.println("erase F");
-					//isPlaceholder = false;
-					txtKey.setText("");
-				}
+				txtKey.setText("");	
 			}
 			
 		});
@@ -128,23 +133,23 @@ public class KeyOpener extends JDialog {
 			JPanel buttonPane = new JPanel();
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
-			btnSave = new JButton("Open the keyfile...");
-			btnCancel = new JButton("Decrypt");
-			//btnCancel.setActionCommand("Cancel");
+			btnOpen = new JButton("Open the keyfile...");
+			btnDecrypt = new JButton("Decrypt");
+			//btnDecrypt.setActionCommand("Cancel");
 			
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			buttonPane.add(btnSave);
+			buttonPane.add(btnOpen);
 			
 			lblNewLabel = new JLabel("    ->    ");
 			buttonPane.add(lblNewLabel);
-			buttonPane.add(btnCancel);
+			buttonPane.add(btnDecrypt);
 
 		}
 		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("pem File (*.pem)", "pem"));
 		fc.setAcceptAllFileFilterUsed(true);
-		btnSave.addActionListener(e -> {
+		btnOpen.addActionListener(e -> {
 			boolean toBeSelected = true;
 			while(toBeSelected) {
 				int response = fc.showOpenDialog(this);
@@ -169,11 +174,12 @@ public class KeyOpener extends JDialog {
 
 		new FileDrop(txtKey, new FileDrop.Listener() {
 			public void filesDropped(java.io.File[] files) {
-				boolean isLoaded = loadPEMFile(files[0]);
+				boolean isDraged = loadPEMFile(files[0]);
 			}
 		});
 
-		btnCancel.addActionListener(e->{
+		btnDecrypt.addActionListener(e->{
+			result = DECRYPT_OPTION;
 			setVisible(false);
 		});
 		
@@ -183,6 +189,8 @@ public class KeyOpener extends JDialog {
 				e.getComponent().requestFocusInWindow();
 			}
 		});
+		
+		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 
 	private boolean loadPEMFile(File pem) {
@@ -190,25 +198,29 @@ public class KeyOpener extends JDialog {
 		String loadedKey = FileManager.getInstance().loadPEMFile(pem);
 		if (loadedKey != null) {
 			txtKey.setText(loadedKey);
+			btnDecrypt.requestFocusInWindow();
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					"Invalid keyfile." + " Please check your file format.", "Crypto Notepad",
+					"The keyfile format must be PEM format." + " Please check your file format.", "Crypto Notepad",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		
 		return isSucceed;
 	}
 	
-	public void showDialog(NotepadUI frame) {
+	public int showDialog(JFrame frame) {
+		result = CANCEL_OPTION;
+		setLocationRelativeTo(frame);
+		
 		setVisible(true);
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				System.out.println("text!!!");
-				btnSave.setFocusable(true);
-				txtKey.requestFocusInWindow();
-				System.out.println(btnSave.requestFocusInWindow());
-			}
-		});
+		return result;
+	}
+	
+	public String getEnteredKey() {
+		if(result == DECRYPT_OPTION) {
+			return txtKey.getText();
+		}
+		return null;
 	}
 }

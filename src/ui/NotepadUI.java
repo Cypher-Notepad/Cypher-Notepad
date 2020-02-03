@@ -354,7 +354,7 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
-
+		
 		new FileDrop(textArea, new FileDrop.Listener() {
 			public void filesDropped(java.io.File[] files) {
 				if (checkSave()) {
@@ -374,7 +374,7 @@ public class NotepadUI extends JFrame implements UI {
 		rp = new KReplacer(textArea);
 		info = new KInformation();
 		st = new KSettings();
-		
+
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -393,7 +393,7 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
-		
+
 		// pagesetup
 		pageSetupMenuItem.setActionCommand("PageSetup");
 		pageSetupMenuItem.addActionListener(pt);
@@ -410,7 +410,7 @@ public class NotepadUI extends JFrame implements UI {
 			textArea.setText(undoText);
 			undoText = origin;
 		});
-		
+
 		// cut
 		cutMenuItem.addActionListener(e -> textArea.cut());
 		// copy

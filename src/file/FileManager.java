@@ -28,6 +28,7 @@ import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
 import ui.NotepadUI;
+import ui.custom.KeyOpener;
 import vo.MemoVO;
 
 public class FileManager {
@@ -318,7 +319,7 @@ public class FileManager {
 		}
 
 	}
-
+	
 	public MemoVO loadMemo(JFrame frame, String filename) {
 		File memo = new File(filename);
 		MemoVO readMemo = new MemoVO();
@@ -365,17 +366,23 @@ public class FileManager {
 								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (NumberFormatException e) {
+				/*
 				JOptionPane
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
 										+ "\n(" + e.getClass().getName() + ")",
 								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				*/
+				return loadMemoTemporary(frame, readMemo);
 			} catch (IllegalArgumentException e) {
+				/*
 				JOptionPane
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
 										+ "\n(" + e.getClass().getName() + ")",
 								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				*/
+				return loadMemoTemporary(frame, readMemo);
 			} catch (IOException e) {
 				JOptionPane
 						.showMessageDialog(frame,
@@ -384,10 +391,13 @@ public class FileManager {
 								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
+				/*
 				JOptionPane.showMessageDialog(
 						frame, "[ERROR]" + "\nUnable to decrypt this file."
 								+ "\nThe configuration file may be corrupted." + "\n(" + e.getClass().getName() + ")",
 						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+				*/
+				return loadMemoTemporary(frame, readMemo);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(frame,
 						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
@@ -402,6 +412,36 @@ public class FileManager {
 					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", "Crypto Notepad",
 					JOptionPane.ERROR_MESSAGE);
 			return null;
+		}
+
+		return readMemo;
+	}
+	
+	public MemoVO loadMemoTemporary(JFrame frame, MemoVO readMemo) {
+		//Do process when the file is encrypted
+		if (readMemo.getKey() != null) {
+			KeyOpener kp = new KeyOpener();
+			
+			boolean toContinue = true;
+			while (toContinue) {
+				int result = kp.showDialog(frame);
+				if (result == kp.DECRYPT_OPTION) {
+					String key = kp.getEnteredKey();
+					if (key != null) {
+						try {
+							new CryptoFacade().decrypt(readMemo, key);
+							toContinue = false;
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(frame,
+									"Failed to decrypt the file." + " Please try again with valid key.",
+									"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				} else {
+					toContinue = false;
+					return null;
+				}
+			}
 		}
 
 		return readMemo;
@@ -443,7 +483,7 @@ public class FileManager {
 						}
 						if(content.endsWith(FOOTER_KEY + "\r\n")) {
 							System.out.println("333" + content);
-							return content.substring(0, content.lastIndexOf(FOOTER_KEY));
+							return content.substring(0, content.lastIndexOf("\r\n" + FOOTER_KEY));
 						}
 					}
 				}
