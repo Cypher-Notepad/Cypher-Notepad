@@ -140,11 +140,47 @@ public class KeyOpener extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			buttonPane.add(btnOpen);
 			
-			lblNewLabel = new JLabel("    ->    ");
+			//lblNewLabel = new JLabel("    ->    ");
+			lblNewLabel = new JLabel("sdfsd        ");
+			
 			buttonPane.add(lblNewLabel);
 			buttonPane.add(btnDecrypt);
 
 		}
+		
+		Thread tr_arrow = new Thread() {
+			private int count = 12;
+			int i, j;
+			private String lblStr = "\u27A4            ";
+
+			public void run() {
+				try {
+					lblNewLabel.setText(lblStr);
+					while (true) {
+						if (lblNewLabel.isShowing()) {
+							for (i = 0; i < count; i++) {
+								lblStr = "";
+								for (j = 0; j < i; j++) {
+									lblStr += " ";
+								}
+								lblStr += "\u27A4";
+								for (j = 0; j < count - i; j++) {
+									lblStr += " ";
+								}
+								Thread.sleep(70);
+								lblNewLabel.setText(lblStr);
+							}
+							Thread.sleep(350);
+						} else {
+							Thread.sleep(1000);
+						}
+					}
+				} catch (Exception e) {
+					System.out.println("Not important");
+				}
+			}
+		};
+		tr_arrow.start();
 		
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("pem File (*.pem)", "pem"));
