@@ -31,10 +31,14 @@ import thread.ThreadManager;
 import thread.TrKsetInitialize;
 import thread.TrKsetInvalidateFile;
 import thread.TrKsetLanguage;
+import ui.NotepadUI;
 
 public class KSettings extends JDialog {
 
 	private static final long serialVersionUID = -2123099396815339083L;
+	
+	private NotepadUI frame = null;
+	
 	private JPanel contentPane;
 	JPanel panelForBtn;
 	KButton btnInit, btnInvalidate, btnLang;
@@ -96,9 +100,11 @@ public class KSettings extends JDialog {
 	};
 	private Timer selectedTimer;
 
-	public KSettings() {
+	public KSettings(NotepadUI frame) {
 		lang = Property.getLanguagePack();
-
+		
+		this.frame = frame;
+		
 		selectedBorder = new TitledBorder("Reserved");
 		selectedBorder.setBorder(new LineBorder(Color.BLACK, 3));
 		selectedTimer = new Timer(650, selectedAction);

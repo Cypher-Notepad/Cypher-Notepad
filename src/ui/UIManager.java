@@ -28,6 +28,10 @@ public class UIManager {
 		ui.draw();
 	}
 	
+	public UI getCurrentUI() {
+		return this.UIStrategy;
+	}
+	
 	public void closeWindow() {
 		ThreadManager.getInstance().joinThreads();
 		UIStrategy.erase();

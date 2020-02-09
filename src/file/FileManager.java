@@ -27,7 +27,10 @@ import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
+import ui.MainUI;
 import ui.NotepadUI;
+import ui.UI;
+import ui.UIManager;
 import ui.custom.KeyOpener;
 import vo.MemoVO;
 
@@ -61,6 +64,16 @@ public class FileManager {
 	private int maxKey = 8192; // Allocated again after loading the prop.
 	private boolean recycleKey = false;
 
+	/*for unimported file*/
+	private boolean isTemporary = false;
+	private String tempKey = null;
+	
+	private boolean isCurrentFileEncrypted = false;
+	
+	private boolean isOpenedWithExportedKey = false;
+	
+	private UI curFrame = null;
+	
 	private FileManager() {
 		// do nothing.
 	}
@@ -114,11 +127,26 @@ public class FileManager {
 					 * must be re-created to make new key-pair.
 					 **/
 					if (reloaded.size() < keys.size()) {
+						//first, save the key currently using. (only one time..)
+						if (isCurrentFileEncrypted) {
+							if (!isTemporary) {
+								isTemporary = true;
+								tempKey = keys.get(keyID);
+							}
+						} else {
+							isTemporary = false;
+							tempKey = null;
+						}
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 						reloaded.add(RSAImpl.getInstance().getPrivateKey());
 						keyID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
 						NotepadUI.setInvalidationFlag(true);
+
 						
+						curFrame = UIManager.getInstance().getCurrentUI();
+						if(curFrame instanceof NotepadUI) {
+							((NotepadUI)curFrame).setTempMode(isTemporary);
+						}
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
 					//recycleKey = false;
@@ -209,10 +237,10 @@ public class FileManager {
 		if (keyFile.exists()) {
 			try {
 				System.out.println("Clear crypto-notepad.keys");
-
 				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				// ========================================================================
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
@@ -223,8 +251,20 @@ public class FileManager {
 		}
 	}
 	
+	public boolean isTemporary() {
+		return isTemporary;
+	}
+	
 	public String getCurKey() {
-		return keys.get(keyID);
+		String rtnKey = "Unexpected Error. Please restart the program.";
+		if(isTemporary) {
+			if(tempKey != null) {
+				rtnKey = tempKey;
+			}
+		} else {
+			rtnKey = keys.get(keyID); 
+		}
+		return rtnKey;
 	}
 
 	public void loadProperties() {
@@ -287,10 +327,17 @@ public class FileManager {
 			if (isEncrypted) {
 				// Encrypt.
 				CryptoFacade crypto = new CryptoFacade();
-				if (recycleKey) {
+				if(isTemporary) {
+					if(tempKey != null) {
+						crypto.encrypt(memo, tempKey);
+					}
+				}
+				else if (recycleKey) {
 					crypto.encrypt(memo, keys.get(keyID));
+					NotepadUI.setInvalidationFlag(false);
 				} else {
 					crypto.encrypt(memo);
+					NotepadUI.setInvalidationFlag(false);
 					
 					//umm...make new key for the next file.
 					recycleKey = true;
@@ -302,11 +349,20 @@ public class FileManager {
 				memoWriter.println(
 						String.valueOf(Base64.getEncoder().encodeToString(String.valueOf(keyID).getBytes())));
 				memoWriter.println(memo.getKey());
-				memoWriter.println(memo.getContent());
+				memoWriter.print(memo.getContent());
+				
+				isCurrentFileEncrypted = true;
 			} else {
 				recycleKey = false;
 				keyID = processID;
-				memoWriter.println(memo.getContent());
+				//not To use same key when tempkey - not encrypt - encrypt 
+				isTemporary = false;
+				tempKey = null;
+				
+				memoWriter.print(memo.getContent());
+				
+				isCurrentFileEncrypted = false;
+				isOpenedWithExportedKey = false;
 			}
 			
 
@@ -341,6 +397,8 @@ public class FileManager {
 					recycleKey = true;
 					keyID = idx;
 					
+					isCurrentFileEncrypted = true;
+					
 				} else {
 					memoReader.close();
 					memoReader = new BufferedReader(new FileReader(filename));
@@ -350,11 +408,13 @@ public class FileManager {
 						content += read + "\r\n";
 						read = memoReader.readLine();
 					}
-					readMemo.setContent(content);
+					readMemo.setContent(content.substring(0, content.length()-2));
 					
 					// In this case, have to use new key explicitly.
 					recycleKey = false;
 					keyID = processID;
+					
+					isCurrentFileEncrypted = false;
 				}
 
 				// Return null not to show up notepadUI(= stay MainUI).
@@ -414,6 +474,8 @@ public class FileManager {
 			return null;
 		}
 
+		isTemporary = false;
+		tempKey = null;
 		return readMemo;
 	}
 	
@@ -430,7 +492,13 @@ public class FileManager {
 					if (key != null) {
 						try {
 							new CryptoFacade().decrypt(readMemo, key);
+							isTemporary = true;
+							tempKey = key;
 							toContinue = false;
+							
+							isCurrentFileEncrypted = true;
+							
+							isOpenedWithExportedKey = true;
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(frame,
 									"Failed to decrypt the file." + " Please try again with valid key.",
@@ -445,6 +513,14 @@ public class FileManager {
 		}
 
 		return readMemo;
+	}
+	
+	public boolean isCurrentFileEncrypted() {
+		return this.isCurrentFileEncrypted;
+	}
+	
+	public boolean isOpenedWithExportedKey() {
+		return this.isOpenedWithExportedKey;
 	}
 	
 	public void exportKey(String filename, String key) {
@@ -507,8 +583,13 @@ public class FileManager {
 	 * This function is only used for when the [new] button is pressed on NotepadUI.
 	 */
 	public void newBtnProcedure() {
+		isTemporary = false;
+		tempKey = null;
+		
 		recycleKey = false;
 		keyID = processID;
+		
+		isCurrentFileEncrypted = false;
 	}
 
 	private Boolean isEncrypted(BufferedReader reader) {
