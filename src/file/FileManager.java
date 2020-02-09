@@ -540,6 +540,18 @@ public class FileManager {
 		}
 	}
 	
+	public void importKey(String filename, MemoVO savedContextMemo) {
+		if(isTemporary) {
+			keys.add(tempKey);
+			keyID = keys.indexOf(tempKey);
+			recycleKey = true;
+			isTemporary = false;
+			isOpenedWithExportedKey = false;
+			addToKeyFile(true, tempKey);
+			saveMemo(filename, savedContextMemo, true);
+		}
+	}
+	
 	public String loadPEMFile(File pem) {
 		//File pem = new File(fileName);
 		BufferedReader pemReader= null;

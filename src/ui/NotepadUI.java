@@ -50,6 +50,7 @@ import ui.custom.KPrinter;
 import ui.custom.KReplacer;
 import ui.custom.KSettings;
 import ui.custom.KeyExporter;
+import ui.custom.KeyImporter;
 import ui.custom.KeyOpener;
 import vo.MemoVO;
 
@@ -598,7 +599,7 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		keyImportMenuItem.addActionListener(e->{
-			new KeyOpener().showDialog(this);
+			importKey();
 		});
 		
 		keyExportMenuItem.addActionListener(e->{
@@ -888,7 +889,19 @@ public class NotepadUI extends JFrame implements UI {
 		}
 		return rtn;
 	}
-	
+	/*
+	public int showImportDialog() {
+		int rtn = CANCEL_OPTION;
+		
+		Object[] options = { "      " + "Import key..." + "      ", lang.btnCancel };
+		
+
+		int response = JOptionPane.showOptionDialog(frame, "Do you really want to import the key?",
+				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				options[1]);
+
+	}
+	*/
 	public boolean checkSaveToExport() {
 		boolean rtn = false;
 		/*
@@ -991,13 +1004,24 @@ public class NotepadUI extends JFrame implements UI {
 	public static void setInvalidationFlag(boolean b) {
 		invalidationFlag = b;
 	}
+	
+	public void importKey() {
+		KeyImporter importer = new KeyImporter();
+		int response = importer.showDialog(frame);
+		if(response == KeyImporter.IMPORT_OPTION) {
+			System.out.println("Do import");
+			String filePath = directory + FileManager.SEPARATOR + fileName;
+			MemoVO savedContextMemo = new MemoVO();
+			savedContextMemo.setContent(savedContext);
+			FileManager.getInstance().importKey(filePath, savedContextMemo);
+			setTempMode(FileManager.getInstance().isTemporary());
+		}
+	}
 
 	public void setTempMode(boolean isTemporary) {
 		if (FileManager.getInstance().isCurrentFileEncrypted()) {
 			if (isTemporary) {
-				// System.out.println("app teml");
 				if (directory != null) {
-					// System.out.println("app teml222");
 					if(FileManager.getInstance().isOpenedWithExportedKey()) {
 						frame.setTitle(
 								fileName + " - Crypto Notepad" + "  (The file is opened with exported keyfile.)");
