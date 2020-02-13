@@ -479,6 +479,14 @@ public class FileManager {
 		return readMemo;
 	}
 	
+	/**
+	 * It must be called only for changing title after exporting the key.
+	 * @param b
+	 */
+	public void setOpenedWithExportedKey(boolean b) {
+		isOpenedWithExportedKey = b;
+	}
+	
 	public MemoVO loadMemoTemporary(JFrame frame, MemoVO readMemo) {
 		//Do process when the file is encrypted
 		if (readMemo.getKey() != null) {

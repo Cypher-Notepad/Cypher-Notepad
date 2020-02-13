@@ -58,7 +58,7 @@ public class NotepadUI extends JFrame implements UI {
 	private static final long serialVersionUID = -6173408665024649253L;
 	private static final int YES_OPTION = 1;
 	private static final int NO_OPTION = 2;
-	private static final int CANCEL_OPTION = -1;
+	private static final int CANCEL_OPTION = 0;
 	
 	
 	// Frame
@@ -97,6 +97,9 @@ public class NotepadUI extends JFrame implements UI {
 	private boolean isEncrypted = true;
 	private static boolean invalidationFlag = false;
 
+	private JTextArea trickTxtArea;
+	FileDrop filedrop = null;
+	
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
 			if (!menuBar.hasFocus()) {
@@ -321,6 +324,7 @@ public class NotepadUI extends JFrame implements UI {
 			private void update() {
 				undoText = curText;
 				curText = textArea.getText();
+				
 			}
 			
 			@Override
@@ -361,13 +365,27 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		new FileDrop(textArea, new FileDrop.Listener() {
+		trickTxtArea = new JTextArea();
+		trickTxtArea.setText("");
+		frame.add(trickTxtArea, BorderLayout.SOUTH);
+		
+		filedrop = new FileDrop(textArea, true, false, new FileDrop.Listener() {
 			public void filesDropped(java.io.File[] files) {
 				if (checkSave()) {
 					loadMemo(files[0]);
 				}
 			}
 		});
+		
+		
+		/*
+		try {
+			filedrop.joinListenerThread();
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		*/
 
 		frame.addMouseListener(menuBarCloser);
 		textArea.addMouseListener(menuBarCloser);
@@ -386,7 +404,7 @@ public class NotepadUI extends JFrame implements UI {
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (checkSave()) {
-					textArea.setText(null);
+					textArea.setText("");
 					directory = null;
 					fileName = "Untitled";
 					savedContext = "";
@@ -397,6 +415,10 @@ public class NotepadUI extends JFrame implements UI {
 					FileManager.getInstance().newBtnProcedure();
 					
 					setTempMode(FileManager.getInstance().isTemporary());
+					
+					//correct setting.
+					setEncryptMode(true);
+					
 					frame.setTitle(fileName + " - Crypto Notepad");
 				}
 			}
@@ -512,12 +534,37 @@ public class NotepadUI extends JFrame implements UI {
 			
 		cryptoMenuItem.setSelected(true);
 		cryptoMenuItem.addActionListener(new ActionListener() {
+			
+			public void applyInstantly(boolean isEncrypted) {
+				String filePath = directory + FileManager.SEPARATOR + fileName;
+				MemoVO savedContextMemo = new MemoVO();
+				savedContextMemo.setContent(savedContext);
+				FileManager.getInstance().saveMemo(filePath, savedContextMemo, isEncrypted);
+				setTempMode(FileManager.getInstance().isTemporary());
+			}
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (cryptoMenuItem.isSelected()) {
 					isEncrypted = true;
+					if(directory != null) {
+						applyInstantly(true);
+					}
+					System.out.println("Selected");
 				} else {
-					isEncrypted = false;
+					if(directory != null) {
+						int response = showEncryptModeDialog();
+						if(response == YES_OPTION) {
+							applyInstantly(false);
+							isEncrypted = false;
+						} else {
+							cryptoMenuItem.setSelected(true);
+							isEncrypted = true;
+						}
+						
+					} else {
+						isEncrypted = false;
+					}
 				}
 			}
 		});
@@ -603,10 +650,7 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		keyExportMenuItem.addActionListener(e->{
-			if(checkSaveToExport()) {
-				System.out.println(directory);
-				new KeyExporter().showDialog(this);
-			}
+			exportKey();
 		});
 		//[Block A - end]*****************************************************************************
 
@@ -804,7 +848,14 @@ public class NotepadUI extends JFrame implements UI {
 					}
 				}
 			} else {
-				rtn = true;
+				if(isUnsafeKey) {
+					response = showImportOrExportDialog();
+					if(response == YES_OPTION) {
+						rtn = true;
+					}
+				} else {
+					rtn = true;
+				}
 			}
 		}
 
@@ -866,23 +917,37 @@ public class NotepadUI extends JFrame implements UI {
 		int rtn = CANCEL_OPTION;
 		Object[] options = { "Import key", "Export Key", "No, I have exported keyfile." };
 
-		int response = JOptionPane.showOptionDialog(frame, "The key used for this file is not saved. To open this file next time, keep the key via options below    ",
-				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
-				options[0]);
+		boolean toBeContinue = true;
+		while (toBeContinue) {
+			int response = JOptionPane.showOptionDialog(frame,
+					"The key used for this file is not saved. To open this file next time, keep the key via options below    ",
+					"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+					options[0]);
 
-		if (response == 0) {
-			//do import
-			rtn = YES_OPTION;
-		} else if (response == 1) {
-			//do export
-			rtn = YES_OPTION;
-		} else if (response == 2){
-			//do nothing
-			rtn = YES_OPTION;
-		} else {
-			System.out.println("Closed option in showDialogImportOrExport()");
-			rtn = CANCEL_OPTION;
+			if (response == 0) {
+				response = importKey();
+				if (response == KeyImporter.IMPORT_OPTION) {
+					rtn = YES_OPTION;
+					toBeContinue = false;
+				}
+			} else if (response == 1) {
+				response = exportKey();
+				if (response == KeyExporter.EXPORT_OPTION) {
+					rtn = YES_OPTION;
+					toBeContinue = false;
+				}
+			} else if (response == 2) {
+				// do nothing
+				rtn = YES_OPTION;
+				toBeContinue = false;
+			} else {
+				System.out.println("Closed option in showDialogImportOrExport()");
+				rtn = CANCEL_OPTION;
+				toBeContinue = false;
+			}
+
 		}
+		
 		
 		if(rtn == YES_OPTION) {
 			setInvalidationFlag(false);
@@ -970,6 +1035,23 @@ public class NotepadUI extends JFrame implements UI {
 		return rtn;
 	}
 	
+	public int showEncryptModeDialog() {
+		int rtn = CANCEL_OPTION;
+		//to make looks better, add space
+		Object[] options = { "      " + "Yes" + "      ", lang.btnCancel };
+
+		int response = JOptionPane.showOptionDialog(frame, "Do you want to turn off encryption mode?     \nIt will be applied instantly. " + "If you have exported keyfile, it will be invalidated.    ",
+				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				options[1]);
+
+		if(response == 0) {
+			rtn = YES_OPTION;
+		} else {
+			rtn = CANCEL_OPTION;
+		}
+		
+		return rtn;
+	}
 
 	public boolean loadMemo(File file) {
 		String selectedPath;
@@ -1005,7 +1087,7 @@ public class NotepadUI extends JFrame implements UI {
 		invalidationFlag = b;
 	}
 	
-	public void importKey() {
+	public int importKey() {
 		KeyImporter importer = new KeyImporter();
 		int response = importer.showDialog(frame);
 		if(response == KeyImporter.IMPORT_OPTION) {
@@ -1016,6 +1098,18 @@ public class NotepadUI extends JFrame implements UI {
 			FileManager.getInstance().importKey(filePath, savedContextMemo);
 			setTempMode(FileManager.getInstance().isTemporary());
 		}
+		
+		return response;
+	}
+	
+	public int exportKey() {
+		int response = new KeyExporter().showDialog(this);
+		if(response == KeyExporter.EXPORT_OPTION) {
+			setInvalidationFlag(false);
+			FileManager.getInstance().setOpenedWithExportedKey(true);
+		}
+		setTempMode(FileManager.getInstance().isTemporary());
+		return response;
 	}
 
 	public void setTempMode(boolean isTemporary) {
@@ -1044,15 +1138,35 @@ public class NotepadUI extends JFrame implements UI {
 				keyExportMenuItem.setEnabled(true);
 
 			}
+			setEncryptMode(true);
+			
 		} else {
 			if (directory != null) {
 				frame.setTitle(fileName + " - Crypto Notepad" + "  (The file is not encrypted.)");
 				keyImportMenuItem.setEnabled(false);
 				keyExportMenuItem.setEnabled(false);
 			}
+			setEncryptMode(false);
+			
 		}
 	}
 	
+	private void setEncryptMode(boolean b) {
+		cryptoMenuItem.setSelected(b);
+		isEncrypted = b;
+	}
+	
+	/*
+	fc = new JFileChooser();
+		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
+		fontChooser = new KFontChooser(this);
+		pt = new KPrinter(textArea);
+		fd = new KFinder(textArea);
+		rp = new KReplacer(textArea);
+		info = new KInformation();
+		st = new KSettings(this);
+	 * */
+		
 /*
 	public boolean isEncrypted() {
 		return isEncrypted;

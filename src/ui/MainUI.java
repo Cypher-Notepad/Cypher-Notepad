@@ -44,7 +44,7 @@ public class MainUI extends JFrame implements UI {
 	private JPanel contentPane;
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
-	private NotepadUI notepadUI;
+	public static NotepadUI notepadUI;
 	private Language lang;
 	int mpX, mpY;
 
@@ -114,6 +114,7 @@ public class MainUI extends JFrame implements UI {
 			}
 		});
 
+		/*
 		Thread prepareNotepad = new Thread() {
 			@Override
 			public void run() {
@@ -124,6 +125,7 @@ public class MainUI extends JFrame implements UI {
 		};
 		prepareNotepad.start();
 		ThreadManager.getInstance().addThread(prepareNotepad);
+		*/
 	}
 
 	@Override

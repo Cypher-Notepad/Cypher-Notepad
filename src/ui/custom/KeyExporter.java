@@ -2,6 +2,7 @@ package ui.custom;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -30,6 +31,10 @@ import javax.swing.JTextPane;
 
 public class KeyExporter extends JDialog {
 
+	public static final int EXPORT_OPTION = 1;
+	public static final int CANCEL_OPTION = 0;
+	public static final int CLOSED_OPTION = -1;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnSave, btnCopy, btnCancel;
 	private JTextArea txtKey;
@@ -37,6 +42,8 @@ public class KeyExporter extends JDialog {
 	private Clipboard clipboard;
 	private JFileChooser fc;
 	private CopyThread copyThread;
+	
+	private int result = CLOSED_OPTION;
 
 	public KeyExporter() {
 		setBounds(100, 100, 520, 370);
@@ -111,6 +118,7 @@ public class KeyExporter extends JDialog {
 					filePath += ".pem";
 				}
 				FileManager.getInstance().exportKey(filePath, txtKey.getText());
+				result = EXPORT_OPTION;
 				setVisible(false);
 			} else if (userSelection == JFileChooser.CANCEL_OPTION) {/* do nothing.*/}
 			else if (userSelection == JFileChooser.ERROR_OPTION) {/* do nothing.*/}
@@ -132,13 +140,16 @@ public class KeyExporter extends JDialog {
 		});
 		
 		btnCancel.addActionListener(e->{
+			result = CANCEL_OPTION;
 			setVisible(false);
 		});
 
+		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 
-	public void showDialog(NotepadUI frame) {
-
+	public int showDialog(NotepadUI frame) {
+		result = CLOSED_OPTION;
+		
 		txtKey.setText(FileManager.getInstance().getCurKey());
 		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
 		int fileExtensionIdx = keyFileName.lastIndexOf('.');
@@ -148,7 +159,10 @@ public class KeyExporter extends JDialog {
 		keyFileName = keyFileName.substring(0, fileExtensionIdx) + ".pem";
 		fc.setSelectedFile(new File(keyFileName));
 
+		setLocationRelativeTo(frame);
 		setVisible(true);
+		
+		return result;
 	}
 
 	private class CopyThread extends Thread {

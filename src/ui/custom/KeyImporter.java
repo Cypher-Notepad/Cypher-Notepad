@@ -2,6 +2,7 @@ package ui.custom;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -19,12 +20,13 @@ public class KeyImporter extends JDialog {
 
 	public static final int IMPORT_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
+	public static final int CLOSED_OPTION = -1;
 	
 	private final JPanel contentPanel = new JPanel();
 	private JButton okButton, cancelButton;
 	
 	
-	private int result = CANCEL_OPTION;
+	private int result = CLOSED_OPTION;
 	
 	/**
 	 * Launch the application.
@@ -44,7 +46,8 @@ public class KeyImporter extends JDialog {
 	 */
 	public KeyImporter() {
 		setTitle("Import key");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 500, 340);
+		this.setMinimumSize(new Dimension(500,340));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -53,6 +56,8 @@ public class KeyImporter extends JDialog {
 		
 		JTextPane txtpnAsd = new JTextPane();
 		txtpnAsd.setText("This process will store your key internally.\r\n\r\nWhen you open this file next time : \r\n  \u2022  Exported keyfile isn't needed anymore.\r\n  \u2022  The file will be decrypted automatically.\r\n\r\nWhen you invalidate keyfile on settings :\r\n  \u2022  The key must be saved before key invalidation.\r\n  \u2022  Or the file won't be able to be decrypted.");
+		txtpnAsd.setEditable(false);
+		
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -94,6 +99,7 @@ public class KeyImporter extends JDialog {
 		});
 		
 		cancelButton.addActionListener(e->{
+			result = CANCEL_OPTION;
 			setVisible(false);
 		});
 		
@@ -101,7 +107,7 @@ public class KeyImporter extends JDialog {
 	}
 	
 	public int showDialog(JFrame frame) {
-		result = CANCEL_OPTION;
+		result = CLOSED_OPTION;
 		setLocationRelativeTo(frame);
 		
 		setVisible(true);
