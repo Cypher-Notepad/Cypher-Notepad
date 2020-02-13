@@ -16,14 +16,29 @@ public class TrInitializeUI extends Thread {
 		}
 	};
 	
+	Thread keyLoadThread = new Thread() {
+		@Override
+		public void run() {
+			FileManager.getInstance().loadKeys();
+		}
+	};
+	
 	@Override
 	public void run() {
 		// to reduce the first file saving time.
+		long start = System.currentTimeMillis();
+		
 		prepareNotepad.start();
 		ThreadManager.getInstance().addThread(prepareNotepad);
 
-		FileManager.getInstance().loadKeys();
+		keyLoadThread.start();
+		ThreadManager.getInstance().setKeyLoadingThead(keyLoadThread);
+		
 		new CryptoFacade();
+		
+		long end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "init UI 실행 시간 : " + ( end - start )/1000.0 +"초");
+
 	}
 
 }

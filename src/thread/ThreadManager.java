@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ThreadManager {
 
 	private Thread initThread = null;
+	private Thread keyLoadingThread = null;
 	private ArrayList<Thread> listTr;
 
 	private static class LazyHolder {
@@ -29,6 +30,22 @@ public class ThreadManager {
 		if(initThread != null) {
 			try {
 				initThread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void setKeyLoadingThead(Thread t) {
+		if(keyLoadingThread == null) {
+			keyLoadingThread = t;
+		}
+	}
+	
+	public void joinKeyLoadingThread() {
+		if(keyLoadingThread != null) {
+			try {
+				keyLoadingThread.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

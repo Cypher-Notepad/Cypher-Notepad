@@ -24,6 +24,7 @@ import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -85,13 +86,15 @@ public class NotepadUI extends JFrame implements UI {
 	public String savedContext;
 	public String undoText;
 
-	private JFileChooser fc;
-	private KFontChooser fontChooser;
-	private KPrinter pt;
-	private KFinder fd;
-	private KReplacer rp;
-	private KInformation info;
-	private KSettings st;
+	private Thread dialogCreationThread = null;
+	
+	private JFileChooser fc = null;
+	private KFontChooser fontChooser = null;
+	private KPrinter pt = null;
+	private KFinder fd = null;
+	private KReplacer rp = null;
+	private KInformation info = null;
+	private KSettings st = null;
 
 	private Language lang;
 	private boolean isEncrypted = true;
@@ -357,6 +360,9 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void settings() {
+		
+		long start = System.currentTimeMillis();
+		
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -368,15 +374,6 @@ public class NotepadUI extends JFrame implements UI {
 		trickTxtArea = new JTextArea();
 		trickTxtArea.setText("");
 		frame.add(trickTxtArea, BorderLayout.SOUTH);
-		
-		filedrop = new FileDrop(textArea, true, false, new FileDrop.Listener() {
-			public void filesDropped(java.io.File[] files) {
-				if (checkSave()) {
-					loadMemo(files[0]);
-				}
-			}
-		});
-		
 		
 		/*
 		try {
@@ -390,7 +387,13 @@ public class NotepadUI extends JFrame implements UI {
 		frame.addMouseListener(menuBarCloser);
 		textArea.addMouseListener(menuBarCloser);
 
+		long end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "0.5구간 실행 시간 : " + ( end - start )/1000.0 +"초");
+		 start = System.currentTimeMillis();
 		
+		
+
+		 /*
 		fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
 		fontChooser = new KFontChooser(this);
@@ -398,8 +401,37 @@ public class NotepadUI extends JFrame implements UI {
 		fd = new KFinder(textArea);
 		rp = new KReplacer(textArea);
 		info = new KInformation();
-		st = new KSettings(this);
+		st = new KSettings();
+*/
+		dialogCreationThread = new Thread() {
+			public void run() {
+				fc = new JFileChooser();
+				fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
+				info = new KInformation();
+				st = new KSettings();
+				fontChooser = new KFontChooser(frame);
+				pt = new KPrinter(textArea);
+				fd = new KFinder(textArea);
+				rp = new KReplacer(textArea);
+				
+				// findnext
+				findNextMenuItem.addActionListener(fd);
+				
+				// pagesetup
+				pageSetupMenuItem.setActionCommand("PageSetup");
+				pageSetupMenuItem.addActionListener(pt);
+				// print
+				printMenuItem.setActionCommand("Print");
+				printMenuItem.addActionListener(pt);
 
+			}
+		};
+		dialogCreationThread.start();
+
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "1구간 실행 시간 : " + ( end - start )/1000.0 +"초");
+		 start = System.currentTimeMillis();
+		
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -423,13 +455,6 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
-
-		// pagesetup
-		pageSetupMenuItem.setActionCommand("PageSetup");
-		pageSetupMenuItem.addActionListener(pt);
-		// print
-		printMenuItem.setActionCommand("Print");
-		printMenuItem.addActionListener(pt);
 
 		// exit
 		exitMenuItem.addActionListener(e -> UIManager.getInstance().closeWindow());
@@ -469,13 +494,16 @@ public class NotepadUI extends JFrame implements UI {
 		});
 
 		// find
-		findMenuItem.addActionListener(e -> fd.showDialog());
-
-		// findnext
-		findNextMenuItem.addActionListener(fd);
+		findMenuItem.addActionListener(e -> {
+			checkDialogCreated(fd);
+			fd.showDialog();
+		});
 
 		// replace
-		replaceMenuItem.addActionListener(e -> rp.showDialog());
+		replaceMenuItem.addActionListener(e -> {
+			checkDialogCreated(rp);
+			rp.showDialog();
+		});
 
 		// goto
 		goToMenuItem.setEnabled(false);
@@ -531,43 +559,6 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
-			
-		cryptoMenuItem.setSelected(true);
-		cryptoMenuItem.addActionListener(new ActionListener() {
-			
-			public void applyInstantly(boolean isEncrypted) {
-				String filePath = directory + FileManager.SEPARATOR + fileName;
-				MemoVO savedContextMemo = new MemoVO();
-				savedContextMemo.setContent(savedContext);
-				FileManager.getInstance().saveMemo(filePath, savedContextMemo, isEncrypted);
-				setTempMode(FileManager.getInstance().isTemporary());
-			}
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (cryptoMenuItem.isSelected()) {
-					isEncrypted = true;
-					if(directory != null) {
-						applyInstantly(true);
-					}
-					System.out.println("Selected");
-				} else {
-					if(directory != null) {
-						int response = showEncryptModeDialog();
-						if(response == YES_OPTION) {
-							applyInstantly(false);
-							isEncrypted = false;
-						} else {
-							cryptoMenuItem.setSelected(true);
-							isEncrypted = true;
-						}
-						
-					} else {
-						isEncrypted = false;
-					}
-				}
-			}
-		});
 		
 		// statusbar
 		statusBarMenuItem.setEnabled(false);
@@ -607,10 +598,14 @@ public class NotepadUI extends JFrame implements UI {
 		});
 
 		// about
-		aboutNotepadMenuItem.addActionListener(e -> info.showDialog());
+		aboutNotepadMenuItem.addActionListener(e -> {
+			checkDialogCreated(info);
+			info.showDialog();
+		});
 
 		// settings
 		settingsMenuItem.addActionListener(e -> {
+			checkDialogCreated(st);
 			if (st.showDialog()) {
 				st.applySettings();
 			}
@@ -619,9 +614,47 @@ public class NotepadUI extends JFrame implements UI {
 		
 		// These listeners must be added after joining init-thread.
 		//[Block A - start]*****************************************************************************
-		ThreadManager.getInstance().joinInitThread();
+		cryptoMenuItem.setSelected(true);
+		cryptoMenuItem.addActionListener(new ActionListener() {
+			
+			public void applyInstantly(boolean isEncrypted) {
+				String filePath = directory + FileManager.SEPARATOR + fileName;
+				MemoVO savedContextMemo = new MemoVO();
+				savedContextMemo.setContent(savedContext);
+				ThreadManager.getInstance().joinKeyLoadingThread();
+				FileManager.getInstance().saveMemo(filePath, savedContextMemo, isEncrypted);
+				setTempMode(FileManager.getInstance().isTemporary());
+			}
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (cryptoMenuItem.isSelected()) {
+					isEncrypted = true;
+					if(directory != null) {
+						applyInstantly(true);
+					}
+					System.out.println("Selected");
+				} else {
+					if(directory != null) {
+						int response = showEncryptModeDialog();
+						if(response == YES_OPTION) {
+							applyInstantly(false);
+							isEncrypted = false;
+						} else {
+							cryptoMenuItem.setSelected(true);
+							isEncrypted = true;
+						}
+						
+					} else {
+						isEncrypted = false;
+					}
+				}
+			}
+		});
+		
 		openMenuItem.addActionListener(e -> {
 			if (checkSave()) {
+				checkJFileChooserCreated(fc);
 				int response = fc.showOpenDialog(frame);
 				if (response == JFileChooser.APPROVE_OPTION) {
 					loadMemo(fc.getSelectedFile());
@@ -654,6 +687,10 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		//[Block A - end]*****************************************************************************
 
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "2 구간 실행 시간 : " + ( end - start )/1000.0 +"초");
+		 start = System.currentTimeMillis();
+		
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		editMenu.setMnemonic(KeyEvent.VK_E);
@@ -724,11 +761,25 @@ public class NotepadUI extends JFrame implements UI {
 		} else {
 			aboutNotepadMenuItem.setDisplayedMnemonicIndex(18);
 		}
+
+		ThreadManager.getInstance().joinKeyLoadingThread();
+		filedrop = new FileDrop(textArea, true, false, new FileDrop.Listener() {
+			public void filesDropped(java.io.File[] files) {
+				if (checkSave()) {
+					loadMemo(files[0]);
+				}
+			}
+		});
 		
+		
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "3구간 실행 시간 : " + ( end - start )/1000.0 + "초");
+
 	}
 
 	public boolean saveAsAction() {
 		boolean rtn = false;
+		checkJFileChooserCreated(fc);
 		int userSelection = fc.showSaveDialog(frame);
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
 			fileName = fc.getSelectedFile().getName();
@@ -768,6 +819,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	private boolean showFontChooser() {
+		checkDialogCreated(fontChooser);
 		return fontChooser.showDialog(textArea.getFont(), textArea.getForeground());
 	}
 
@@ -1058,6 +1110,8 @@ public class NotepadUI extends JFrame implements UI {
 		try {
 			selectedPath = file.getCanonicalPath();
 			Property.addRecentFiles(selectedPath);
+			
+			ThreadManager.getInstance().joinKeyLoadingThread();
 			MemoVO memo = FileManager.getInstance().loadMemo(frame, selectedPath);
 			if (memo != null) {
 				savedContext = memo.getContent();
@@ -1088,6 +1142,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 	
 	public int importKey() {
+		ThreadManager.getInstance().joinKeyLoadingThread();
 		KeyImporter importer = new KeyImporter();
 		int response = importer.showDialog(frame);
 		if(response == KeyImporter.IMPORT_OPTION) {
@@ -1103,6 +1158,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 	
 	public int exportKey() {
+		ThreadManager.getInstance().joinKeyLoadingThread();
 		int response = new KeyExporter().showDialog(this);
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
@@ -1166,6 +1222,49 @@ public class NotepadUI extends JFrame implements UI {
 		info = new KInformation();
 		st = new KSettings(this);
 	 * */
+	
+	
+	/*
+	 * These functions is for Adding listener faster for UX.
+	 * */
+	public void checkKeyLoading() {
+		ThreadManager.getInstance().joinInitThread();
+	}
+	
+	private void checkDialogCreated(JDialog dialog) {
+		if(dialog == null) {
+			try {
+				dialogCreationThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void checkJFileChooserCreated(JFileChooser fc) {
+		if(fc == null) {
+			try {
+				dialogCreationThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	/*
+	private void checkKPrinterCreated(KPrinter kp) {
+		if(kp == null) {
+			try {
+				dialogCreationThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	*/
+	
 		
 /*
 	public boolean isEncrypted() {

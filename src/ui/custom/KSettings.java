@@ -37,7 +37,7 @@ public class KSettings extends JDialog {
 
 	private static final long serialVersionUID = -2123099396815339083L;
 	
-	private NotepadUI frame = null;
+	//private NotepadUI frame = null;
 	
 	private JPanel contentPane;
 	JPanel panelForBtn;
@@ -100,10 +100,10 @@ public class KSettings extends JDialog {
 	};
 	private Timer selectedTimer;
 
-	public KSettings(NotepadUI frame) {
+	public KSettings() {
 		lang = Property.getLanguagePack();
 		
-		this.frame = frame;
+		//this.frame = frame;
 		
 		selectedBorder = new TitledBorder("Reserved");
 		selectedBorder.setBorder(new LineBorder(Color.BLACK, 3));
