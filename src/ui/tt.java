@@ -1,47 +1,34 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import config.Language;
-import config.Property;
 import file.FileManager;
-import thread.ThreadManager;
-import thread.TrInitializeUI;
 import ui.custom.KButton;
 
-public class MainUI extends JFrame implements UI {
-
+public class tt extends JFrame {
 	private static final long serialVersionUID = -8901510103598913554L;
 	//private JPanel contentPane;
 	private Container contentPane;
@@ -50,42 +37,53 @@ public class MainUI extends JFrame implements UI {
 	public static NotepadUI notepadUI;
 	private Language lang;
 	int mpX, mpY;
+	
 
-	public MainUI() {
-		System.out.println("[MainUI]Get langueage setting.");
-		lang = Property.getLanguagePack();
-
-
-		/*
-		Thread prepareNotepad = new Thread() {
-			@Override
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				System.out.println("[MainUI]Preload NotepadUI for reducing the time for loading");
-				notepadUI = new NotepadUI();
-				notepadUI.initializeUI();
+				try {
+					tt frame = new tt();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		};
-		prepareNotepad.start();
-		ThreadManager.getInstance().addThread(prepareNotepad);
-		*/
+		});
 	}
 
-	@Override
-	public void draw() {
-
+	/**
+	 * Create the frame.
+	 */
+	public tt() {
+long start = System.currentTimeMillis();
+		
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		long end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간1 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
 		
 		Image originFrameImg = new ImageIcon(getClass().getClassLoader().getResource("encrypted_black_crop_bg.png")).getImage();
 		Image changedFrameImg = originFrameImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		setIconImage(changedFrameImg);
 		
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간2 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		setBounds(100, 100, 550, 719);
 		this.setLocationRelativeTo(null);
-
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간3-3 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		/*
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -93,16 +91,26 @@ public class MainUI extends JFrame implements UI {
 		*/
 		
 		contentPane = this.getContentPane();
-		
 		//contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-
+		
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간3-2 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
 		this.setUndecorated(true);
-
+		
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간3-1 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
 
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간3 : " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(FileManager.getInstance().loadRecentFiles(),
 				new String[] { lang.tblName, lang.tblDate, lang.tblSize, lang.tblPath }) {
@@ -136,6 +144,10 @@ public class MainUI extends JFrame implements UI {
 		for (int i = 1; i < tcmSchedule.getColumnCount()-1; i++) {
 			tcmSchedule.getColumn(i).setCellRenderer(tScheduleCellRenderer);
 		}
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간 :4 " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
@@ -164,6 +176,10 @@ public class MainUI extends JFrame implements UI {
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간 5: " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		btnNew = new KButton();
 		btnNew.setText(lang.btnNew);
 		btnNew.setFocusPainted(true);
@@ -217,6 +233,9 @@ public class MainUI extends JFrame implements UI {
 		btnX.setForeground(new Color(0xffffff));
 		btnX.setkHoverColor(new Color(0xffffff));
 		btnX.setkHoverForeGround(new Color(0x68217A));
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간 :6 " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
 
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -247,156 +266,12 @@ public class MainUI extends JFrame implements UI {
 						.addContainerGap(22, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
-
+		
+		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
+		System.out.println( "main UI 실행 시간 7: " + ( end - start )/1000.0 +"초");
+		start = System.currentTimeMillis();
+		
 		setVisible(true);
-		System.out.println("MainUI show");
-		
-		Thread threadInit = new TrInitializeUI();
-		threadInit.start();
-		ThreadManager.getInstance().setInitThead(threadInit);
-
-		addListeners();
-	}
-
-	@Override
-	public void erase() {
-		this.dispose();
-	}
-
-	public void addListeners() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mpX = e.getX();
-				mpY = e.getY();
-			}
-		});
-
-		addMouseMotionListener(new MouseMotionAdapter() {
-			private static final int STICKY_THRESHOLD = 17;
-			Insets taskBar;
-			Point curFramePos;
-			int screenXSize = Toolkit.getDefaultToolkit().getScreenSize().width;
-			int screenYSize = Toolkit.getDefaultToolkit().getScreenSize().height;
-			int frameWidth, frameHeight;
-			int posX, posY;
-			int left, right, top, bottom;
-			int distanceX, distanceY;
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				taskBar = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
-				curFramePos = getLocation();
-				frameWidth = getWidth();
-				frameHeight = getHeight();
-				distanceX = e.getX() - mpX;
-				distanceY = e.getY() - mpY;
-				posX = curFramePos.x + distanceX;
-				posY = curFramePos.y + distanceY;
-
-				//calc the distance from the boundaries of the screen.
-				left = curFramePos.x - taskBar.left;
-				right = screenXSize - left - frameWidth - taskBar.right - taskBar.left;
-				top = curFramePos.y - taskBar.top;
-				bottom = screenYSize - top - frameHeight - taskBar.bottom - taskBar.top;
-
-				// Horizontal magnet frame.
-				if (Math.abs(left) < STICKY_THRESHOLD) {
-					posX = 0 + taskBar.left;
-					if (distanceX > STICKY_THRESHOLD) posX = STICKY_THRESHOLD + taskBar.left;
-					if (distanceX < -STICKY_THRESHOLD) posX = -STICKY_THRESHOLD + taskBar.left;
-				} else if (Math.abs(right) < STICKY_THRESHOLD) {
-					posX = screenXSize - frameWidth - taskBar.right;
-					if (distanceX > STICKY_THRESHOLD) posX = screenXSize - frameWidth +  STICKY_THRESHOLD - taskBar.right; 
-					if (distanceX < -STICKY_THRESHOLD) posX = screenXSize - frameWidth - STICKY_THRESHOLD - taskBar.right;
-				}
-
-				// Vertical magnet frame.
-				if (Math.abs(top) < STICKY_THRESHOLD) {
-					posY = 0 + taskBar.top;
-					if (distanceY > STICKY_THRESHOLD) posY = STICKY_THRESHOLD + taskBar.top;
-					if (distanceY < -STICKY_THRESHOLD) posY = -STICKY_THRESHOLD + taskBar.top;
-				} else if (Math.abs(bottom) < STICKY_THRESHOLD) {
-					posY = screenYSize - frameHeight - taskBar.bottom;
-					if (distanceY > STICKY_THRESHOLD) posY = screenYSize - frameHeight + STICKY_THRESHOLD - taskBar.bottom;
-					if (distanceY < -STICKY_THRESHOLD) posY = screenYSize - frameHeight - STICKY_THRESHOLD - taskBar.bottom;
-				}
-				
-				setLocation(posX, posY);
-			}
-		});
-		
-
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
-					ThreadManager.getInstance().joinKeyLoadingThread();
-					boolean isLoaded = notepadUI.loadMemo(new File(path));
-					if (isLoaded) {
-						Property.addRecentFiles(path);
-						ThreadManager.getInstance().joinThreads();
-						UIManager.getInstance().setUI(notepadUI);
-					}
-				}
-			}
-		});
-
-		btnNew.addActionListener(e -> {
-			ThreadManager.getInstance().joinThreads();
-			UIManager.getInstance().setUI(notepadUI);
-		});
-
-		btnOpen.addActionListener(e -> {
-			JFileChooser fc = new JFileChooser();
-			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
-			boolean toBeSelected = true;
-			while(toBeSelected) {
-				int response = fc.showOpenDialog(this);
-				if (response == JFileChooser.APPROVE_OPTION) {
-					if (fc.getSelectedFile().exists()) {
-						toBeSelected = false;
-						System.out.println(fc.getSelectedFile());
-						ThreadManager.getInstance().joinKeyLoadingThread();
-						boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
-						if (isLoaded) {
-							try {
-								Property.addRecentFiles(fc.getSelectedFile().getCanonicalPath());
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							}
-							ThreadManager.getInstance().joinThreads();
-							UIManager.getInstance().setUI(notepadUI);
-						}
-					} else {
-						toBeSelected = true;
-						JOptionPane.showMessageDialog(this,
-								"The file does not exist." + " Please check your file name.", "Crypto Notepad",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				else {
-					toBeSelected = false;
-				}
-			}
-		});
-
-		btnX.addActionListener(e -> {
-			System.out.println("[MainUI] Close Window on Main UI");
-			ThreadManager.getInstance().joinInitThread();
-			System.out.println("[1]");
-			ThreadManager.getInstance().joinKeyLoadingThread();
-			System.out.println("[2]");
-			ThreadManager.getInstance().joinThreads();
-			System.out.println("[3]");
-			FileManager.getInstance().saveProperties();
-			UIManager.getInstance().closeWindow();
-			System.exit(0);
-		});
 	}
 
 }

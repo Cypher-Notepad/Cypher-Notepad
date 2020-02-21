@@ -13,10 +13,17 @@ public class Main {
 	*/
 	
 	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
+		
 		FileManager.getInstance().loadProperties();
+		/*
 		Thread threadInit = new TrInitializeUI();
 		threadInit.start();
 		ThreadManager.getInstance().setInitThead(threadInit);
+		*/
 		UIManager.getInstance().setDefaultUI();
+		
+		long end = System.currentTimeMillis(); 
+		System.out.println( "werwerwertotal time : " + ( end - start )/1000.0 +"sec");
 	}
 }
