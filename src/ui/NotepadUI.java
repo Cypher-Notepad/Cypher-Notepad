@@ -3,7 +3,10 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -22,6 +25,8 @@ import java.util.Calendar;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
@@ -31,10 +36,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.MenuSelectionManager;
+import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -61,7 +72,7 @@ public class NotepadUI extends JFrame implements UI {
 	private static final int NO_OPTION = 2;
 	private static final int CANCEL_OPTION = 0;
 	
-	
+	JTextPane t1;
 	// Frame
 	public JFrame frame;
 	// Menu bar
@@ -327,7 +338,7 @@ public class NotepadUI extends JFrame implements UI {
 			private void update() {
 				undoText = curText;
 				curText = textArea.getText();
-				
+
 			}
 			
 			@Override
@@ -373,7 +384,56 @@ public class NotepadUI extends JFrame implements UI {
 		
 		trickTxtArea = new JTextArea();
 		trickTxtArea.setText("");
-		frame.add(trickTxtArea, BorderLayout.SOUTH);
+		
+		JPanel jj = new JPanel();
+		
+		GridLayout gl = new GridLayout(1,3);
+		jj.setLayout(gl);
+		
+		jj.setLayout(new BoxLayout(jj,
+                BoxLayout.LINE_AXIS));
+		
+		 t1 = new JTextPane();
+		JTextPane t2 = new JTextPane();
+		JTextPane t3 = new JTextPane();
+		//t1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		//t2.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		//t3.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		//t1.setSize(750,20);
+		//t2.setSize(100,20);
+		//t3.setSize(100,20);
+		
+		/**
+		 * put maximum string length of status instead of 450
+		 */
+		t1.setMinimumSize(new Dimension(450, t1.getHeight()));
+
+		t2.setMinimumSize(new Dimension(0, t2.getHeight()));
+		t3.setMinimumSize(new Dimension(0, t3.getHeight()));
+		
+		t2.setMaximumSize(new Dimension(100, 50));
+		t3.setMaximumSize(new Dimension(100, 50));
+		
+		t2.setPreferredSize(new Dimension(100, 24));
+		t3.setPreferredSize(new Dimension(100, 24));
+		
+		t1.setBackground(new Color(0xF0F0F0));
+		t2.setBackground(new Color(0xF0F0F0));
+		t3.setBackground(new Color(0xF0F0F0));
+		
+		jj.add(t1);
+		jj.add(Box.createHorizontalStrut(5));
+		jj.add(new JSeparator(SwingConstants.VERTICAL));
+		jj.add(Box.createHorizontalStrut(5));
+		jj.add(t2);
+		jj.add(Box.createHorizontalStrut(5));
+		jj.add(new JSeparator(SwingConstants.VERTICAL));
+		jj.add(Box.createHorizontalStrut(5));
+		jj.add(t3);
+		
+		frame.add(jj, BorderLayout.SOUTH);
+		
+		
 		
 		/*
 		try {
