@@ -223,6 +223,7 @@ public class KReplacer extends JDialog {
 
 	public void showDialog() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.pack();
 		setVisible(true);
 	}
 	

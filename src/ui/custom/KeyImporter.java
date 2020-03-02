@@ -109,7 +109,7 @@ public class KeyImporter extends JDialog {
 	public int showDialog(JFrame frame) {
 		result = CLOSED_OPTION;
 		setLocationRelativeTo(frame);
-		
+
 		setVisible(true);
 		return result;
 	}

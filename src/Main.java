@@ -14,7 +14,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
-		
+
 		FileManager.getInstance().loadProperties();
 		/*
 		Thread threadInit = new TrInitializeUI();

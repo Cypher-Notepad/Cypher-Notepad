@@ -1,19 +1,25 @@
 package ui;
 
+import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -46,6 +52,8 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,7 +80,6 @@ public class NotepadUI extends JFrame implements UI {
 	private static final int NO_OPTION = 2;
 	private static final int CANCEL_OPTION = 0;
 	
-	JTextPane t1;
 	// Frame
 	public JFrame frame;
 	// Menu bar
@@ -83,15 +90,22 @@ public class NotepadUI extends JFrame implements UI {
 	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, 
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
-			selectAllMenuItem, timeDateMenuItem, fontMenuItem, statusBarMenuItem, viewHelpMenuItem , 
+			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem , 
 			HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
-	public JCheckBoxMenuItem wordWrapMenuItem, cryptoMenuItem;
+	public JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
 
 	// Text area
 	public static JTextArea textArea = new JTextArea();
 	public JScrollPane scrollPane;
+	private Font curFont = null;
 
+	//status bar
+	private JPanel statusBar;
+	private JTextPane txtPaneStatus, txtPanRowCol, txtPanMagnification;
+	private Thread stsUpdateThread = null;
+	private int fontMagnification = 100;
+	
 	public String fileName;
 	public File directory;
 	public String savedContext;
@@ -121,10 +135,10 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}
 	};
-
+	
 	public NotepadUI() {
 		lang = Property.getLanguagePack();
-
+        
 		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
 		savedContext = "";
@@ -132,6 +146,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public NotepadUI(File file) {
+		/*Never used yet*/
 		this();
 		String path;
 		try {
@@ -191,10 +206,10 @@ public class NotepadUI extends JFrame implements UI {
 		}
 
 		Properties p = Property.getProperties();
-		Font textFont = new Font(p.getProperty(Property.fontFamily),
+		curFont = new Font(p.getProperty(Property.fontFamily),
 				Integer.parseInt(p.getProperty(Property.fontStyle)),
 				Integer.parseInt(p.getProperty(Property.fontSize)) + KFontChooser.FONT_SIZE_CORRECTION);
-		textArea.setFont(textFont);
+		textArea.setFont(curFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
 
 		// Bar
@@ -244,12 +259,20 @@ public class NotepadUI extends JFrame implements UI {
 		wordWrapMenuItem = new JCheckBoxMenuItem(lang.miWordWrap);
 		fontMenuItem = new JMenuItem(lang.miFont);
 		cryptoMenuItem= new JCheckBoxMenuItem(lang.miCrypto);
-		statusBarMenuItem = new JMenuItem(lang.miStsBar);
+		statusBarMenuItem = new JCheckBoxMenuItem(lang.miStsBar);
 
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
 		HomepageMenuItem = new JMenuItem(lang.miCNWeb);
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
 		settingsMenuItem = new JMenuItem(lang.miSetting);
+		
+		statusBar = new JPanel();
+		statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.LINE_AXIS));
+		txtPaneStatus = new JTextPane();
+		txtPanRowCol = new JTextPane();
+		txtPanMagnification = new JTextPane();
+		updateRowCol();
+		txtPanMagnification.setText("100%");
 
 		// In the most of case UI shows up before its listener is added.
 		// IDKDIKDIDK......
@@ -324,6 +347,38 @@ public class NotepadUI extends JFrame implements UI {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
+		
+		/*Start statusBar*/
+		/**
+		 * put maximum string length of status instead of 450
+		 */
+		txtPaneStatus.setMinimumSize(new Dimension(450, txtPaneStatus.getHeight()));
+		txtPanRowCol.setMinimumSize(new Dimension(0, txtPanRowCol.getHeight()));
+		txtPanMagnification.setMinimumSize(new Dimension(0, txtPanMagnification.getHeight()));
+		
+		txtPanRowCol.setMaximumSize(new Dimension(160, 50));
+		txtPanMagnification.setMaximumSize(new Dimension(60, 50));
+		
+		txtPanRowCol.setPreferredSize(new Dimension(160, 24));
+		txtPanMagnification.setPreferredSize(new Dimension(60, 24));
+		
+		txtPaneStatus.setBackground(new Color(0xF0F0F0));
+		txtPanRowCol.setBackground(new Color(0xF0F0F0));
+		txtPanMagnification.setBackground(new Color(0xF0F0F0));
+		
+		statusBar.add(txtPaneStatus);
+		statusBar.add(Box.createHorizontalStrut(5));
+		statusBar.add(new JSeparator(SwingConstants.VERTICAL));
+		statusBar.add(Box.createHorizontalStrut(5));
+		statusBar.add(txtPanRowCol);
+		statusBar.add(Box.createHorizontalStrut(5));
+		statusBar.add(new JSeparator(SwingConstants.VERTICAL));
+		statusBar.add(Box.createHorizontalStrut(5));
+		statusBar.add(txtPanMagnification);
+		
+		frame.add(statusBar, BorderLayout.SOUTH);
+		/*End statusBar*/
+		
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(950, 500);
 		frame.setResizable(true);
@@ -338,7 +393,6 @@ public class NotepadUI extends JFrame implements UI {
 			private void update() {
 				undoText = curText;
 				curText = textArea.getText();
-
 			}
 			
 			@Override
@@ -357,6 +411,63 @@ public class NotepadUI extends JFrame implements UI {
 			}	
 		});
 		
+		textArea.addCaretListener(new CaretListener() {
+			@Override
+			public void caretUpdate(CaretEvent e) {
+				updateRowCol();
+			}
+		});
+		
+		textArea.addMouseWheelListener(new MouseWheelListener() {
+			
+			int rotation = 0;
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				if (e.isControlDown()) {
+					rotation = e.getWheelRotation();
+					updataMagVal(-rotation);
+					updateFontMag();
+					txtPanMagnification.setText(fontMagnification + "%");
+				} else if (e.isShiftDown()) {
+	                // Horizontal scrolling
+	                Adjustable adj = scrollPane.getHorizontalScrollBar();
+	                int scroll = e.getUnitsToScroll() * adj.getBlockIncrement();
+	                adj.setValue(adj.getValue() + scroll);
+	            } else {
+	                // Vertical scrolling
+	                Adjustable adj = scrollPane.getVerticalScrollBar();
+	                int scroll = e.getUnitsToScroll() * adj.getBlockIncrement();
+	                adj.setValue(adj.getValue() + scroll);
+	            }
+			}
+
+			private void updataMagVal(int val) {
+				fontMagnification += (val*10);
+				
+				if(fontMagnification < 10) {
+					fontMagnification = 10;
+				} else if(fontMagnification > 500) {
+					fontMagnification = 500;
+				}
+			}
+			
+		});
+	}
+	
+	public void updateRowCol() {
+		if(txtPanRowCol != null) {
+			String[] t = textArea.getText().substring(0, textArea.getCaretPosition()).split("\n",-1);
+			txtPanRowCol.setText("Ln " + t.length + ", Col " + (t[t.length-1].length()+1));
+		}
+	}
+	
+	public void updateFontMag() {
+		if(fontMagnification == 100) {
+			textArea.setFont(curFont);
+		} else {
+			textArea.setFont(curFont.deriveFont(curFont.getSize()*(fontMagnification*0.01f)));
+		}
 	}
 
 	@Override
@@ -381,57 +492,7 @@ public class NotepadUI extends JFrame implements UI {
 				UIManager.getInstance().closeWindow();
 			}
 		});
-		
-		trickTxtArea = new JTextArea();
-		trickTxtArea.setText("");
-		
-		JPanel jj = new JPanel();
-		
-		GridLayout gl = new GridLayout(1,3);
-		jj.setLayout(gl);
-		
-		jj.setLayout(new BoxLayout(jj,
-                BoxLayout.LINE_AXIS));
-		
-		 t1 = new JTextPane();
-		JTextPane t2 = new JTextPane();
-		JTextPane t3 = new JTextPane();
-		//t1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		//t2.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		//t3.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		//t1.setSize(750,20);
-		//t2.setSize(100,20);
-		//t3.setSize(100,20);
-		
-		/**
-		 * put maximum string length of status instead of 450
-		 */
-		t1.setMinimumSize(new Dimension(450, t1.getHeight()));
 
-		t2.setMinimumSize(new Dimension(0, t2.getHeight()));
-		t3.setMinimumSize(new Dimension(0, t3.getHeight()));
-		
-		t2.setMaximumSize(new Dimension(100, 50));
-		t3.setMaximumSize(new Dimension(100, 50));
-		
-		t2.setPreferredSize(new Dimension(100, 24));
-		t3.setPreferredSize(new Dimension(100, 24));
-		
-		t1.setBackground(new Color(0xF0F0F0));
-		t2.setBackground(new Color(0xF0F0F0));
-		t3.setBackground(new Color(0xF0F0F0));
-		
-		jj.add(t1);
-		jj.add(Box.createHorizontalStrut(5));
-		jj.add(new JSeparator(SwingConstants.VERTICAL));
-		jj.add(Box.createHorizontalStrut(5));
-		jj.add(t2);
-		jj.add(Box.createHorizontalStrut(5));
-		jj.add(new JSeparator(SwingConstants.VERTICAL));
-		jj.add(Box.createHorizontalStrut(5));
-		jj.add(t3);
-		
-		frame.add(jj, BorderLayout.SOUTH);
 		
 		
 		
@@ -611,7 +672,11 @@ public class NotepadUI extends JFrame implements UI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (showFontChooser()) {
-					textArea.setFont(fontChooser.getSelctedFont());
+					curFont = fontChooser.getSelctedFont();
+					fontMagnification = 100;
+					txtPanMagnification.setText("100%");
+					
+					textArea.setFont(curFont);
 					textArea.setForeground(fontChooser.getSelectedColor());
 					Property.setFont(fontChooser.getSelctedFont(), fontChooser.getSelectedColor());
 
@@ -621,7 +686,15 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		// statusbar
-		statusBarMenuItem.setEnabled(false);
+		statusBarMenuItem.setSelected(true);
+		statusBarMenuItem.addActionListener(e -> {
+			if (statusBarMenuItem.isSelected()) {
+				statusBar.setVisible(true);
+			} else {
+				statusBar.setVisible(false);
+			}
+		});
+		
 		
 		// view
 		viewHelpMenuItem.addActionListener(e -> {
@@ -880,7 +953,7 @@ public class NotepadUI extends JFrame implements UI {
 
 	private boolean showFontChooser() {
 		checkDialogCreated(fontChooser);
-		return fontChooser.showDialog(textArea.getFont(), textArea.getForeground());
+		return fontChooser.showDialog(curFont, textArea.getForeground());
 	}
 
 	public boolean checkSave() {
@@ -1312,6 +1385,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}
 	}
+	
 	/*
 	private void checkKPrinterCreated(KPrinter kp) {
 		if(kp == null) {

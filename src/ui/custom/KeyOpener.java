@@ -248,7 +248,7 @@ public class KeyOpener extends JDialog {
 	public int showDialog(JFrame frame) {
 		result = CANCEL_OPTION;
 		setLocationRelativeTo(frame);
-		
+
 		setVisible(true);
 		return result;
 	}

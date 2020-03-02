@@ -160,6 +160,7 @@ public class KeyExporter extends JDialog {
 		fc.setSelectedFile(new File(keyFileName));
 
 		setLocationRelativeTo(frame);
+		
 		setVisible(true);
 		
 		return result;

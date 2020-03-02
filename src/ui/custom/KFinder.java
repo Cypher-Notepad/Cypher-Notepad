@@ -166,6 +166,7 @@ public class KFinder extends JDialog implements ActionListener {
 		contentPanel.setLayout(gl_contentPanel);
 		
 		setResizable(false);
+		this.pack();
 	}
 
 	public void showDialog() {

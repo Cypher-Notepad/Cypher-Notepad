@@ -321,6 +321,7 @@ public class KFontChooser extends JDialog {
 		listStyle.setSelectedIndex(getStyleIdx(curFont.getStyle()));
 		listSize.setSelectedValue(String.valueOf(curFont.getSize() - FONT_SIZE_CORRECTION), true);
 
+		this.pack();
 		setVisible(true);
 		return isConfirmed;
 	}
