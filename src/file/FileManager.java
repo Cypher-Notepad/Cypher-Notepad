@@ -458,7 +458,7 @@ public class FileManager {
 								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
 				*/
 				return loadMemoTemporary(frame, readMemo);
-			} catch (IOException e) {
+			} catch (NullPointerException | IOException e) {
 				JOptionPane
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."

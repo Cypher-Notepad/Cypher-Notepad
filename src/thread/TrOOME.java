@@ -14,7 +14,7 @@ import javax.management.NotificationListener;
 
 /**
  * This class is modified version of MemoryWarningSystem.
- * @modifier : LeeDongGeon1996 on github
+ * @modifier : LeeDongGeon1996 on Github
  * 
  * you can see the original version on the link below.
  * https://www.javaspecialists.eu/archive/Issue092.html
