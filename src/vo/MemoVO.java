@@ -14,6 +14,9 @@ public class MemoVO implements Encryptable{
 	}
 	
 	public String  getContent() {
+		if(content == null) {
+			content = "";
+		}
 		return content;
 	}
 	

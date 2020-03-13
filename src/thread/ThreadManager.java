@@ -49,6 +49,9 @@ public class ThreadManager {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		} else {
+			joinInitThread();
+			joinKeyLoadingThread();
 		}
 	}
 	
@@ -57,6 +60,10 @@ public class ThreadManager {
 	}
 	
 	public void joinThreads() {
+		if(listTr.isEmpty()) {
+			joinInitThread();
+		}
+		
 		for(Thread t : listTr) {
 			try {
 				t.join();

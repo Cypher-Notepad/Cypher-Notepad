@@ -3,6 +3,7 @@ package ui;
 import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,6 +26,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,6 +59,8 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
@@ -63,6 +68,7 @@ import config.Property;
 import file.FileDrop;
 import file.FileManager;
 import thread.ThreadManager;
+import thread.TrOOME;
 import ui.custom.KFinder;
 import ui.custom.KFontChooser;
 import ui.custom.KInformation;
@@ -113,6 +119,9 @@ public class NotepadUI extends JFrame implements UI {
 
 	private Thread dialogCreationThread = null;
 	
+	private TrOOME OOMEChecker = null;
+	private boolean OOMEFlag = false;
+	
 	private JFileChooser fc = null;
 	private KFontChooser fontChooser = null;
 	private KPrinter pt = null;
@@ -138,11 +147,31 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public NotepadUI() {
 		lang = Property.getLanguagePack();
-        
+
 		fileName = lang.frmUntitled;
 		frame = new JFrame(fileName + " - Crypto Notepad");
 		savedContext = "";
 		undoText = savedContext;
+
+		/**
+		 * OOME detection.
+		 * */
+		TrOOME.setPercentageUsageThreshold(0.8);
+		OOMEChecker = new TrOOME();
+		OOMEChecker.addExceedListener(new TrOOME.ExceedListener() {
+			@Override
+			public void memoryUsageExceeded(long usedMemory, long maxMemory) {
+				System.out.println("[Warning] out of Momory.");
+				OOMEFlag = true;
+			}
+		});
+		OOMEChecker.addMemSafeListener(new TrOOME.MemorySafeListener() {
+			@Override
+			public void memoryUsageSafe(long usedMemory, long maxMemory) {
+				System.out.println("[Warning] Escape OOME.");
+				OOMEFlag = false;
+			}
+		});
 	}
 
 	public NotepadUI(File file) {
@@ -382,8 +411,10 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(950, 500);
 		frame.setResizable(true);
+		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
 		
 		//curText must be set after loading content.
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
@@ -454,11 +485,16 @@ public class NotepadUI extends JFrame implements UI {
 			
 		});
 	}
-	
+
 	public void updateRowCol() {
-		if(txtPanRowCol != null) {
-			String[] t = textArea.getText().substring(0, textArea.getCaretPosition()).split("\n",-1);
-			txtPanRowCol.setText("Ln " + t.length + ", Col " + (t[t.length-1].length()+1));
+		if (txtPanRowCol != null) {
+			String[] t = textArea.getText().substring(0, textArea.getCaretPosition()).split("\n", -1);
+			
+			if (OOMEFlag) {
+				txtPanRowCol.setText("N/A");
+			} else {
+				txtPanRowCol.setText("Ln " + t.length + ", Col " + (t[t.length - 1].length() + 1));
+			}
 		}
 	}
 	
@@ -1241,11 +1277,24 @@ public class NotepadUI extends JFrame implements UI {
 	public boolean loadMemo(File file) {
 		String selectedPath;
 		try {
+			long start = System.currentTimeMillis();
+			
 			selectedPath = file.getCanonicalPath();
 			Property.addRecentFiles(selectedPath);
 			
+			long end = System.currentTimeMillis(); 
+			System.out.println( "note load time1 : " + ( end - start )/1000.0 +"sec");
+			start = System.currentTimeMillis();
+			
 			ThreadManager.getInstance().joinKeyLoadingThread();
+			end = System.currentTimeMillis(); 
+			System.out.println( "note load time2 : " + ( end - start )/1000.0 +"sec");
+			start = System.currentTimeMillis();
 			MemoVO memo = FileManager.getInstance().loadMemo(frame, selectedPath);
+			
+			end = System.currentTimeMillis(); 
+			System.out.println( "note load time33 : " + ( end - start )/1000.0 +"sec");
+			start = System.currentTimeMillis();
 			if (memo != null) {
 				savedContext = memo.getContent();
 				undoText = savedContext;
@@ -1260,8 +1309,10 @@ public class NotepadUI extends JFrame implements UI {
 				textArea.setText(memo.getContent());
 				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf(FileManager.SEPARATOR)));
 				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);
-				frame.setTitle(fileName + " - Crypto Notepad");
+				//frame.setTitle(fileName + " - Crypto Notepad");
 				setTempMode(FileManager.getInstance().isTemporary());
+				updateRowCol();
+				
 				return true;
 			}
 		} catch (IOException e1) {
@@ -1361,7 +1412,7 @@ public class NotepadUI extends JFrame implements UI {
 	 * These functions is for Adding listener faster for UX.
 	 * */
 	public void checkKeyLoading() {
-		ThreadManager.getInstance().joinInitThread();
+		ThreadManager.getInstance().joinKeyLoadingThread();
 	}
 	
 	private void checkDialogCreated(JDialog dialog) {
@@ -1385,6 +1436,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}
 	}
+	
 	
 	/*
 	private void checkKPrinterCreated(KPrinter kp) {

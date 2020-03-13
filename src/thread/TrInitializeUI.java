@@ -1,5 +1,6 @@
 package thread;
 
+import crypto.AESImpl;
 import crypto.CryptoFacade;
 import file.FileManager;
 import ui.MainUI;
@@ -26,13 +27,19 @@ public class TrInitializeUI extends Thread {
 	@Override
 	public void run() {
 		// to reduce the first file saving time.
-		prepareNotepad.start();
-		ThreadManager.getInstance().addThread(prepareNotepad);
-
+		//new AESImpl();
+		
 		keyLoadThread.start();
 		ThreadManager.getInstance().setKeyLoadingThead(keyLoadThread);
 
+		prepareNotepad.start();
+		ThreadManager.getInstance().addThread(prepareNotepad);
+		
+		ThreadManager.getInstance().joinKeyLoadingThread();
+		long start = System.currentTimeMillis();
 		new CryptoFacade();
+		long end = System.currentTimeMillis(); 
+		System.out.println( "crypto time : " + ( end - start )/1000.0 +"sec");
 
 	}
 

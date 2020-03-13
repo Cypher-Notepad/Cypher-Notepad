@@ -33,6 +33,15 @@ abstract public class RSA {
 		System.out.println("[RSA]RSA initialize.");
 		initialize();
 	}
+	
+	public RSA(boolean decryptMode) {
+		if(decryptMode) {
+			System.out.println("[RSA]RSA initialize. - decrypt mode");
+		} else {
+			System.out.println("[RSA]RSA initialize.");
+			initialize();
+		}
+	}
 
 	private void initialize() {
 
@@ -157,7 +166,7 @@ abstract public class RSA {
 			try {
 				KeyFactory factory = KeyFactory.getInstance(ENCRYPT_ALGO);
 				setKey(factory.generatePrivate(keySpec));
-
+				
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (InvalidKeySpecException e) {

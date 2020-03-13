@@ -1,3 +1,4 @@
+import crypto.AESImpl;
 import crypto.CryptoFacade;
 import file.FileManager;
 import thread.ThreadManager;
@@ -6,24 +7,23 @@ import ui.UIManager;
 
 public class Main {
 
-	/*
-	private static Thread threadInit = new Thread() {
-
-	};
-	*/
 	
-	public static void main(String[] args) {
+	private static Thread threadInit = new Thread() {
+		public void run() {
+			new AESImpl();
+			
+		}
+	};
+	
+	
+	public static void main(String[] args) throws OutOfMemoryError{
 		long start = System.currentTimeMillis();
-
+		
 		FileManager.getInstance().loadProperties();
-		/*
-		Thread threadInit = new TrInitializeUI();
 		threadInit.start();
-		ThreadManager.getInstance().setInitThead(threadInit);
-		*/
 		UIManager.getInstance().setDefaultUI();
 		
 		long end = System.currentTimeMillis(); 
-		System.out.println( "werwerwertotal time : " + ( end - start )/1000.0 +"sec");
+		System.out.println( "Loading MainUI time : " + ( end - start )/1000.0 +"sec");
 	}
 }

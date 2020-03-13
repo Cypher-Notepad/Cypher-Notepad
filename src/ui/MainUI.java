@@ -35,6 +35,7 @@ import javax.swing.table.TableColumnModel;
 
 import config.Language;
 import config.Property;
+import crypto.AESImpl;
 import file.FileManager;
 import thread.ThreadManager;
 import thread.TrInitializeUI;
@@ -52,9 +53,9 @@ public class MainUI extends JFrame implements UI {
 	int mpX, mpY;
 
 	public MainUI() {
+		
 		System.out.println("[MainUI]Get langueage setting.");
 		lang = Property.getLanguagePack();
-
 
 		/*
 		Thread prepareNotepad = new Thread() {
@@ -250,12 +251,14 @@ public class MainUI extends JFrame implements UI {
 
 		setVisible(true);
 		System.out.println("MainUI show");
-		
+
 		Thread threadInit = new TrInitializeUI();
 		threadInit.start();
 		ThreadManager.getInstance().setInitThead(threadInit);
-
+		
+		
 		addListeners();
+		
 	}
 
 	@Override
@@ -335,8 +338,14 @@ public class MainUI extends JFrame implements UI {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
+					long start = System.currentTimeMillis();
 					ThreadManager.getInstance().joinKeyLoadingThread();
+					long end = System.currentTimeMillis(); 
+					System.out.println( "t1 time : " + ( end - start )/1000.0 +"sec");
+					start = System.currentTimeMillis();
 					boolean isLoaded = notepadUI.loadMemo(new File(path));
+					end = System.currentTimeMillis(); 
+					System.out.println( "t2 time : " + ( end - start )/1000.0 +"sec");
 					if (isLoaded) {
 						Property.addRecentFiles(path);
 						ThreadManager.getInstance().joinThreads();

@@ -5,6 +5,10 @@ public class RSAImpl extends RSA{
 		//do nothing.
 	}
 	
+	private RSAImpl(boolean decryptMode) {
+		super(decryptMode);
+	}
+	
 	private static final class LazyHolder{
 		private static RSAImpl instance = new RSAImpl();
 	}
@@ -18,6 +22,10 @@ public class RSAImpl extends RSA{
 			LazyHolder.instance = new RSAImpl();
 		}
 		return LazyHolder.instance;
+	}
+	
+	public static RSAImpl getDecryptInstance() {
+		return new RSAImpl(true);
 	}
 	
 	@Override

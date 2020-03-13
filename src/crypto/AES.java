@@ -21,8 +21,22 @@ public abstract class AES {
 	private KeyGenerator keyGenerator;
 	
 	public AES() {
-		try {
+		System.out.println("[AES]AES initialize.");
+		initialize();
+		
+	}
+	
+	public AES(boolean decryptMode) {
+		if(decryptMode) {
+			System.out.println("[AES]AES initialize. - decrypt mode");
+		} else {
 			System.out.println("[AES]AES initialize.");
+			initialize();
+		}
+	}
+	
+	private void initialize() {
+		try {
 			keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -49,6 +63,7 @@ public abstract class AES {
 	public Decryptor getDecryptor() {
 		return new AES.AESDecryptor(getSecretKey());
 	}
+	
 	public Decryptor getDecryptor(String secretKey) {
 		return new AES.AESDecryptor(secretKey);
 	}
