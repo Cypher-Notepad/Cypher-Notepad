@@ -2,7 +2,6 @@ import crypto.AESImpl;
 import crypto.CryptoFacade;
 import file.FileManager;
 import thread.ThreadManager;
-import thread.TrInitializeUI;
 import ui.UIManager;
 
 public class Main {

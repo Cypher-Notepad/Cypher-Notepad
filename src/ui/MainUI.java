@@ -38,7 +38,8 @@ import config.Property;
 import crypto.AESImpl;
 import file.FileManager;
 import thread.ThreadManager;
-import thread.TrInitializeUI;
+import thread.TrKeyLoad;
+import thread.TrPrepareNotepadUI;
 import ui.custom.KButton;
 
 public class MainUI extends JFrame implements UI {
@@ -57,6 +58,7 @@ public class MainUI extends JFrame implements UI {
 		System.out.println("[MainUI]Get langueage setting.");
 		lang = Property.getLanguagePack();
 
+		
 		/*
 		Thread prepareNotepad = new Thread() {
 			@Override
@@ -252,10 +254,19 @@ public class MainUI extends JFrame implements UI {
 		setVisible(true);
 		System.out.println("MainUI show");
 
+		/*
 		Thread threadInit = new TrInitializeUI();
 		threadInit.start();
 		ThreadManager.getInstance().setInitThead(threadInit);
+		*/
+
+		Thread prepareNotepadUIThread = new TrPrepareNotepadUI();
+		prepareNotepadUIThread.start();
+		ThreadManager.getInstance().addThread(prepareNotepadUIThread);
 		
+		Thread keyLoadThread = new TrKeyLoad();
+		keyLoadThread.start();
+		ThreadManager.getInstance().setKeyLoadingThead(keyLoadThread);
 		
 		addListeners();
 		
@@ -339,16 +350,19 @@ public class MainUI extends JFrame implements UI {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
 					long start = System.currentTimeMillis();
-					ThreadManager.getInstance().joinKeyLoadingThread();
+					//ThreadManager.getInstance().joinKeyLoadingThread();
 					long end = System.currentTimeMillis(); 
 					System.out.println( "t1 time : " + ( end - start )/1000.0 +"sec");
 					start = System.currentTimeMillis();
+					if(notepadUI == null) {
+						ThreadManager.getInstance().joinThreads();
+					}
 					boolean isLoaded = notepadUI.loadMemo(new File(path));
 					end = System.currentTimeMillis(); 
 					System.out.println( "t2 time : " + ( end - start )/1000.0 +"sec");
 					if (isLoaded) {
 						Property.addRecentFiles(path);
-						ThreadManager.getInstance().joinThreads();
+						//ThreadManager.getInstance().joinThreads();
 						UIManager.getInstance().setUI(notepadUI);
 					}
 				}
@@ -370,7 +384,9 @@ public class MainUI extends JFrame implements UI {
 					if (fc.getSelectedFile().exists()) {
 						toBeSelected = false;
 						System.out.println(fc.getSelectedFile());
-						ThreadManager.getInstance().joinKeyLoadingThread();
+						if(notepadUI == null) {
+							ThreadManager.getInstance().joinThreads();
+						}
 						boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
 						if (isLoaded) {
 							try {
@@ -378,7 +394,7 @@ public class MainUI extends JFrame implements UI {
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
-							ThreadManager.getInstance().joinThreads();
+							//ThreadManager.getInstance().joinThreads();
 							UIManager.getInstance().setUI(notepadUI);
 						}
 					} else {
@@ -396,8 +412,8 @@ public class MainUI extends JFrame implements UI {
 
 		btnX.addActionListener(e -> {
 			System.out.println("[MainUI] Close Window on Main UI");
-			ThreadManager.getInstance().joinInitThread();
-			System.out.println("[1]");
+			//ThreadManager.getInstance().joinInitThread();
+			//System.out.println("[1]");
 			ThreadManager.getInstance().joinKeyLoadingThread();
 			System.out.println("[2]");
 			ThreadManager.getInstance().joinThreads();
