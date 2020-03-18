@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class ThreadManager {
 
-	private Thread initThread = null;
 	private Thread keyLoadingThread = null;
 	private ArrayList<Thread> listTr;
 
@@ -18,22 +17,6 @@ public class ThreadManager {
 
 	public static ThreadManager getInstance() {
 		return ThreadManager.LazyHolder.INSTANCE;
-	}
-	
-	public void setInitThead(Thread t) {
-		if(initThread == null) {
-			initThread = t;
-		}
-	}
-	
-	public void joinInitThread() {
-		if(initThread != null) {
-			try {
-				initThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	public void setKeyLoadingThead(Thread t) {
@@ -50,7 +33,6 @@ public class ThreadManager {
 				e.printStackTrace();
 			}
 		} else {
-			joinInitThread();
 			joinKeyLoadingThread();
 		}
 	}
@@ -60,10 +42,6 @@ public class ThreadManager {
 	}
 	
 	public void joinThreads() {
-		if(listTr.isEmpty()) {
-			joinInitThread();
-		}
-		
 		for(Thread t : listTr) {
 			try {
 				t.join();
