@@ -166,7 +166,7 @@ public class NotepadUI extends JFrame implements UI {
 				System.out.println("[Warning] out of Momory.");
 				OOMEFlag = true;
 				if(statusLogger != null) {
-					statusLogger.setDefault("Out of Memory. Some features may not work correctly.");
+					statusLogger.setDefault(lang.OOMEWarning);
 				}
 			}
 		});
@@ -175,9 +175,7 @@ public class NotepadUI extends JFrame implements UI {
 			public void memoryUsageSafe(long usedMemory, long maxMemory) {
 				System.out.println("[Warning] Escape OOME.");
 				OOMEFlag = false;
-				if(statusLogger != null) {
-					statusLogger.setDefault(null);
-				}
+
 			}
 		});
 	}
@@ -311,9 +309,9 @@ public class NotepadUI extends JFrame implements UI {
 		txtPanMagnification.setText("100%");
 		
 		//initial call
-		updateRowCol();
 		statusLogger = new StatusLogger();
-
+		updateRowCol();
+		
 		//add listeners
 		new Thread() {
 			public void run() {
@@ -504,6 +502,9 @@ public class NotepadUI extends JFrame implements UI {
 				txtPanRowCol.setText("N/A");
 			} else {
 				txtPanRowCol.setText("Ln " + t.length + ", Col " + (t[t.length - 1].length() + 1));
+				if(statusLogger != null) {
+					statusLogger.setDefault(null);
+				}
 			}
 		}
 	}

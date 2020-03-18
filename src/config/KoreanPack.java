@@ -102,6 +102,7 @@ class KoreanPack extends Language {
 		save = "\uC800\uC7A5";
 		noSave = "  \uC800\uC7A5 \uC548 \uD568  ";
 
-		
+		//OOME
+		OOMEWarning = "\uBA54\uBAA8\uB9AC\uAC00 \uBD80\uC871\uD569\uB2C8\uB2E4. \uC77C\uBD80 \uAE30\uB2A5\uC774 \uC815\uC0C1\uC801\uC73C\uB85C \uB3D9\uC791\uD558\uC9C0 \uC54A\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4. ";
 	}
 }
