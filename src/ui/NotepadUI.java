@@ -109,7 +109,8 @@ public class NotepadUI extends JFrame implements UI {
 	//status bar
 	private JPanel statusBar;
 	private JTextPane txtPaneStatus, txtPanRowCol, txtPanMagnification;
-	private Thread stsUpdateThread = null;
+	//private Thread stsUpdateThread = null;
+	private StatusLogger statusLogger = null;
 	private int fontMagnification = 100;
 	
 	public String fileName;
@@ -144,7 +145,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}
 	};
-	
+		
 	public NotepadUI() {
 		lang = Property.getLanguagePack();
 
@@ -153,6 +154,7 @@ public class NotepadUI extends JFrame implements UI {
 		savedContext = "";
 		undoText = savedContext;
 
+		
 		/**
 		 * OOME detection.
 		 * */
@@ -163,6 +165,9 @@ public class NotepadUI extends JFrame implements UI {
 			public void memoryUsageExceeded(long usedMemory, long maxMemory) {
 				System.out.println("[Warning] out of Momory.");
 				OOMEFlag = true;
+				if(statusLogger != null) {
+					statusLogger.setDefault("Out of Memory. Some features may not work correctly.");
+				}
 			}
 		});
 		OOMEChecker.addMemSafeListener(new TrOOME.MemorySafeListener() {
@@ -170,6 +175,9 @@ public class NotepadUI extends JFrame implements UI {
 			public void memoryUsageSafe(long usedMemory, long maxMemory) {
 				System.out.println("[Warning] Escape OOME.");
 				OOMEFlag = false;
+				if(statusLogger != null) {
+					statusLogger.setDefault(null);
+				}
 			}
 		});
 	}
@@ -300,11 +308,13 @@ public class NotepadUI extends JFrame implements UI {
 		txtPaneStatus = new JTextPane();
 		txtPanRowCol = new JTextPane();
 		txtPanMagnification = new JTextPane();
-		updateRowCol();
 		txtPanMagnification.setText("100%");
+		
+		//initial call
+		updateRowCol();
+		statusLogger = new StatusLogger();
 
-		// In the most of case UI shows up before its listener is added.
-		// IDKDIKDIDK......
+		//add listeners
 		new Thread() {
 			public void run() {
 				settings();
@@ -1436,6 +1446,63 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		}
 	}
+	
+
+	private class StatusLogger{
+		
+		private TimerThread curThread = null;
+		private String logStr = "";
+		private String defaultStr = "";
+		
+		public void setDefault(String str) {
+			if(str == null) {
+				defaultStr = "";
+			} else {
+				defaultStr = str;
+			}
+			if(curThread == null) {
+				if(txtPaneStatus != null) {
+					txtPaneStatus.setText(defaultStr);
+				}
+			}
+		}
+
+		public void showLog(String log) {
+			logStr = log;
+			if (curThread == null) {
+				curThread = new TimerThread();
+			} else {
+				curThread.extendThread();
+			}
+		}
+
+		private class TimerThread extends Thread{
+			
+			private int loggingTime = 5;
+			
+			public void extendThread() {
+				loggingTime = 5;
+			}
+			
+			@Override
+			public void run() {
+				if(txtPaneStatus != null) {
+					for(; loggingTime>0; loggingTime--) {
+						txtPaneStatus.setText(logStr);
+						try {
+							Thread.sleep(600);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					txtPaneStatus.setText(defaultStr);
+				}
+				curThread = null;
+			}
+		}
+		
+	}
+
 	
 	
 	/*
