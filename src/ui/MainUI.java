@@ -269,7 +269,6 @@ public class MainUI extends JFrame implements UI {
 		ThreadManager.getInstance().setKeyLoadingThead(keyLoadThread);
 		
 		addListeners();
-		
 	}
 
 	@Override

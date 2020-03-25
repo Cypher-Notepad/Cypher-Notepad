@@ -1225,7 +1225,7 @@ public class NotepadUI extends JFrame implements UI {
 				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);
 				//frame.setTitle(fileName + " - Crypto Notepad");
 				setTempMode(FileManager.getInstance().isTemporary());
-				statusLogger.showLog(fileName + " is loaded.");
+				statusLogger.showLog(fileName + " is opened.");
 				updateRowCol();
 				
 				return true;
@@ -1250,9 +1250,9 @@ public class NotepadUI extends JFrame implements UI {
 			MemoVO savedContextMemo = new MemoVO();
 			savedContextMemo.setContent(savedContext);
 			FileManager.getInstance().importKey(filePath, savedContextMemo);
-			setTempMode(FileManager.getInstance().isTemporary());
+			statusLogger.showLog("The key of current file is imported");
 		}
-		
+		setTempMode(FileManager.getInstance().isTemporary());
 		return response;
 	}
 	
@@ -1261,7 +1261,8 @@ public class NotepadUI extends JFrame implements UI {
 		int response = new KeyExporter().showDialog(this);
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
-			FileManager.getInstance().setOpenedWithExportedKey(true);
+			//FileManager.getInstance().setOpenedWithExportedKey(true);
+			statusLogger.showLog("The key of current file is exported");
 		}
 		setTempMode(FileManager.getInstance().isTemporary());
 		return response;

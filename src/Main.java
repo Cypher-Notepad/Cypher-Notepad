@@ -19,10 +19,11 @@ public class Main {
 		long start = System.currentTimeMillis();
 		
 		FileManager.getInstance().loadProperties();
-		threadInit.start();
 		UIManager.getInstance().setDefaultUI();
 		
 		long end = System.currentTimeMillis(); 
 		System.out.println( "Loading MainUI time : " + ( end - start )/1000.0 +"sec");
+		threadInit.start();
+		
 	}
 }
