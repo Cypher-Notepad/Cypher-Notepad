@@ -1124,8 +1124,6 @@ public class NotepadUI extends JFrame implements UI {
 					rtn = YES_OPTION;
 					toBeContinue = false;
 				}
-				rtn = YES_OPTION;
-				toBeContinue = false;
 			} else {
 				System.out.println("Closed option in showDialogImportOrExport()");
 				rtn = CANCEL_OPTION;

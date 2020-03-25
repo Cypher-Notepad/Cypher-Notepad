@@ -13,6 +13,7 @@ public class CryptoFacade {
 		this.aes = new AESImpl();
 	}
 	
+	/* not used */
 	public CryptoFacade(boolean decryptMode) {
 		if(decryptMode) {
 			long start = System.currentTimeMillis();

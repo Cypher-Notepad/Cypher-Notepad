@@ -3,6 +3,7 @@ package ui.custom;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -47,6 +48,7 @@ public class KeyExporter extends JDialog {
 
 	public KeyExporter() {
 		setBounds(100, 100, 520, 370);
+		this.setMinimumSize(new Dimension(520,370));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
