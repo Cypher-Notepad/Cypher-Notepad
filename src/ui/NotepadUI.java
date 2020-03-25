@@ -78,6 +78,7 @@ import ui.custom.KSettings;
 import ui.custom.KeyExporter;
 import ui.custom.KeyImporter;
 import ui.custom.KeyOpener;
+import ui.custom.KeyValidator;
 import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -1118,7 +1119,11 @@ public class NotepadUI extends JFrame implements UI {
 					toBeContinue = false;
 				}
 			} else if (response == 2) {
-				// do nothing
+				response = checkKey();
+				if (response == KeyValidator.CHECK_OPTION) {
+					rtn = YES_OPTION;
+					toBeContinue = false;
+				}
 				rtn = YES_OPTION;
 				toBeContinue = false;
 			} else {
@@ -1261,11 +1266,23 @@ public class NotepadUI extends JFrame implements UI {
 		int response = new KeyExporter().showDialog(this);
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
-			//FileManager.getInstance().setOpenedWithExportedKey(true);
+			FileManager.getInstance().setOpenedWithExportedKey(true);
 			statusLogger.showLog("The key of current file is exported");
 		}
 		setTempMode(FileManager.getInstance().isTemporary());
 		return response;
+	}
+	
+	public int checkKey() {
+		ThreadManager.getInstance().joinKeyLoadingThread();
+		KeyValidator ki = new KeyValidator();
+		int response = ki.showDialog(this);
+		if(response == KeyValidator.CHECK_OPTION) {
+			setInvalidationFlag(false);
+		}
+		setTempMode(FileManager.getInstance().isTemporary());
+		return response;
+		
 	}
 
 	public void setTempMode(boolean isTemporary) {
