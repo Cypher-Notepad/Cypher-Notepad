@@ -115,4 +115,28 @@ public abstract class Language {
 	//OOME
 	public String OOMEWarning = "Out of Memory. Some features may not work correctly.";
 	
+	//Warning message
+	public String fileNotExist = "The file does not exist." + " Please check your file name.";
+	public String notAvailable = "N/A";
+	public String warningSaveKey = "The key used for this file is not saved. To open this file next time, keep the key via options below    ";
+	public String warningTurnOffEncryption = "Do you want to turn off encryption mode?     \nIt will be applied instantly. If you have exported keyfile, it will be invalidated.    ";
+	
+	//status logger
+	public String status_save = " is saved.";
+	public String status_open = " is opened.";
+	public String status_import = "The key of current file is imported";
+	public String status_export = "The key of current file is exported";
+	
+	//title
+	public String title_openWithExportedKey = "  (The file is opened with exported keyfile.)";
+	public String title_needToImportOrExport = "  (It is required to import or export the key.)";
+	public String title_notEncrypted = "  (The file is not encrypted.)";
+	
+	
+	//minor things
+	public String defaultFileName = "Untitled";
+	public String fileFilter_txt = "Text Documents (*.txt)";
+	
+	public String IHaveExportedKeyFile = "No, I have exported keyfile.";
+	public String yes = "Yes";
 }

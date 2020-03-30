@@ -500,7 +500,7 @@ public class NotepadUI extends JFrame implements UI {
 			String[] t = textArea.getText().substring(0, textArea.getCaretPosition()).split("\n", -1);
 			
 			if (OOMEFlag) {
-				txtPanRowCol.setText("N/A");
+				txtPanRowCol.setText(lang.notAvailable);
 			} else {
 				txtPanRowCol.setText("Ln " + t.length + ", Col " + (t[t.length - 1].length() + 1));
 				if(statusLogger != null) {
@@ -575,7 +575,7 @@ public class NotepadUI extends JFrame implements UI {
 		dialogCreationThread = new Thread() {
 			public void run() {
 				fc = new JFileChooser();
-				fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
+				fc.setFileFilter(new FileNameExtensionFilter(lang.fileFilter_txt, "txt"));
 				info = new KInformation();
 				st = new KSettings();
 				fontChooser = new KFontChooser(frame);
@@ -607,7 +607,7 @@ public class NotepadUI extends JFrame implements UI {
 				if (checkSave()) {
 					textArea.setText("");
 					directory = null;
-					fileName = "Untitled";
+					fileName = lang.defaultFileName;
 					savedContext = "";
 					undoText = savedContext;
 
@@ -996,7 +996,7 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setTitle(fileName + " - Crypto Notepad");
 		setTempMode(FileManager.getInstance().isTemporary());
 		
-		statusLogger.showLog(fileName + " is saved.");
+		statusLogger.showLog(fileName + lang.status_save);
 		
 	}
 
@@ -1097,12 +1097,12 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int showImportOrExportDialog() {
 		int rtn = CANCEL_OPTION;
-		Object[] options = { "Import key", "Export Key", "No, I have exported keyfile." };
+		Object[] options = { lang.miImporter, lang.miExporter, lang.IHaveExportedKeyFile };
 
 		boolean toBeContinue = true;
 		while (toBeContinue) {
 			int response = JOptionPane.showOptionDialog(frame,
-					"The key used for this file is not saved. To open this file next time, keep the key via options below    ",
+					lang.warningSaveKey,
 					"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 					options[0]);
 
@@ -1176,9 +1176,9 @@ public class NotepadUI extends JFrame implements UI {
 	public int showEncryptModeDialog() {
 		int rtn = CANCEL_OPTION;
 		//to make looks better, add space
-		Object[] options = { "      " + "Yes" + "      ", lang.btnCancel };
+		Object[] options = { "      " + lang.yes + "      ", lang.btnCancel };
 
-		int response = JOptionPane.showOptionDialog(frame, "Do you want to turn off encryption mode?     \nIt will be applied instantly. " + "If you have exported keyfile, it will be invalidated.    ",
+		int response = JOptionPane.showOptionDialog(frame, lang.warningTurnOffEncryption,
 				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 				options[1]);
 
@@ -1228,7 +1228,7 @@ public class NotepadUI extends JFrame implements UI {
 				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);
 				//frame.setTitle(fileName + " - Crypto Notepad");
 				setTempMode(FileManager.getInstance().isTemporary());
-				statusLogger.showLog(fileName + " is opened.");
+				statusLogger.showLog(fileName + lang.status_open);
 				updateRowCol();
 				
 				return true;
@@ -1253,7 +1253,7 @@ public class NotepadUI extends JFrame implements UI {
 			MemoVO savedContextMemo = new MemoVO();
 			savedContextMemo.setContent(savedContext);
 			FileManager.getInstance().importKey(filePath, savedContextMemo);
-			statusLogger.showLog("The key of current file is imported");
+			statusLogger.showLog(lang.status_import);
 		}
 		setTempMode(FileManager.getInstance().isTemporary());
 		return response;
@@ -1265,7 +1265,7 @@ public class NotepadUI extends JFrame implements UI {
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
 			FileManager.getInstance().setOpenedWithExportedKey(true);
-			statusLogger.showLog("The key of current file is exported");
+			statusLogger.showLog(lang.status_export);
 		}
 		setTempMode(FileManager.getInstance().isTemporary());
 		return response;
@@ -1289,13 +1289,13 @@ public class NotepadUI extends JFrame implements UI {
 				if (directory != null) {
 					if(FileManager.getInstance().isOpenedWithExportedKey()) {
 						frame.setTitle(
-								fileName + " - Crypto Notepad" + "  (The file is opened with exported keyfile.)");
+								fileName + " - Crypto Notepad" + lang.title_openWithExportedKey);
 						keyImportMenuItem.setEnabled(true);
 						keyExportMenuItem.setEnabled(false);
 					} else {
 						/*the case of invalidation*/
 						frame.setTitle(
-								fileName + " - Crypto Notepad" + "  (It is required to import or export the key.)");
+								fileName + " - Crypto Notepad" + lang.title_needToImportOrExport);
 						keyImportMenuItem.setEnabled(true);
 						keyExportMenuItem.setEnabled(true);
 					}
@@ -1313,7 +1313,7 @@ public class NotepadUI extends JFrame implements UI {
 			
 		} else {
 			if (directory != null) {
-				frame.setTitle(fileName + " - Crypto Notepad" + "  (The file is not encrypted.)");
+				frame.setTitle(fileName + " - Crypto Notepad" + lang.title_notEncrypted);
 				keyImportMenuItem.setEnabled(false);
 				keyExportMenuItem.setEnabled(false);
 			}

@@ -399,7 +399,7 @@ public class MainUI extends JFrame implements UI {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								"The file does not exist." + " Please check your file name.", "Crypto Notepad",
+								lang.fileNotExist, "Crypto Notepad",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
