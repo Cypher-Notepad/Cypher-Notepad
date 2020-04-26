@@ -16,14 +16,8 @@ public class CryptoFacade {
 	/* not used */
 	public CryptoFacade(boolean decryptMode) {
 		if(decryptMode) {
-			long start = System.currentTimeMillis();
 			this.rsa = RSAImpl.getDecryptInstance();
-			long end = System.currentTimeMillis(); 
-			System.out.println( "FACAde time11 : " + ( end - start )/1000.0 +"sec");
-			start = System.currentTimeMillis();
 			this.aes = new AESImpl(true);
-			end = System.currentTimeMillis(); 
-			System.out.println( "FACAde time22 : " + ( end - start )/1000.0 +"sec");
 		} else {
 			this.rsa = RSAImpl.getInstance();
 			this.aes = new AESImpl();
@@ -54,28 +48,12 @@ public class CryptoFacade {
 	}
 	
 	public void decrypt(MemoVO memo, String privateKey) throws BadPaddingException {
-		long start = System.currentTimeMillis();
-		
 		Decryptor rsaDecryptor = rsa.getDecryptor(privateKey);
-		long end = System.currentTimeMillis(); 
-		System.out.println( "CF time1 : " + ( end - start )/1000.0 +"sec");
-		start = System.currentTimeMillis();
-		
 		String secretKey = rsaDecryptor.decrypt(memo.getKey());
 		memo.setKey(secretKey);
-		end = System.currentTimeMillis(); 
-		System.out.println( "CF time2 : " + ( end - start )/1000.0 +"sec");
-		start = System.currentTimeMillis();
 		
 		Decryptor aesDecryptor = aes.getDecryptor(secretKey);
-		end = System.currentTimeMillis(); 
-		System.out.println( "CF time3 : " + ( end - start )/1000.0 +"sec");
-		start = System.currentTimeMillis();
-		
 		memo.setContent(aesDecryptor.decrypt(memo.getContent()));
-		end = System.currentTimeMillis(); 
-		System.out.println( "CF time4 : " + ( end - start )/1000.0 +"sec");
-		start = System.currentTimeMillis();
 		
 	}
 

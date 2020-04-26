@@ -530,9 +530,6 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public void settings() {
-		
-		long start = System.currentTimeMillis();
-		
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -541,37 +538,9 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 
-		
-		
-		
-		/*
-		try {
-			filedrop.joinListenerThread();
-		} catch (InterruptedException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		*/
-
 		frame.addMouseListener(menuBarCloser);
 		textArea.addMouseListener(menuBarCloser);
 
-		long end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
-		System.out.println( "0.5구간 실행 시간 : " + ( end - start )/1000.0 +"초");
-		 start = System.currentTimeMillis();
-		
-		
-
-		 /*
-		fc = new JFileChooser();
-		fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
-		fontChooser = new KFontChooser(this);
-		pt = new KPrinter(textArea);
-		fd = new KFinder(textArea);
-		rp = new KReplacer(textArea);
-		info = new KInformation();
-		st = new KSettings();
-*/
 		dialogCreationThread = new Thread() {
 			public void run() {
 				fc = new JFileChooser();
@@ -597,10 +566,6 @@ public class NotepadUI extends JFrame implements UI {
 		};
 		dialogCreationThread.start();
 
-		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
-		System.out.println( "1구간 실행 시간 : " + ( end - start )/1000.0 +"초");
-		 start = System.currentTimeMillis();
-		
 		// actions
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -864,10 +829,6 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		//[Block A - end]*****************************************************************************
 
-		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
-		System.out.println( "2 구간 실행 시간 : " + ( end - start )/1000.0 +"초");
-		 start = System.currentTimeMillis();
-		
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		editMenu.setMnemonic(KeyEvent.VK_E);
@@ -897,7 +858,6 @@ public class NotepadUI extends JFrame implements UI {
 		HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
-		
 		
 
 		// sub menu mnemonic keys
@@ -948,9 +908,6 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		end = System.currentTimeMillis(); //프로그램이 끝나는 시점 계산
-		System.out.println( "3구간 실행 시간 : " + ( end - start )/1000.0 + "초");
-
 	}
 
 	public boolean saveAsAction() {
@@ -1197,24 +1154,12 @@ public class NotepadUI extends JFrame implements UI {
 	public boolean loadMemo(File file) {
 		String selectedPath;
 		try {
-			long start = System.currentTimeMillis();
-			
 			selectedPath = file.getCanonicalPath();
 			Property.addRecentFiles(selectedPath);
 			
-			long end = System.currentTimeMillis(); 
-			System.out.println( "note load time1 : " + ( end - start )/1000.0 +"sec");
-			start = System.currentTimeMillis();
-			
 			ThreadManager.getInstance().joinKeyLoadingThread();
-			end = System.currentTimeMillis(); 
-			System.out.println( "note load time2 : " + ( end - start )/1000.0 +"sec");
-			start = System.currentTimeMillis();
 			MemoVO memo = FileManager.getInstance().loadMemo(frame, selectedPath);
 			
-			end = System.currentTimeMillis(); 
-			System.out.println( "note load time33 : " + ( end - start )/1000.0 +"sec");
-			start = System.currentTimeMillis();
 			if (memo != null) {
 				savedContext = memo.getContent();
 				undoText = savedContext;

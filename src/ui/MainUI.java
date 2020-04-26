@@ -58,19 +58,6 @@ public class MainUI extends JFrame implements UI {
 		System.out.println("[MainUI]Get langueage setting.");
 		lang = Property.getLanguagePack();
 
-		
-		/*
-		Thread prepareNotepad = new Thread() {
-			@Override
-			public void run() {
-				System.out.println("[MainUI]Preload NotepadUI for reducing the time for loading");
-				notepadUI = new NotepadUI();
-				notepadUI.initializeUI();
-			}
-		};
-		prepareNotepad.start();
-		ThreadManager.getInstance().addThread(prepareNotepad);
-		*/
 	}
 
 	@Override
@@ -252,7 +239,7 @@ public class MainUI extends JFrame implements UI {
 		contentPane.setLayout(gl_contentPane);
 
 		setVisible(true);
-		System.out.println("MainUI show");
+		System.out.println("[MainUI]MainUI show");
 
 		/*
 		Thread threadInit = new TrInitializeUI();
@@ -348,20 +335,13 @@ public class MainUI extends JFrame implements UI {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					String path = String.valueOf(table.getValueAt(table.getSelectedRow(), 3));
-					long start = System.currentTimeMillis();
-					//ThreadManager.getInstance().joinKeyLoadingThread();
-					long end = System.currentTimeMillis(); 
-					System.out.println( "t1 time : " + ( end - start )/1000.0 +"sec");
-					start = System.currentTimeMillis();
 					if(notepadUI == null) {
 						ThreadManager.getInstance().joinThreads();
 					}
+					
 					boolean isLoaded = notepadUI.loadMemo(new File(path));
-					end = System.currentTimeMillis(); 
-					System.out.println( "t2 time : " + ( end - start )/1000.0 +"sec");
 					if (isLoaded) {
 						Property.addRecentFiles(path);
-						//ThreadManager.getInstance().joinThreads();
 						UIManager.getInstance().setUI(notepadUI);
 					}
 				}
@@ -386,6 +366,7 @@ public class MainUI extends JFrame implements UI {
 						if(notepadUI == null) {
 							ThreadManager.getInstance().joinThreads();
 						}
+						
 						boolean isLoaded = notepadUI.loadMemo(fc.getSelectedFile());
 						if (isLoaded) {
 							try {
@@ -393,7 +374,6 @@ public class MainUI extends JFrame implements UI {
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
-							//ThreadManager.getInstance().joinThreads();
 							UIManager.getInstance().setUI(notepadUI);
 						}
 					} else {
@@ -411,8 +391,7 @@ public class MainUI extends JFrame implements UI {
 
 		btnX.addActionListener(e -> {
 			System.out.println("[MainUI] Close Window on Main UI");
-			//ThreadManager.getInstance().joinInitThread();
-			//System.out.println("[1]");
+			System.out.println("[1]");
 			ThreadManager.getInstance().joinKeyLoadingThread();
 			System.out.println("[2]");
 			ThreadManager.getInstance().joinThreads();

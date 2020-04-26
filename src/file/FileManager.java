@@ -417,29 +417,16 @@ public class FileManager {
 			try {
 				BufferedReader memoReader = new BufferedReader(new FileReader(filename));
 				if (isEncrypted(memoReader)) {
-					long start = System.currentTimeMillis();
 					
 					memoReader.readLine();
 					String strIdx = memoReader.readLine();
 					readMemo.setKey(memoReader.readLine());
 					readMemo.setContent(memoReader.readLine());
 					memoReader.close();
-					long end = System.currentTimeMillis(); 
-					System.out.println( "KM time1 : " + ( end - start )/1000.0 +"sec");
-					start = System.currentTimeMillis();
 					
 					// Decrypt.
 					int idx = Integer.parseInt(new String(Base64.getDecoder().decode(strIdx)));
-					end = System.currentTimeMillis(); 
-					System.out.println( "KM time2-- : " + ( end - start )/1000.0 +"sec");
-					start = System.currentTimeMillis();
-					
 					new CryptoFacade().decrypt(readMemo, getKey(idx));
-					
-					end = System.currentTimeMillis(); 
-					System.out.println( "KM time2 : " + ( end - start )/1000.0 +"sec");
-					start = System.currentTimeMillis();
-					
 					
 					// And use again its key which was used to encrypt at the first.
 					recycleKey = true;
