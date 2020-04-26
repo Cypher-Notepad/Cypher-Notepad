@@ -235,6 +235,7 @@ public class KeyValidator extends JDialog {
 		});
 		
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
+		setResizable(false);
 	}
 
 	private boolean loadPEMFile(File pem) {

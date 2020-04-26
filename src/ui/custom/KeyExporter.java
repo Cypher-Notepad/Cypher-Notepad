@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextPane;
+import javax.swing.JCheckBox;
 
 public class KeyExporter extends JDialog {
 
@@ -45,6 +46,9 @@ public class KeyExporter extends JDialog {
 	private CopyThread copyThread;
 	
 	private int result = CLOSED_OPTION;
+	private JCheckBox chckbxDelete;
+	
+	private NotepadUI frame = null;
 
 	public KeyExporter() {
 		setBounds(100, 100, 520, 370);
@@ -69,23 +73,40 @@ public class KeyExporter extends JDialog {
 		txtpnWarn.setFont(txtpnWarn.getFont().deriveFont(12f));
 		txtpnWarn.setBackground(new Color(0xF0F0F0));
 		txtpnWarn.setFocusable(false);
+		
+		//delete from keyfile
+		chckbxDelete = new JCheckBox("키파일에서 제거하기");
+		if(FileManager.getInstance().isTemporary()) {
+			chckbxDelete.setEnabled(false);
+			chckbxDelete.setSelected(false);
+		} else {
+			chckbxDelete.setSelected(true);
+		}
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(
-				Alignment.TRAILING,
-				gl_contentPanel.createSequentialGroup().addContainerGap().addGroup(gl_contentPanel
-						.createParallelGroup(Alignment.TRAILING)
-						.addComponent(txtpnWarn, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-						.addComponent(lblKey, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 50,
-								GroupLayout.PREFERRED_SIZE))
-						.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap().addComponent(lblKey)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(txtpnWarn, GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)));
+		gl_contentPanel.setHorizontalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(txtpnWarn, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+						.addComponent(scrollPane, Alignment.LEADING)
+						.addComponent(lblKey, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+						.addComponent(chckbxDelete, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_contentPanel.setVerticalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblKey)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(txtpnWarn, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(chckbxDelete))
+		);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -120,6 +141,11 @@ public class KeyExporter extends JDialog {
 					filePath += ".pem";
 				}
 				FileManager.getInstance().exportKey(filePath, txtKey.getText());
+				if(chckbxDelete.isSelected()) {
+					FileManager.getInstance().deleteCurrentKey();
+					frame.saveSavedMemo(true);
+				}
+				
 				result = EXPORT_OPTION;
 				setVisible(false);
 			} else if (userSelection == JFileChooser.CANCEL_OPTION) {/* do nothing.*/}
@@ -147,10 +173,12 @@ public class KeyExporter extends JDialog {
 		});
 
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
+		setResizable(false);
 	}
 
 	public int showDialog(NotepadUI frame) {
 		result = CLOSED_OPTION;
+		this.frame = frame;
 		
 		txtKey.setText(FileManager.getInstance().getCurKey());
 		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
@@ -162,7 +190,6 @@ public class KeyExporter extends JDialog {
 		fc.setSelectedFile(new File(keyFileName));
 
 		setLocationRelativeTo(frame);
-		
 		setVisible(true);
 		
 		return result;

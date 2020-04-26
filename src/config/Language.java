@@ -113,7 +113,7 @@ public abstract class Language {
 	public String noSave = "  Don't Save  ";
 	
 	//OOME
-	public String OOMEWarning = "Out of Memory. Some features may not work correctly.";
+	public String OOMEWarning = "Out of Memory. Some functions may not work correctly.";
 	
 	//Warning message
 	public String fileNotExist = "The file does not exist." + " Please check your file name.";

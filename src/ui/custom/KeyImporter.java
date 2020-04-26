@@ -104,6 +104,7 @@ public class KeyImporter extends JDialog {
 		});
 		
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
+		setResizable(false);
 	}
 	
 	public int showDialog(JFrame frame) {

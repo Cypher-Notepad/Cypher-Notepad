@@ -799,11 +799,7 @@ public class NotepadUI extends JFrame implements UI {
 		cryptoMenuItem.addActionListener(new ActionListener() {
 			
 			public void applyInstantly(boolean isEncrypted) {
-				String filePath = directory + FileManager.SEPARATOR + fileName;
-				MemoVO savedContextMemo = new MemoVO();
-				savedContextMemo.setContent(savedContext);
-				ThreadManager.getInstance().joinKeyLoadingThread();
-				FileManager.getInstance().saveMemo(filePath, savedContextMemo, isEncrypted);
+				saveSavedMemo(isEncrypted);
 				setTempMode(FileManager.getInstance().isTemporary());
 			}
 			
@@ -997,7 +993,14 @@ public class NotepadUI extends JFrame implements UI {
 		setTempMode(FileManager.getInstance().isTemporary());
 		
 		statusLogger.showLog(fileName + lang.status_save);
-		
+	}
+	
+	public void saveSavedMemo(boolean isEncrypted) {
+		String filePath = directory + FileManager.SEPARATOR + fileName;
+		MemoVO savedContextMemo = new MemoVO();
+		savedContextMemo.setContent(savedContext);
+		ThreadManager.getInstance().joinKeyLoadingThread();
+		FileManager.getInstance().saveMemo(filePath, savedContextMemo, isEncrypted);
 	}
 
 	private boolean showFontChooser() {

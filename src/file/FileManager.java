@@ -225,7 +225,26 @@ public class FileManager {
 			closeIO(fout);
 		}
 	}
-
+	
+	/**
+	 * Used only for key extraction.
+	 * This function modifies the variable, keyID to make effect of deleting the key. 
+	 * */
+	public void deleteCurrentKey() {
+		if(!isTemporary) {
+			System.out.println("[FileManager] key deleted.");
+			tempKey = getCurKey();
+			isTemporary = true;
+			isOpenedWithExportedKey = true;
+			
+			int newID = new Random().nextInt(maxKey);
+			while(newID == keyID) {
+				newID = new Random().nextInt(maxKey);
+			}
+			keyID = newID;
+		}
+	}
+	
 	public void saveKeys() {
 		String[] a = new String[] {};
 		addToKeyFile(false, keys.toArray(a));
@@ -296,6 +315,11 @@ public class FileManager {
 			inStream.close();
 
 			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "8192"));
+			// ignore the value less than 500.
+			if(maxKey < 500) {
+				maxKey = 500;
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -341,9 +365,18 @@ public class FileManager {
 					
 					//umm...make new key for the next file.
 					recycleKey = true;
-					addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
-					keys.add(RSAImpl.getInstance().getPrivateKey());
-					processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
+					if (keys.size() < maxKey) {
+						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
+						keys.add(RSAImpl.getInstance().getPrivateKey());
+						processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
+					} else {
+						int newID = new Random().nextInt(maxKey);
+						while(newID == processID) {
+							newID = new Random().nextInt(maxKey);
+						}
+						processID = newID;
+					}
+					
 				}
 				memoWriter.println(HEADER_WARNING);
 				memoWriter.println(
