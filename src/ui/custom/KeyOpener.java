@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import config.Language;
 import config.Property;
 import file.FileDrop;
 import file.FileManager;
@@ -56,16 +57,20 @@ public class KeyOpener extends JDialog {
 	
 	private int result = CANCEL_OPTION;
 	
+	private Language lang = null;
+	
 	public KeyOpener() {
+		lang = Property.getLanguagePack();
+		
 		setBounds(100, 100, 520, 300);
 		this.setMinimumSize(new Dimension(520,300));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setFocusable(true);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		setTitle("Enter the key");
+		setTitle(lang.koTitle);
 
-		JLabel lblKey = new JLabel("Enter the key to use for decryption : ");
+		JLabel lblKey = new JLabel(lang.koMainContent);
 
 		txtKey = new JTextArea();
 		txtKey.setEditable(true);
@@ -73,7 +78,7 @@ public class KeyOpener extends JDialog {
 		txtKey.setWrapStyleWord(true);
 		txtKey.setBackground(new Color(0xE8E8E8));
 		txtKey.setForeground(txtKey.getDisabledTextColor());
-		txtKey.setText("Drag or Open the keyFile.");
+		txtKey.setText(lang.txtBoxDrag);
 		txtKey.addFocusListener(new FocusListener() {
 
 			boolean isPlaceholder = true;
@@ -90,16 +95,14 @@ public class KeyOpener extends JDialog {
 			}
 			
 			public void setPlaceholder() {
-				System.out.println("lost");
 				txtKey.setBackground(new Color(0xE8E8E8));
 				txtKey.setForeground(txtKey.getDisabledTextColor());
 				if(txtKey.getText().equals("")) {
-					txtKey.setText("Drag or Open the keyFile.");
+					txtKey.setText(lang.txtBoxDrag);
 				}
 			}
 
 			public void erasePlaceholder() {
-				System.out.println("gain");
 				txtKey.setBackground(Color.WHITE);
 				txtKey.setForeground(Color.BLACK);
 				txtKey.setText("");	
@@ -133,8 +136,8 @@ public class KeyOpener extends JDialog {
 			JPanel buttonPane = new JPanel();
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
-			btnOpen = new JButton("Open the keyfile...");
-			btnDecrypt = new JButton("Decrypt");
+			btnOpen = new JButton(lang.koOpen);
+			btnDecrypt = new JButton(lang.koDecrypt);
 			//btnDecrypt.setActionCommand("Cancel");
 			
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -175,9 +178,7 @@ public class KeyOpener extends JDialog {
 							Thread.sleep(1000);
 						}
 					}
-				} catch (Exception e) {
-					System.out.println("Not important");
-				}
+				} catch (Exception e) {/* do nothing */}
 			}
 		};
 		tr_arrow.start();
@@ -198,7 +199,7 @@ public class KeyOpener extends JDialog {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								"The file does not exist." + " Please check your file.", "Crypto Notepad",
+								lang.fileNotExist, "Crypto Notepad",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -239,7 +240,7 @@ public class KeyOpener extends JDialog {
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					"The keyfile format must be PEM format." + " Please check your file format.", "Crypto Notepad",
+					lang.fileFormat_PEM, "Crypto Notepad",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		

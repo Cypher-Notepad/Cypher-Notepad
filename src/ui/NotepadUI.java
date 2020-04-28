@@ -78,7 +78,7 @@ import ui.custom.KSettings;
 import ui.custom.KeyExporter;
 import ui.custom.KeyImporter;
 import ui.custom.KeyOpener;
-import ui.custom.KeyValidator;
+import ui.custom.KeyVerifier;
 import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
@@ -1080,7 +1080,7 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			} else if (response == 2) {
 				response = checkKey();
-				if (response == KeyValidator.CHECK_OPTION) {
+				if (response == KeyVerifier.CHECK_OPTION) {
 					rtn = YES_OPTION;
 					toBeContinue = false;
 				}
@@ -1106,6 +1106,7 @@ public class NotepadUI extends JFrame implements UI {
 		return rtn;
 	}
 	
+	/*
 	public int showSaveOrNotDialogToExport() {
 		int rtn = CANCEL_OPTION;
 		//to make looks better, add space
@@ -1132,6 +1133,7 @@ public class NotepadUI extends JFrame implements UI {
 
 		return rtn;
 	}
+	*/
 	
 	public int showEncryptModeDialog() {
 		int rtn = CANCEL_OPTION;
@@ -1221,9 +1223,9 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int checkKey() {
 		ThreadManager.getInstance().joinKeyLoadingThread();
-		KeyValidator ki = new KeyValidator();
+		KeyVerifier ki = new KeyVerifier();
 		int response = ki.showDialog(this);
-		if(response == KeyValidator.CHECK_OPTION) {
+		if(response == KeyVerifier.CHECK_OPTION) {
 			setInvalidationFlag(false);
 		}
 		setTempMode(FileManager.getInstance().isTemporary());

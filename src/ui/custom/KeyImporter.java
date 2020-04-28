@@ -10,6 +10,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import config.Language;
+import config.Property;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -25,37 +29,27 @@ public class KeyImporter extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JButton okButton, cancelButton;
 	
-	
 	private int result = CLOSED_OPTION;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			KeyImporter dialog = new KeyImporter();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
+	private Language lang = null;
+	
 	/**
 	 * Create the dialog.
 	 */
 	public KeyImporter() {
-		setTitle("Import key");
+		lang = Property.getLanguagePack();
+		
+		setTitle(lang.kiTitle);
 		setBounds(100, 100, 500, 340);
 		this.setMinimumSize(new Dimension(500,340));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		
-		JLabel lblDoYouReally = new JLabel("Do you really want to import the key?");
+		JLabel lblDoYouReally = new JLabel(lang.kiMainContent);
 		
 		JTextPane txtpnAsd = new JTextPane();
-		txtpnAsd.setText("This process will store your key internally.\r\n\r\nWhen you open this file next time : \r\n  \u2022  Exported keyfile isn't needed anymore.\r\n  \u2022  The file will be decrypted automatically.\r\n\r\nWhen you invalidate keyfile on settings :\r\n  \u2022  The key must be saved before key invalidation.\r\n  \u2022  Or the file won't be able to be decrypted.");
+		txtpnAsd.setText(lang.kiSubContent);
 		txtpnAsd.setEditable(false);
 		
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
@@ -83,12 +77,12 @@ public class KeyImporter extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton("Import the key...\r\n");
+				okButton = new JButton(lang.kiImport);
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				cancelButton = new JButton("Cancel");
+				cancelButton = new JButton(lang.btnCancel);
 				buttonPane.add(cancelButton);
 			}
 		}

@@ -1,11 +1,6 @@
 package config;
 
 public abstract class Language {
-	
-	//KoreanSupport
-	public char testChar_EN = 'a';
-	public char testChar_KO = '\uAC00';
-	
 	//MainUI
 	public String btnNew = "New";
 	public String btnOpen = "Open";
@@ -17,9 +12,6 @@ public abstract class Language {
 	
 	
 	//NotepadUI
-	public String btnOK = "OK";
-	public String btnCancel = "Cancel";
-	
 	public String frmUntitled = "Untitled";
 	public String mbFile = " File ";
 	public String mbEdit = " Edit ";
@@ -101,13 +93,48 @@ public abstract class Language {
 	public String ksLangWarn = " Language(Not Recommended)";
 	public String ksLangWarnHover = "English -> Korean(Not Recommended)";
 	
+	//KeyExporter
+	public String keTitle = "Export Key";
+	public String keKey = "Key";
+	public String keDeleteKey = "delete from the program";
+	public String keSave = "Save";
+	public String keCopy = "Copy";
+	public String keCopied = "Copied";
+	public String keWarn = "1. The keyfile must be PEM format.\n" + 
+			"2. If you export the key of file, the file will not be affected by file-invalidation.\n" + 
+			"3. If you have exported keyfile, you can decrypt the encrypted file on other devices.";
+
+	//KeyImporter
+	public String kiTitle = "Import Key";
+	public String kiMainContent = "Do you really want to import the key?";
+	public String kiSubContent = "This process will store your key internally.\n\n" +
+			"When you open this file next time :\n" +
+			"  \u2022  Exported keyfile isn't needed anymore.\n" +
+			"  \u2022  The file will be decrypted automatically.\n\n" +
+			"When you invalidate keyfile on settings :\n" +
+			"  \u2022  The key must be saved before key invalidation.\n" +
+			"  \u2022  Or the file won't be able to be decrypted.";
+	public String kiImport = "Import the key...";
+	
+	public String txtBoxDrag = "Drag or Open the keyfile.";
+	//KeyOpener
+	public String koTitle = "Enter the Key";
+	public String koMainContent = "Enter the key to use for decryption : ";
+	public String koOpen = "Open the keyfile...";
+	public String koDecrypt = "Decrypt";
+	
+	//keyVerifier
+	public String kvTitle = "Verify the key";
+	public String kvMainContent = "Verify that you have valid key : ";
+	public String kvVerify = "Verify";
+	
 	//Date
 	public String am = "AM";
 	public String pm = "PM";
 	
 	//CheckSave
 	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to [";
-	public String checkSaveToExport_pre = "Your work has to be saved to export key. Do you want to save changes to [";
+	//public String checkSaveToExport_pre = "Your work has to be saved to export key. Do you want to save changes to [";
 	public String checkSave_post = "]?   \n";
 	public String save = "Save";
 	public String noSave = "  Don't Save  ";
@@ -116,6 +143,8 @@ public abstract class Language {
 	public String OOMEWarning = "Out of Memory. Some functions may not work correctly.";
 	
 	//Warning message
+	public String keyNotValid = "The key you entered is not valid for this file. Please go back to import or export the valid key";
+	public String fileFormat_PEM = "The keyfile format must be PEM format. Please check your file format.";
 	public String fileNotExist = "The file does not exist." + " Please check your file name.";
 	public String notAvailable = "N/A";
 	public String warningSaveKey = "The key used for this file is not saved. To open this file next time, keep the key via options below    ";
@@ -124,19 +153,26 @@ public abstract class Language {
 	//status logger
 	public String status_save = " is saved.";
 	public String status_open = " is opened.";
-	public String status_import = "The key of current file is imported";
-	public String status_export = "The key of current file is exported";
+	public String status_import = "The key of current file is imported.";
+	public String status_export = "The key of current file is exported.";
 	
-	//title
-	public String title_openWithExportedKey = "  (The file is opened with exported keyfile.)";
-	public String title_needToImportOrExport = "  (It is required to import or export the key.)";
-	public String title_notEncrypted = "  (The file is not encrypted.)";
+	//MainUI title
+	public String title_openWithExportedKey = "  (Opened with exported keyfile)";
+	public String title_needToImportOrExport = "  (Required to import or export the key)";
+	public String title_notEncrypted = "  (Not encrypted)";
 	
-	
-	//minor things
-	public String defaultFileName = "Untitled";
-	public String fileFilter_txt = "Text Documents (*.txt)";
-	
+	//dialog
+	public String btnOK = "OK";
+	public String btnCancel = "Cancel";
 	public String IHaveExportedKeyFile = "No, I have exported keyfile.";
 	public String yes = "Yes";
+	
+	//Language Support
+	public char testChar_EN = 'a';
+	public char testChar_KO = '\uAC00';
+	
+	//etc
+	public String defaultFileName = "Untitled";
+	public String fileFilter_txt = "Text Documents (*.txt)";
+		
 }

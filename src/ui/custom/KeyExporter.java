@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import config.Language;
 import config.Property;
 import file.FileManager;
 import ui.NotepadUI;
@@ -50,15 +51,19 @@ public class KeyExporter extends JDialog {
 	
 	private NotepadUI frame = null;
 
+	private Language lang;
+	
 	public KeyExporter() {
-		setBounds(100, 100, 520, 370);
+		lang = Property.getLanguagePack();
+		
+		setBounds(100, 100, 520, 390);
 		this.setMinimumSize(new Dimension(520,370));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		setTitle("Export key");
+		setTitle(lang.keTitle);
 
-		JLabel lblKey = new JLabel("Key : ");
+		JLabel lblKey = new JLabel(lang.keKey + " : ");
 
 		txtKey = new JTextArea();
 		txtKey.setText("");
@@ -68,14 +73,13 @@ public class KeyExporter extends JDialog {
 		JScrollPane scrollPane = new JScrollPane(txtKey);
 
 		JTextPane txtpnWarn = new JTextPane();
-		txtpnWarn.setText("1. 암호키를 추출하여 키파일에 저장하면 파일무효화에 영향받지 않습니다.\n"
-				+ "2. 키파일을 갖고 있다면 암호화된 파일을 다른 기기에서도 복호화 할 수 있습니다.\n" + "3. 파일을 저장한 후 키파일을 생성해야 올바른 키파일이 생성됩니다.");
+		txtpnWarn.setText(lang.keWarn);
 		txtpnWarn.setFont(txtpnWarn.getFont().deriveFont(12f));
 		txtpnWarn.setBackground(new Color(0xF0F0F0));
 		txtpnWarn.setFocusable(false);
 		
-		//delete from keyfile
-		chckbxDelete = new JCheckBox("키파일에서 제거하기");
+		//프로그램에서 키 제거하기
+		chckbxDelete = new JCheckBox(lang.keDeleteKey);
 		if(FileManager.getInstance().isTemporary()) {
 			chckbxDelete.setEnabled(false);
 			chckbxDelete.setSelected(false);
@@ -90,9 +94,9 @@ public class KeyExporter extends JDialog {
 					.addContainerGap()
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 						.addComponent(txtpnWarn, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-						.addComponent(scrollPane, Alignment.LEADING)
-						.addComponent(lblKey, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-						.addComponent(chckbxDelete, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+						.addComponent(chckbxDelete, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPanel.setVerticalGroup(
@@ -112,14 +116,14 @@ public class KeyExporter extends JDialog {
 			JPanel buttonPane = new JPanel();
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
-			btnSave = new JButton("Save");
+			btnSave = new JButton(lang.keSave);
 			{
-				btnCopy = new JButton("Copy");
+				btnCopy = new JButton(lang.keCopy);
 				btnCopy.setActionCommand("OK");
 				getRootPane().setDefaultButton(btnCopy);
 			}
 			{
-				btnCancel = new JButton("Cancel");
+				btnCancel = new JButton(lang.btnCancel);
 				btnCancel.setActionCommand("Cancel");
 			}
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -130,7 +134,7 @@ public class KeyExporter extends JDialog {
 		}
 
 		fc = new JFileChooser();
-		fc.setFileFilter(new FileNameExtensionFilter("pem File (*.pem)", "pem"));
+		fc.setFileFilter(new FileNameExtensionFilter("PEM File (*.pem)", "pem"));
 		fc.setAcceptAllFileFilterUsed(false);
 		btnSave.addActionListener(e -> {
 			String filePath = null;
@@ -200,7 +204,7 @@ public class KeyExporter extends JDialog {
 		private int sleepCnt = 3;
 
 		public void run() {
-			btnCopy.setText("Copied");
+			btnCopy.setText(lang.keCopied);
 			btnCopy.setForeground(Color.red);
 
 			for (; sleepCnt > 0; sleepCnt--) {
@@ -212,7 +216,7 @@ public class KeyExporter extends JDialog {
 			}
 
 			if (btnCopy.isShowing()) {
-				btnCopy.setText("Copy");
+				btnCopy.setText(lang.keCopy);
 				btnCopy.setForeground(Color.black);
 			} else {/*do nothing.*/}
 			

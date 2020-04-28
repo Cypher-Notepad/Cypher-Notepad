@@ -355,7 +355,7 @@ public class MainUI extends JFrame implements UI {
 
 		btnOpen.addActionListener(e -> {
 			JFileChooser fc = new JFileChooser();
-			fc.setFileFilter(new FileNameExtensionFilter("Text File (*.txt)", "txt"));
+			fc.setFileFilter(new FileNameExtensionFilter(lang.fileFilter_txt, "txt"));
 			boolean toBeSelected = true;
 			while(toBeSelected) {
 				int response = fc.showOpenDialog(this);
