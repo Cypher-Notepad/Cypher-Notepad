@@ -5,17 +5,11 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -30,9 +24,6 @@ import config.Language;
 import config.Property;
 import file.FileDrop;
 import file.FileManager;
-import thread.ThreadManager;
-import ui.NotepadUI;
-import ui.UIManager;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -40,10 +31,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingUtilities;
-import javax.swing.JTextPane;
 
 public class KeyVerifier extends JDialog {
+	private static final long serialVersionUID = -5181681288167371761L;
 
 	public static final int CHECK_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
@@ -80,9 +70,6 @@ public class KeyVerifier extends JDialog {
 		txtKey.setForeground(txtKey.getDisabledTextColor());
 		txtKey.setText(lang.txtBoxDrag);
 		txtKey.addFocusListener(new FocusListener() {
-
-			boolean isPlaceholder = true;
-			
 			@Override
 			public void focusGained(FocusEvent e) {
 				erasePlaceholder();
@@ -211,6 +198,7 @@ public class KeyVerifier extends JDialog {
 
 		new FileDrop(txtKey, new FileDrop.Listener() {
 			public void filesDropped(java.io.File[] files) {
+				@SuppressWarnings("unused")
 				boolean isDraged = loadPEMFile(files[0]);
 			}
 		});
@@ -261,12 +249,5 @@ public class KeyVerifier extends JDialog {
 
 		setVisible(true);
 		return result;
-	}
-	
-	private String getEnteredKey() {
-		if(result == CHECK_OPTION) {
-			return txtKey.getText();
-		}
-		return null;
 	}
 }

@@ -5,17 +5,11 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -30,9 +24,6 @@ import config.Language;
 import config.Property;
 import file.FileDrop;
 import file.FileManager;
-import thread.ThreadManager;
-import ui.NotepadUI;
-import ui.UIManager;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -40,11 +31,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingUtilities;
-import javax.swing.JTextPane;
 
 public class KeyOpener extends JDialog {
-
+	private static final long serialVersionUID = 949855548485976167L;
+	
 	public static final int DECRYPT_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
 	
@@ -80,9 +70,6 @@ public class KeyOpener extends JDialog {
 		txtKey.setForeground(txtKey.getDisabledTextColor());
 		txtKey.setText(lang.txtBoxDrag);
 		txtKey.addFocusListener(new FocusListener() {
-
-			boolean isPlaceholder = true;
-			
 			@Override
 			public void focusGained(FocusEvent e) {
 				erasePlaceholder();
@@ -138,17 +125,12 @@ public class KeyOpener extends JDialog {
 
 			btnOpen = new JButton(lang.koOpen);
 			btnDecrypt = new JButton(lang.koDecrypt);
-			//btnDecrypt.setActionCommand("Cancel");
+			lblNewLabel = new JLabel("sdfsd        ");
 			
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			buttonPane.add(btnOpen);
-			
-			//lblNewLabel = new JLabel("    ->    ");
-			lblNewLabel = new JLabel("sdfsd        ");
-			
 			buttonPane.add(lblNewLabel);
 			buttonPane.add(btnDecrypt);
-
 		}
 		
 		Thread tr_arrow = new Thread() {
@@ -211,6 +193,7 @@ public class KeyOpener extends JDialog {
 
 		new FileDrop(txtKey, new FileDrop.Listener() {
 			public void filesDropped(java.io.File[] files) {
+				@SuppressWarnings("unused")
 				boolean isDraged = loadPEMFile(files[0]);
 			}
 		});

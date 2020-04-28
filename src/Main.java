@@ -1,7 +1,5 @@
 import crypto.AESImpl;
-import crypto.CryptoFacade;
 import file.FileManager;
-import thread.ThreadManager;
 import ui.UIManager;
 
 public class Main {
@@ -14,7 +12,6 @@ public class Main {
 		}
 	};
 	
-	
 	public static void main(String[] args) throws OutOfMemoryError{
 		long start = System.currentTimeMillis();
 		
@@ -22,7 +19,7 @@ public class Main {
 		UIManager.getInstance().setDefaultUI();
 		
 		long end = System.currentTimeMillis(); 
-		System.out.println( "Loading MainUI time : " + ( end - start )/1000.0 +"sec");
+		System.out.println( "[Main]Loading MainUI time : " + ( end - start )/1000.0 +"sec");
 		threadInit.start();
 		
 	}

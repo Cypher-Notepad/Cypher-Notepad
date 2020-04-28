@@ -252,23 +252,23 @@ public class Property {
 							case FileManager.FILE_NAME_PROP:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 									// Reload new property and apply.
-									System.out.println("[MODIFIED]" + paths.getFileName());
+									System.out.println("[Property] modified " + paths.getFileName());
 									FileManager.getInstance().loadProperties(true);
 									applyReloadedProp();
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("[DELETED]" + paths.getFileName());
+									System.out.println("[Property] deleted" + paths.getFileName());
 									FileManager.getInstance().saveProperties();
 								}
 								break;
 
 							case FileManager.FILE_NAME_KEYS:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-									System.out.println("[MODIFIED]" + paths.getFileName());
+									System.out.println("[Property] modified" + paths.getFileName());
 									FileManager.getInstance().loadKeys(true);
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("[DELETED]" + paths.getFileName());
+									System.out.println("[Property] deleted" + paths.getFileName());
 									FileManager.getInstance().saveKeys();
 								}
 								break;
@@ -301,7 +301,7 @@ public class Property {
 
 		public void startUpdater() {
 			updater.start();
-			System.out.println("[Property]Updater Start!");
+			//System.out.println("[Property]Updater Start");
 		}
 
 	}

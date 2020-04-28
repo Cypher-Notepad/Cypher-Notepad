@@ -27,7 +27,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -35,7 +34,6 @@ import javax.swing.table.TableColumnModel;
 
 import config.Language;
 import config.Property;
-import crypto.AESImpl;
 import file.FileManager;
 import thread.ThreadManager;
 import thread.TrKeyLoad;
@@ -54,10 +52,7 @@ public class MainUI extends JFrame implements UI {
 	int mpX, mpY;
 
 	public MainUI() {
-		
-		System.out.println("[MainUI]Get langueage setting.");
 		lang = Property.getLanguagePack();
-
 	}
 
 	@Override
@@ -76,18 +71,8 @@ public class MainUI extends JFrame implements UI {
 		setBounds(100, 100, 550, 719);
 		this.setLocationRelativeTo(null);
 
-		/*
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(contentPane);
-		*/
-		
 		contentPane = this.getContentPane();
-		
-		//contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-
 		this.setUndecorated(true);
-
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
 		JPanel panel = new JPanel();
@@ -239,13 +224,6 @@ public class MainUI extends JFrame implements UI {
 		contentPane.setLayout(gl_contentPane);
 
 		setVisible(true);
-		System.out.println("[MainUI]MainUI show");
-
-		/*
-		Thread threadInit = new TrInitializeUI();
-		threadInit.start();
-		ThreadManager.getInstance().setInitThead(threadInit);
-		*/
 
 		Thread prepareNotepadUIThread = new TrPrepareNotepadUI();
 		prepareNotepadUIThread.start();
@@ -266,7 +244,6 @@ public class MainUI extends JFrame implements UI {
 	public void addListeners() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -391,11 +368,8 @@ public class MainUI extends JFrame implements UI {
 
 		btnX.addActionListener(e -> {
 			System.out.println("[MainUI] Close Window on Main UI");
-			System.out.println("[1]");
 			ThreadManager.getInstance().joinKeyLoadingThread();
-			System.out.println("[2]");
 			ThreadManager.getInstance().joinThreads();
-			System.out.println("[3]");
 			FileManager.getInstance().saveProperties();
 			UIManager.getInstance().closeWindow();
 			System.exit(0);

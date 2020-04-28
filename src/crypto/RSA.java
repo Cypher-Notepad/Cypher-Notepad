@@ -34,6 +34,7 @@ abstract public class RSA {
 		initialize();
 	}
 	
+	
 	public RSA(boolean decryptMode) {
 		if(decryptMode) {
 			System.out.println("[RSA]RSA initialize. - decrypt mode");
@@ -42,7 +43,7 @@ abstract public class RSA {
 			initialize();
 		}
 	}
-
+	
 	private void initialize() {
 
 		// create a pair of key

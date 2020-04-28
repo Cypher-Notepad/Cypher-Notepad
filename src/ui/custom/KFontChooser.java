@@ -73,7 +73,6 @@ public class KFontChooser extends JDialog {
 	};
 	
 	private ArrayList<String> fontValidation() {
-		//Font test = new Font("Arial", Font.PLAIN, 10);
 		Font test;
 		ArrayList<String> filtered = new ArrayList<String>();
 		
@@ -92,8 +91,6 @@ public class KFontChooser extends JDialog {
 		
 		allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		fonts = allfonts;
-		//fonts = new String[] {};
-		//fonts = fontValidation().toArray(fonts);
 		styles = new String[] { lang.kfcPlain, lang.kfcItalic, lang.kfcBold };
 		sizes = new String[] { "2", "4", "6", "8", "10", "11", "12", "13", "14", "16", "18", "20", "22", "24", "30",
 				"36", "48", "72" };
@@ -125,7 +122,6 @@ public class KFontChooser extends JDialog {
 		txtrScriptView.setPreferredSize(new Dimension(txtViewWidth, txtViewHeight));
 		txtrScriptView.setMaximumSize(new Dimension(txtViewWidth, txtViewHeight));
 
-		//listFont = new JList(fonts);
 		listFont = new JList(fonts);
 		
 		JScrollPane listFontScroll = new JScrollPane(listFont);

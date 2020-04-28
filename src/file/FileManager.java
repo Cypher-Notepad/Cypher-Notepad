@@ -27,7 +27,6 @@ import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
-import ui.MainUI;
 import ui.NotepadUI;
 import ui.UI;
 import ui.UIManager;
@@ -102,7 +101,7 @@ public class FileManager {
 		try {
 			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
-				System.out.println("Create crypto-notepad.keys");
+				System.out.println("[FileManager]Create crypto-notepad.keys");
 				File parentDir = keyFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -177,7 +176,7 @@ public class FileManager {
 			closeIO(keyReader, keyWriter);
 		}
 
-		System.out.println("[KEY] procID : " + processID + ", #ofkeys : " + keys.size());
+		System.out.println("[FileManager] KEY procID : " + processID + ", #ofkeys : " + keys.size());
 	}
 
 	private void closeIO(Closeable... IOs) {
@@ -255,7 +254,7 @@ public class FileManager {
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
 			try {
-				System.out.println("Clear crypto-notepad.keys");
+				System.out.println("[FileManager]Clear crypto-notepad.keys");
 				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				// ========================================================================
@@ -296,7 +295,7 @@ public class FileManager {
 		try {
 			File propFile = new File(propFilePath);
 			if (!propFile.exists()) {
-				System.out.println("Create crypto-notepad.properties");
+				System.out.println("[FileManager]Create crypto-notepad.properties");
 				File parentDir = propFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -336,12 +335,6 @@ public class FileManager {
 		}
 
 	}
-
-	/*
-	public void saveMemo(String filename, MemoVO memo) {
-		saveMemo(String filename, MemoVO memo, boolean isEncrypted
-	}
-	*/
 	
 	public void saveMemo(String filename, MemoVO memo, boolean isEncrypted) {
 		PrintWriter memoWriter = null;
@@ -363,7 +356,7 @@ public class FileManager {
 					crypto.encrypt(memo);
 					NotepadUI.setInvalidationFlag(false);
 					
-					//umm...make new key for the next file.
+					//make new key for the next file.
 					recycleKey = true;
 					if (keys.size() < maxKey) {
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
@@ -386,19 +379,17 @@ public class FileManager {
 				
 				isCurrentFileEncrypted = true;
 			} else {
+				memoWriter.print(memo.getContent());
+				
 				recycleKey = false;
 				keyID = processID;
+				isCurrentFileEncrypted = false;
+				isOpenedWithExportedKey = false;
+				
 				//not To use same key when tempkey - not encrypt - encrypt 
 				isTemporary = false;
 				tempKey = null;
-				
-				memoWriter.print(memo.getContent());
-				
-				isCurrentFileEncrypted = false;
-				isOpenedWithExportedKey = false;
 			}
-			
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -452,7 +443,7 @@ public class FileManager {
 					isCurrentFileEncrypted = false;
 				}
 
-				// Return null not to show up notepadUI(= stay MainUI).
+			// Return null not to show up notepadUI(= stay MainUI).
 			} catch (FileNotFoundException e) {
 				JOptionPane
 						.showMessageDialog(
@@ -531,7 +522,7 @@ public class FileManager {
 			boolean toContinue = true;
 			while (toContinue) {
 				int result = kp.showDialog(frame);
-				if (result == kp.DECRYPT_OPTION) {
+				if (result == KeyOpener.DECRYPT_OPTION) {
 					String key = kp.getEnteredKey();
 					if (key != null) {
 						try {
@@ -539,10 +530,9 @@ public class FileManager {
 							isTemporary = true;
 							tempKey = key;
 							toContinue = false;
-							
 							isCurrentFileEncrypted = true;
-							
 							isOpenedWithExportedKey = true;
+							
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(frame,
 									"Failed to decrypt the file." + " Please try again with valid key.",
@@ -597,24 +587,20 @@ public class FileManager {
 	}
 	
 	public String loadPEMFile(File pem) {
-		//File pem = new File(fileName);
 		BufferedReader pemReader= null;
 		if (pem.exists()) {
 			try {
 				pemReader = new BufferedReader(new FileReader(pem));
 				String content = "";
 				String read = pemReader.readLine();
-				System.out.println("1" + read);
 				if(read != null) {
 					if(read.equals(HEADER_KEY)) {
 						read = pemReader.readLine();
 						while (read != null) {
-							System.out.println("22" + read);
 							content += read + "\r\n";
 							read = pemReader.readLine();
 						}
 						if(content.endsWith(FOOTER_KEY + "\r\n")) {
-							System.out.println("333" + content);
 							return content.substring(0, content.lastIndexOf("\r\n" + FOOTER_KEY));
 						}
 					}

@@ -22,8 +22,7 @@ public abstract class AES {
 	
 	public AES() {
 		System.out.println("[AES]AES initialize.");
-		initialize();
-		
+		initialize();	
 	}
 	
 	public AES(boolean decryptMode) {

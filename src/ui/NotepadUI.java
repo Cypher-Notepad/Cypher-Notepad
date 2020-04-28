@@ -3,17 +3,10 @@ package ui;
 import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +19,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,19 +40,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.MouseInputListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
@@ -77,7 +65,6 @@ import ui.custom.KReplacer;
 import ui.custom.KSettings;
 import ui.custom.KeyExporter;
 import ui.custom.KeyImporter;
-import ui.custom.KeyOpener;
 import ui.custom.KeyVerifier;
 import vo.MemoVO;
 
@@ -136,7 +123,6 @@ public class NotepadUI extends JFrame implements UI {
 	private boolean isEncrypted = true;
 	private static boolean invalidationFlag = false;
 
-	private JTextArea trickTxtArea;
 	FileDrop filedrop = null;
 	
 	private MouseAdapter menuBarCloser = new MouseAdapter() {
@@ -182,7 +168,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public NotepadUI(File file) {
-		/*Never used yet*/
+		/*Never used*/
 		this();
 		String path;
 		try {
@@ -201,8 +187,10 @@ public class NotepadUI extends JFrame implements UI {
 		}
 	}
 
+	/**
+	 * reduce the time for loading.
+	 * */
 	public void initializeUI() {
-		// reduce the time for loading.
 		try {
 			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
@@ -576,7 +564,6 @@ public class NotepadUI extends JFrame implements UI {
 					savedContext = "";
 					undoText = savedContext;
 
-					//keyExportMenuItem.setEnabled(false);
 					setInvalidationFlag(false);
 					FileManager.getInstance().newBtnProcedure();
 					
@@ -584,7 +571,6 @@ public class NotepadUI extends JFrame implements UI {
 					
 					//correct setting.
 					setEncryptMode(true);
-					
 					frame.setTitle(fileName + " - Crypto Notepad");
 				}
 			}
@@ -757,12 +743,8 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		
-		// These listeners must be added after joining init-thread.
-		//[Block A - start]*****************************************************************************
 		cryptoMenuItem.setSelected(true);
 		cryptoMenuItem.addActionListener(new ActionListener() {
-			
 			public void applyInstantly(boolean isEncrypted) {
 				saveSavedMemo(isEncrypted);
 				setTempMode(FileManager.getInstance().isTemporary());
@@ -775,7 +757,6 @@ public class NotepadUI extends JFrame implements UI {
 					if(directory != null) {
 						applyInstantly(true);
 					}
-					System.out.println("Selected");
 				} else {
 					if(directory != null) {
 						int response = showEncryptModeDialog();
@@ -827,8 +808,8 @@ public class NotepadUI extends JFrame implements UI {
 		keyExportMenuItem.addActionListener(e->{
 			exportKey();
 		});
-		//[Block A - end]*****************************************************************************
-
+		
+		
 		// menu mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		editMenu.setMnemonic(KeyEvent.VK_E);
@@ -939,14 +920,6 @@ public class NotepadUI extends JFrame implements UI {
 		savedContext = textArea.getText();
 		memo.setContent(savedContext);
 		FileManager.getInstance().saveMemo(filePath, memo, isEncrypted);
-		/*
-		if(isEncrypted) {
-			keyExportMenuItem.setEnabled(true);
-		} else {
-			keyExportMenuItem.setEnabled(false);
-		}
-		*/
-		frame.setTitle(fileName + " - Crypto Notepad");
 		setTempMode(FileManager.getInstance().isTemporary());
 		
 		statusLogger.showLog(fileName + lang.status_save);
@@ -1085,7 +1058,6 @@ public class NotepadUI extends JFrame implements UI {
 					toBeContinue = false;
 				}
 			} else {
-				System.out.println("Closed option in showDialogImportOrExport()");
 				rtn = CANCEL_OPTION;
 				toBeContinue = false;
 			}
@@ -1105,35 +1077,6 @@ public class NotepadUI extends JFrame implements UI {
 		
 		return rtn;
 	}
-	
-	/*
-	public int showSaveOrNotDialogToExport() {
-		int rtn = CANCEL_OPTION;
-		//to make looks better, add space
-		Object[] options = { "      " +lang.save + "      ", lang.btnCancel };
-
-		int response = JOptionPane.showOptionDialog(frame, lang.checkSaveToExport_pre + fileName + lang.checkSave_post,
-				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
-				options[1]);
-
-		if (response == JOptionPane.YES_OPTION) {
-			if (directory != null) {
-				saveMemo();
-				rtn = YES_OPTION;
-			} else {
-				if(saveAsAction()) {
-					rtn = YES_OPTION;
-				}
-			}
-		} else if (response == JOptionPane.NO_OPTION) {
-			rtn = NO_OPTION;
-		} else {
-			rtn = CANCEL_OPTION;
-		}
-
-		return rtn;
-	}
-	*/
 	
 	public int showEncryptModeDialog() {
 		int rtn = CANCEL_OPTION;
@@ -1166,17 +1109,10 @@ public class NotepadUI extends JFrame implements UI {
 				savedContext = memo.getContent();
 				undoText = savedContext;
 				setInvalidationFlag(false);
-				/*
-				if(memo.getKey() == null) {
-					keyExportMenuItem.setEnabled(false);
-				} else {
-					keyExportMenuItem.setEnabled(true);
-				}
-				*/
+				
 				textArea.setText(memo.getContent());
 				directory = new File(selectedPath.substring(0, selectedPath.lastIndexOf(FileManager.SEPARATOR)));
 				fileName = selectedPath.substring(selectedPath.lastIndexOf(FileManager.SEPARATOR) + 1);
-				//frame.setTitle(fileName + " - Crypto Notepad");
 				setTempMode(FileManager.getInstance().isTemporary());
 				statusLogger.showLog(fileName + lang.status_open);
 				updateRowCol();
@@ -1251,10 +1187,7 @@ public class NotepadUI extends JFrame implements UI {
 					}
 				}
 			} else {
-
-				System.out.println("no app teml");
 				frame.setTitle(fileName + " - Crypto Notepad");
-
 				keyImportMenuItem.setEnabled(false);
 				keyExportMenuItem.setEnabled(true);
 
@@ -1290,7 +1223,6 @@ public class NotepadUI extends JFrame implements UI {
 			try {
 				dialogCreationThread.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -1301,13 +1233,11 @@ public class NotepadUI extends JFrame implements UI {
 			try {
 				dialogCreationThread.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 	
-
 	private class StatusLogger{
 		
 		private TimerThread curThread = null;

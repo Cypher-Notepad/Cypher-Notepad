@@ -21,7 +21,8 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class KeyImporter extends JDialog {
-
+	private static final long serialVersionUID = -426831946642003239L;
+	
 	public static final int IMPORT_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
 	public static final int CLOSED_OPTION = -1;

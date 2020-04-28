@@ -1,7 +1,6 @@
 package thread;
 
 import file.FileManager;
-import ui.NotepadUI;
 
 public class TrKsetInvalidateFile extends Thread{
 	

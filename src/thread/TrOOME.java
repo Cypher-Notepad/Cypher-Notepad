@@ -20,7 +20,6 @@ import javax.management.NotificationListener;
  * https://www.javaspecialists.eu/archive/Issue092.html
  */
 public class TrOOME {
-
 	private static double memoryThreshold = 0.8;
 	private final Collection<ExceedListener> exceedListeners = new ArrayList<ExceedListener>();
 	private final Collection<MemorySafeListener> memSafeListeners = new ArrayList<MemorySafeListener>();

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -33,7 +32,8 @@ import javax.swing.JTextPane;
 import javax.swing.JCheckBox;
 
 public class KeyExporter extends JDialog {
-
+	private static final long serialVersionUID = -7169483905654387775L;
+	
 	public static final int EXPORT_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
 	public static final int CLOSED_OPTION = -1;
@@ -200,7 +200,6 @@ public class KeyExporter extends JDialog {
 	}
 
 	private class CopyThread extends Thread {
-		private boolean stopFlag = false;
 		private int sleepCnt = 3;
 
 		public void run() {
