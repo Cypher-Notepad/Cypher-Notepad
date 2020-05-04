@@ -53,6 +53,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import config.Language;
 import config.Property;
+import dto.MemoVO;
 import file.FileDrop;
 import file.FileManager;
 import thread.ThreadManager;
@@ -66,7 +67,6 @@ import ui.custom.KSettings;
 import ui.custom.KeyExporter;
 import ui.custom.KeyImporter;
 import ui.custom.KeyVerifier;
-import vo.MemoVO;
 
 public class NotepadUI extends JFrame implements UI {
 	private static final long serialVersionUID = -6173408665024649253L;

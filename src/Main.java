@@ -4,7 +4,6 @@ import ui.UIManager;
 
 public class Main {
 
-	
 	private static Thread threadInit = new Thread() {
 		public void run() {
 			new AESImpl();

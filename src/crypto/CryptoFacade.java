@@ -1,7 +1,7 @@
 package crypto;
 import javax.crypto.BadPaddingException;
 
-import vo.MemoVO;
+import dto.MemoVO;
 
 public class CryptoFacade {
 

@@ -27,11 +27,11 @@ import config.Language;
 import config.Property;
 import crypto.CryptoFacade;
 import crypto.RSAImpl;
+import dto.MemoVO;
 import ui.NotepadUI;
 import ui.UI;
 import ui.UIManager;
 import ui.custom.KeyOpener;
-import vo.MemoVO;
 
 public class FileManager {
 
