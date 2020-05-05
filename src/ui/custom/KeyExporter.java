@@ -78,7 +78,6 @@ public class KeyExporter extends JDialog {
 		txtpnWarn.setBackground(new Color(0xF0F0F0));
 		txtpnWarn.setFocusable(false);
 		
-		//프로그램에서 키 제거하기
 		chckbxDelete = new JCheckBox(lang.keDeleteKey);
 		if(FileManager.getInstance().isTemporary()) {
 			chckbxDelete.setEnabled(false);

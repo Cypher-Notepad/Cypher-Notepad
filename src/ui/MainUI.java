@@ -43,7 +43,6 @@ import ui.custom.KButton;
 public class MainUI extends JFrame implements UI {
 
 	private static final long serialVersionUID = -8901510103598913554L;
-	//private JPanel contentPane;
 	private Container contentPane;
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
@@ -368,10 +367,10 @@ public class MainUI extends JFrame implements UI {
 
 		btnX.addActionListener(e -> {
 			System.out.println("[MainUI] Close Window on Main UI");
+			UIManager.getInstance().closeWindow();
 			ThreadManager.getInstance().joinKeyLoadingThread();
 			ThreadManager.getInstance().joinThreads();
 			FileManager.getInstance().saveProperties();
-			UIManager.getInstance().closeWindow();
 			System.exit(0);
 		});
 	}

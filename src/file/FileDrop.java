@@ -8,7 +8,11 @@ import java.io.PrintStream;
 import java.io.Reader;
 
 /**
- * This file is open-source from "http://www.iharder.net/current/java/filedrop/" 
+ * This class is modified version of FileDrop.
+ * @modifier : LeeDongGeon1996 on Github
+ * 
+ * you can see the original version on the link below.
+ * http://www.iharder.net/current/java/filedrop/ 
  ********************************************************************************
  * 
  * This class makes it easy to drag and drop files from the operating

@@ -1,7 +1,6 @@
 package dto;
 import crypto.Encryptable;
 
-
 public class MemoVO implements Encryptable{
 	private String content;
 	private String key;

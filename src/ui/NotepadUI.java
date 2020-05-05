@@ -75,23 +75,23 @@ public class NotepadUI extends JFrame implements UI {
 	private static final int CANCEL_OPTION = 0;
 	
 	// Frame
-	public JFrame frame;
+	private JFrame frame;
 	// Menu bar
-	public JMenuBar menuBar;
+	private JMenuBar menuBar;
 	// Menus
-	public JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
+	private JMenu fileMenu, editMenu, formatMenu, viewMenu, helpMenu;
 	// Menu items
-	public JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, 
+	private JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, 
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
 			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem , 
 			HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
 
-	public JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
+	private JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
 
 	// Text area
 	public static JTextArea textArea = new JTextArea();
-	public JScrollPane scrollPane;
+	private JScrollPane scrollPane;
 	private Font curFont = null;
 
 	//status bar
@@ -103,8 +103,8 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public String fileName;
 	public File directory;
-	public String savedContext;
-	public String undoText;
+	private String savedContext;
+	private String undoText;
 
 	private Thread dialogCreationThread = null;
 	
@@ -197,6 +197,7 @@ public class NotepadUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
+		//fix the bug in Java1.8
 		try {
 			String[][] icons = { { "OptionPane.errorIcon", "65581" }, { "OptionPane.warningIcon", "65577" },
 					{ "OptionPane.questionIcon", "65579" }, { "OptionPane.informationIcon", "65583" } };
@@ -247,7 +248,7 @@ public class NotepadUI extends JFrame implements UI {
 		viewMenu = new JMenu(lang.mbView);
 		helpMenu = new JMenu(lang.mbHelp);
 
-		// add menu to bar, but not set yet.
+		// add menu to bar
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
 		menuBar.add(formatMenu);
@@ -408,14 +409,11 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(950, 500);
 		frame.setResizable(true);
-		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		
 		//curText must be set after loading content.
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
-
 			String curText = undoText;
 			
 			private void update() {
@@ -447,7 +445,6 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		textArea.addMouseWheelListener(new MouseWheelListener() {
-			
 			int rotation = 0;
 
 			@Override
@@ -540,10 +537,10 @@ public class NotepadUI extends JFrame implements UI {
 				fd = new KFinder(textArea);
 				rp = new KReplacer(textArea);
 				
-				// findnext
+				// find next
 				findNextMenuItem.addActionListener(fd);
 				
-				// pagesetup
+				// page setup
 				pageSetupMenuItem.setActionCommand("PageSetup");
 				pageSetupMenuItem.addActionListener(pt);
 				// print
@@ -566,7 +563,6 @@ public class NotepadUI extends JFrame implements UI {
 
 					setInvalidationFlag(false);
 					FileManager.getInstance().newBtnProcedure();
-					
 					setTempMode(FileManager.getInstance().isTemporary());
 					
 					//correct setting.
@@ -628,9 +624,9 @@ public class NotepadUI extends JFrame implements UI {
 		// goto
 		goToMenuItem.setEnabled(false);
 
-		// selectall
+		// select all
 		selectAllMenuItem.addActionListener(e -> textArea.selectAll());
-		// timedate
+		// time date
 		timeDateMenuItem.addActionListener(e -> {
 			Calendar cal = Calendar.getInstance();
 			int hour = cal.get(Calendar.HOUR);
@@ -655,7 +651,7 @@ public class NotepadUI extends JFrame implements UI {
 			textArea.insert(date, textArea.getCaretPosition());
 		});
 
-		// wordwrap
+		// word wrap
 		wordWrapMenuItem.addActionListener(e -> {
 			if (wordWrapMenuItem.isSelected()) {
 				textArea.setLineWrap(true);
@@ -684,7 +680,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		// statusbar
+		// status bar
 		statusBarMenuItem.setSelected(true);
 		statusBarMenuItem.addActionListener(e -> {
 			if (statusBarMenuItem.isSelected()) {

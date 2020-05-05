@@ -34,9 +34,6 @@ public class KeyImporter extends JDialog {
 
 	private Language lang = null;
 	
-	/**
-	 * Create the dialog.
-	 */
 	public KeyImporter() {
 		lang = Property.getLanguagePack();
 		

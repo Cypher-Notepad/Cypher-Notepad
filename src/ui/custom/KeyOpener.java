@@ -78,7 +78,6 @@ public class KeyOpener extends JDialog {
 			@Override
 			public void focusLost(FocusEvent e) {
 				setPlaceholder();
-				//lblKey.requestFocusInWindow();
 			}
 			
 			public void setPlaceholder() {

@@ -227,7 +227,7 @@ public class FileManager {
 	
 	/**
 	 * Used only for key extraction.
-	 * This function modifies the variable, keyID to make effect of deleting the key. 
+	 * This function modifies the keyID variable to effect the key deletion.
 	 * */
 	public void deleteCurrentKey() {
 		if(!isTemporary) {
@@ -529,10 +529,9 @@ public class FileManager {
 							new CryptoFacade().decrypt(readMemo, key);
 							isTemporary = true;
 							tempKey = key;
-							toContinue = false;
 							isCurrentFileEncrypted = true;
 							isOpenedWithExportedKey = true;
-							
+							toContinue = false;
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(frame,
 									"Failed to decrypt the file." + " Please try again with valid key.",
