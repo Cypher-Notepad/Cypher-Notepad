@@ -24,8 +24,12 @@ class KoreanPack extends Language {
 		miOpen = "\uC5F4\uAE30\u0028O\u0029        ";
 		miSave = "\uC800\uC7A5\u0028S\u0029        ";
 		miSaveAs = "\uB2E4\uB978 \uC774\uB984\uC73C\uB85C \uC800\uC7A5\u0028A\u0029...        ";
-		miImporter = "\uD0A4 \uCD94\uAC00\uD558\uAE30...	";
-		miExporter = "\uD0A4 \uCD94\uCD9C\uD558\uAE30...	";
+		
+		miImporter = "\uD504\uB85C\uADF8\uB7A8\uC5D0 \uD0A4 \uCD94\uAC00...  ";
+		miExporter = "\uC678\uBD80\uD30C\uC77C\uC5D0 \uD0A4 \uC800\uC7A5...  ";
+		//miImporter = "\uD0A4 \uCD94\uAC00\uD558\uAE30...	";
+		//miExporter = "\uD0A4 \uCD94\uCD9C\uD558\uAE30...	";
+		
 		miPageSet = "\uD398\uC774\uC9C0 \uC124\uC815\u0028U\u0029...        ";
 		miPrint = "\uC778\uC1C4\u0028P\u0029...        ";
 		miExit = "\uB05D\uB0B4\uAE30\u0028X\u0029        ";
