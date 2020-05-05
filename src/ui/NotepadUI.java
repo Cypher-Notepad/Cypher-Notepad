@@ -297,6 +297,9 @@ public class NotepadUI extends JFrame implements UI {
 		txtPanRowCol = new JTextPane();
 		txtPanMagnification = new JTextPane();
 		txtPanMagnification.setText("100%");
+		txtPaneStatus.setEditable(false);
+		txtPanRowCol.setEditable(false);
+		txtPanMagnification.setEditable(false);
 		
 		//initial call
 		statusLogger = new StatusLogger();
