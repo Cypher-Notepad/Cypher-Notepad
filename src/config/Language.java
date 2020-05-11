@@ -96,7 +96,7 @@ public abstract class Language {
 	//KeyExporter
 	public String keTitle = "Export Key";
 	public String keKey = "Key";
-	public String keDeleteKey = "delete from the program";
+	public String keDeleteKey = "delete from program";
 	public String keSave = "Save";
 	public String keCopy = "Copy";
 	public String keCopied = "Copied";
@@ -118,14 +118,14 @@ public abstract class Language {
 	
 	public String txtBoxDrag = "Drag or Open the keyfile.";
 	//KeyOpener
-	public String koTitle = "Enter the Key";
-	public String koMainContent = "Enter the key to use for decryption : ";
-	public String koOpen = "Open the keyfile...";
+	public String koTitle = "Enter Key";
+	public String koMainContent = "Enter the key for decryption : ";
+	public String koOpen = "Open keyfile...";
 	public String koDecrypt = "Decrypt";
 	
 	//keyVerifier
-	public String kvTitle = "Verify the key";
-	public String kvMainContent = "Verify that you have valid key : ";
+	public String kvTitle = "Verification";
+	public String kvMainContent = "Verify your key : ";
 	public String kvVerify = "Verify";
 	
 	//Date
@@ -148,7 +148,7 @@ public abstract class Language {
 	public String fileNotExist = "The file does not exist." + " Please check your file name.";
 	public String notAvailable = "N/A";
 	public String warningSaveKey = "The key used for this file is not saved. To open this file next time, keep the key via options below    ";
-	public String warningTurnOffEncryption = "Do you want to turn off encryption mode?     \nIt will be applied instantly. If you have exported keyfile, it will be invalidated.    ";
+	public String warningTurnOffEncryption = "Do you really want to turn off encryption mode?     \nIt will be applied instantly. If you have exported keyfile, it will be invalidated.    ";
 	
 	//status logger
 	public String status_save = " is saved.";
@@ -157,8 +157,9 @@ public abstract class Language {
 	public String status_export = "The key of current file is exported.";
 	
 	//MainUI title
-	public String title_openWithExportedKey = "  (Opened with exported keyfile)";
-	public String title_needToImportOrExport = "  (Required to import or export the key)";
+	public String title_openWithExportedKey = "  (opened with exported keyfile)";
+	public String title_needToImportOrExport = "  (required to import or export the key)";
+	
 	public String title_notEncrypted = "  (Not encrypted)";
 	
 	//dialog

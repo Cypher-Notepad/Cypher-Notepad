@@ -98,7 +98,7 @@ public class KFontChooser extends JDialog {
 
 		this.setTitle(lang.kfcTitle);
 
-		setBounds(100, 100, 556, 621);
+		//setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -299,8 +299,10 @@ public class KFontChooser extends JDialog {
 			}
 		}
 
-		setLocationRelativeTo(jframe);
+		this.pack();
+		setBounds(100, 100, 556, 621);
 		setResizable(false);
+		setLocationRelativeTo(jframe);
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 	}
 
@@ -317,7 +319,7 @@ public class KFontChooser extends JDialog {
 		listStyle.setSelectedIndex(getStyleIdx(curFont.getStyle()));
 		listSize.setSelectedValue(String.valueOf(curFont.getSize() - FONT_SIZE_CORRECTION), true);
 
-		this.pack();
+		
 		setVisible(true);
 		return isConfirmed;
 	}
