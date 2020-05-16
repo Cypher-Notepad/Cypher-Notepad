@@ -51,7 +51,7 @@ public class KInformation extends JDialog {
 		txtpnCryptonotepadVersion.setEditable(false);
 		txtpnCryptonotepadVersion.setBackground(new Color(240, 240, 240));
 		txtpnCryptonotepadVersion.setText(
-				"\r\nThe Crypto-Notepad was built for protecting user's data. Its interface is from the Microsoft Windows10 Notepad. \r\n\r\n\r\nThe source code of this program may be found on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". You are always welcome to press the \"follow\" and \"star\" button.");
+				"\r\nThe Cypher Notepad was built for protecting user's data. It provides user-friendly security so that users don't need to worry about encryption. \r\n\r\nThe source code of this program may be found on Github, \"https://github.com/LeeDongGeon1996/Crypto-Notepad\". You are always welcome to press the \"follow\" and \"star\" button.");
 		
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -62,7 +62,7 @@ public class KInformation extends JDialog {
 		lblIcon.setIcon(Icon1);
 		
 		JTextPane txtpnG = new JTextPane();
-		txtpnG.setText("Crypto-Notepad\r\nVersion 2.0\r\nImplemented by \"LEEDONGGEON1996\" on Github");
+		txtpnG.setText("Cypher Notepad\r\nVersion 2.1\r\nImplemented by \"LeeDongGeon1996\" on Github");
 		txtpnG.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtpnG.setEditable(false);
 		txtpnG.setBackground(new Color(240, 240, 240));
@@ -101,7 +101,7 @@ public class KInformation extends JDialog {
 					.addContainerGap(40, Short.MAX_VALUE))
 		);
 
-		JLabel lblNewLabel = new JLabel("Crypto Notepad");
+		JLabel lblNewLabel = new JLabel("Cypher Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 

@@ -54,8 +54,8 @@ class KoreanPack extends Language {
 		miStsBar = "\uC0C1\uD0DC \uD45C\uC2DC\uC904\u0028S\u0029        ";
 
 		miViewHelp = "\uB3C4\uC6C0\uB9D0 \uBCF4\uAE30\u0028H\u0029        ";
-		miCNWeb = "Crypto Notepad \uD648\uD398\uC774\uC9C0";
-		miAbtCN = "Crypto Notepad \uC815\uBCF4\u0028A\u0029        ";
+		miCNWeb = "Cypher Notepad \uD648\uD398\uC774\uC9C0";
+		miAbtCN = "Cypher Notepad \uC815\uBCF4\u0028A\u0029        ";
 		miSetting = "\uC124\uC815\u0028S\u0029        ";
 
 		// KFinder

@@ -180,7 +180,7 @@ public class KeyOpener extends JDialog {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Crypto Notepad",
+								lang.fileNotExist, "Cypher Notepad",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -222,7 +222,7 @@ public class KeyOpener extends JDialog {
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					lang.fileFormat_PEM, "Crypto Notepad",
+					lang.fileFormat_PEM, "Cypher Notepad",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		

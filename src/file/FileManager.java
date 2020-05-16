@@ -449,7 +449,7 @@ public class FileManager {
 						.showMessageDialog(
 								frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
 										+ "\n(" + e.getClass().getName() + ")",
-								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (NumberFormatException e) {
 				/*
@@ -457,7 +457,7 @@ public class FileManager {
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
 										+ "\n(" + e.getClass().getName() + ")",
-								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				*/
 				return loadMemoTemporary(frame, readMemo);
 			} catch (IllegalArgumentException e) {
@@ -466,7 +466,7 @@ public class FileManager {
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
 										+ "\n(" + e.getClass().getName() + ")",
-								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				*/
 				return loadMemoTemporary(frame, readMemo);
 			} catch (NullPointerException | IOException e) {
@@ -474,14 +474,14 @@ public class FileManager {
 						.showMessageDialog(frame,
 								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
 										+ "\n(" + e.getClass().getName() + ")",
-								"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
 				/*
 				JOptionPane.showMessageDialog(
 						frame, "[ERROR]" + "\nUnable to decrypt this file."
 								+ "\nThe configuration file may be corrupted." + "\n(" + e.getClass().getName() + ")",
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+						"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				*/
 				return loadMemoTemporary(frame, readMemo);
 			} catch (Exception e) {
@@ -489,14 +489,14 @@ public class FileManager {
 						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
 								+ "\nPlease contact developer via email with error name below."
 								+ "\n*E-mail : matth1996@hanmail.net" + "\n**Error Name : " + e.getClass().getName(),
-						"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+						"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 				return null;
 			}
 
 		} else {
 			JOptionPane.showMessageDialog(frame,
-					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", "Crypto Notepad",
+					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", "Cypher Notepad",
 					JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -535,7 +535,7 @@ public class FileManager {
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(frame,
 									"Failed to decrypt the file." + " Please try again with valid key.",
-									"Crypto Notepad", JOptionPane.ERROR_MESSAGE);
+									"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				} else {

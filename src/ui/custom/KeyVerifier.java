@@ -186,7 +186,7 @@ public class KeyVerifier extends JDialog {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Crypto Notepad",
+								lang.fileNotExist, "Cypher Notepad",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -207,7 +207,7 @@ public class KeyVerifier extends JDialog {
 			String enteredKey = txtKey.getText();
 			if((enteredKey == null) || (!enteredKey.equals(FileManager.getInstance().getCurKey()))) {
 				JOptionPane.showMessageDialog(this,
-						lang.keyNotValid, "Crypto Notepad",
+						lang.keyNotValid, "Cypher Notepad",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				result = CHECK_OPTION;
@@ -236,7 +236,7 @@ public class KeyVerifier extends JDialog {
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					lang.fileFormat_PEM, "Crypto Notepad",
+					lang.fileFormat_PEM, "Cypher Notepad",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		

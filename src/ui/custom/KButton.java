@@ -18,7 +18,7 @@ import javax.swing.JButton;
 
 /**
  *
- * @auauthor oXCToo
+ * @author oXCToo
  */
 @SuppressWarnings("serial")
 public class KButton extends JButton {

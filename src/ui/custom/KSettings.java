@@ -306,7 +306,7 @@ public class KSettings extends JDialog {
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		panelForBtn.setLayout(gl_panelForBtn);
 
-		JLabel lblNewLabel = new JLabel("Crypto Notepad");
+		JLabel lblNewLabel = new JLabel("Cypher Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 

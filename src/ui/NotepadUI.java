@@ -137,7 +137,7 @@ public class NotepadUI extends JFrame implements UI {
 		lang = Property.getLanguagePack();
 
 		fileName = lang.frmUntitled;
-		frame = new JFrame(fileName + " - Crypto Notepad");
+		frame = new JFrame(fileName + " - Cypher Notepad");
 		savedContext = "";
 		undoText = savedContext;
 
@@ -175,7 +175,7 @@ public class NotepadUI extends JFrame implements UI {
 			path = file.getCanonicalPath();
 			directory = new File(path.substring(0, path.lastIndexOf(FileManager.SEPARATOR)));
 			fileName = path.substring(path.lastIndexOf(FileManager.SEPARATOR) + 1);
-			frame = new JFrame(fileName + " - Crypto Notepad");
+			frame = new JFrame(fileName + " - Cypher Notepad");
 			MemoVO loadedContent = FileManager.getInstance().loadMemo(frame, path);
 			savedContext = loadedContent.getContent();
 			undoText = savedContext;
@@ -570,7 +570,7 @@ public class NotepadUI extends JFrame implements UI {
 					
 					//correct setting.
 					setEncryptMode(true);
-					frame.setTitle(fileName + " - Crypto Notepad");
+					frame.setTitle(fileName + " - Cypher Notepad");
 				}
 			}
 		});
@@ -1006,7 +1006,7 @@ public class NotepadUI extends JFrame implements UI {
 		Object[] options = { lang.save, lang.noSave, lang.btnCancel };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.checkSave_pre + fileName + lang.checkSave_post,
-				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 				options[0]);
 
 		if (response == JOptionPane.YES_OPTION) {
@@ -1035,7 +1035,7 @@ public class NotepadUI extends JFrame implements UI {
 		while (toBeContinue) {
 			int response = JOptionPane.showOptionDialog(frame,
 					lang.warningSaveKey,
-					"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+					"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 					options[0]);
 
 			if (response == 0) {
@@ -1083,7 +1083,7 @@ public class NotepadUI extends JFrame implements UI {
 		Object[] options = { "      " + lang.yes + "      ", lang.btnCancel };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.warningTurnOffEncryption,
-				"Crypto Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 				options[1]);
 
 		if(response == 0) {
@@ -1173,19 +1173,19 @@ public class NotepadUI extends JFrame implements UI {
 				if (directory != null) {
 					if(FileManager.getInstance().isOpenedWithExportedKey()) {
 						frame.setTitle(
-								fileName + " - Crypto Notepad" + lang.title_openWithExportedKey);
+								fileName + " - Cypher Notepad" + lang.title_openWithExportedKey);
 						keyImportMenuItem.setEnabled(true);
 						keyExportMenuItem.setEnabled(false);
 					} else {
 						/*the case of invalidation*/
 						frame.setTitle(
-								fileName + " - Crypto Notepad" + lang.title_needToImportOrExport);
+								fileName + " - Cypher Notepad" + lang.title_needToImportOrExport);
 						keyImportMenuItem.setEnabled(true);
 						keyExportMenuItem.setEnabled(true);
 					}
 				}
 			} else {
-				frame.setTitle(fileName + " - Crypto Notepad");
+				frame.setTitle(fileName + " - Cypher Notepad");
 				keyImportMenuItem.setEnabled(false);
 				keyExportMenuItem.setEnabled(true);
 
@@ -1194,7 +1194,7 @@ public class NotepadUI extends JFrame implements UI {
 			
 		} else {
 			if (directory != null) {
-				frame.setTitle(fileName + " - Crypto Notepad" + lang.title_notEncrypted);
+				frame.setTitle(fileName + " - Cypher Notepad" + lang.title_notEncrypted);
 			}
 			keyImportMenuItem.setEnabled(false);
 			keyExportMenuItem.setEnabled(false);

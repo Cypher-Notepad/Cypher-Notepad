@@ -298,6 +298,6 @@ public class KReplacer extends JDialog {
 
 	
 	private void showInfoMessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg, "Crypto Notepad", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg, "Cypher Notepad", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

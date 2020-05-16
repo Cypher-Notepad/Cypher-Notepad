@@ -134,7 +134,7 @@ public class MainUI extends JFrame implements UI {
 						.addGap(4)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE)));
 
-		JLabel lblNewLabel = new JLabel("Crypto Notepad");
+		JLabel lblNewLabel = new JLabel("Cypher Notepad");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
@@ -355,7 +355,7 @@ public class MainUI extends JFrame implements UI {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Crypto Notepad",
+								lang.fileNotExist, "Cypher Notepad",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
