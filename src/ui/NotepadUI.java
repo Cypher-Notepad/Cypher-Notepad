@@ -1133,7 +1133,6 @@ public class NotepadUI extends JFrame implements UI {
 		KeyImporter importer = new KeyImporter();
 		int response = importer.showDialog(frame);
 		if(response == KeyImporter.IMPORT_OPTION) {
-			System.out.println("Do import");
 			String filePath = directory + FileManager.SEPARATOR + fileName;
 			MemoVO savedContextMemo = new MemoVO();
 			savedContextMemo.setContent(savedContext);
@@ -1196,9 +1195,9 @@ public class NotepadUI extends JFrame implements UI {
 		} else {
 			if (directory != null) {
 				frame.setTitle(fileName + " - Crypto Notepad" + lang.title_notEncrypted);
-				keyImportMenuItem.setEnabled(false);
-				keyExportMenuItem.setEnabled(false);
 			}
+			keyImportMenuItem.setEnabled(false);
+			keyExportMenuItem.setEnabled(false);
 			setEncryptMode(false);
 			
 		}
