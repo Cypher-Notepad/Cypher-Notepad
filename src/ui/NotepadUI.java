@@ -719,7 +719,7 @@ public class NotepadUI extends JFrame implements UI {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
 					Desktop.getDesktop()
-					.browse(new URI("https://leedonggeon1996.github.io/Cypher-Notepad-Web/"));
+					.browse(new URI("https://Cypher-Notepad.github.io"));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e1) {
