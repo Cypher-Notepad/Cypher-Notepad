@@ -2,6 +2,12 @@ import crypto.AESImpl;
 import file.FileManager;
 import ui.UIManager;
 
+/**
+ * @author LeeDongGeon1996
+ * @release 2020.05.21 Cypher Notepad 2.1 
+ * 
+ */
+
 public class Main {
 
 	private static Thread threadInit = new Thread() {
