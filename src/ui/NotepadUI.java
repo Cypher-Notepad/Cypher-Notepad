@@ -349,7 +349,7 @@ public class NotepadUI extends JFrame implements UI {
 		editMenu.add(findMenuItem);
 		editMenu.add(findNextMenuItem);
 		editMenu.add(replaceMenuItem);
-		editMenu.add(goToMenuItem);
+		//editMenu.add(goToMenuItem);
 		editMenu.addSeparator();
 		editMenu.add(selectAllMenuItem);
 		editMenu.add(timeDateMenuItem);

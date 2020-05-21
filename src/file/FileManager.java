@@ -40,16 +40,15 @@ public class FileManager {
 	public static final String DIR_NAME = HOME_DIR + "Crypto-Notepad" + SEPARATOR;
 	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
 	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
-	private static final int NUM_HEADER_LINE = 9;
-	private static final String HEADER_WARNING = "####################################################\r\n" + 
-			"##		     *Warning*			  ##\r\n" + 
-			"## This file has been encrypted. By using Windows ##\r\n" +
-			"## Notepad, you can not access this file anymore. ##\r\n" +
-			"## Please open it with valid key. Do not modify	  ##\r\n" +
-			"## anything in this file including this message	  ##\r\n" +
-			"## or you will never be able to recover its	  ##\r\n" +
-			"## original content.       _LEEDONGGEON1996_      ##\r\n" +
-			"####################################################\r\n";
+	private static final int NUM_HEADER_LINE = 8;
+	private static final String HEADER_WARNING = "____________________Warning_____________________\r\n" + 
+			" This file has been encrypted. By using Windows\r\n" +
+			" Notepad, you can not access this file anymore.\r\n" +
+			" Please open it with valid key. Do not modify\r\n" +
+			" anything in this file including this message\r\n" +
+			" or you will never be able to recover its\r\n" +
+			" original content.\r\n" +
+			"________________________________________________\r\n";
 	private static final String HEADER_KEY = "-----BEGIN RSA PRIVATE KEY-----";
 	private static final String FOOTER_KEY = "-----END RSA PRIVATE KEY-----";
 	
