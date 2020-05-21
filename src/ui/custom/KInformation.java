@@ -51,7 +51,7 @@ public class KInformation extends JDialog {
 		txtpnCryptonotepadVersion.setEditable(false);
 		txtpnCryptonotepadVersion.setBackground(new Color(240, 240, 240));
 		txtpnCryptonotepadVersion.setText(
-				"\r\nThe Cypher Notepad was built for protecting user's data. It provides user-friendly security so that users don't need to worry about encryption. \r\n\r\nThe source code of this program may be found on Github, \"https://github.com/Cypher-Notepad/Cypher-Notepad\".  You are always welcome to press the \"follow\" and \"star\" button.");
+				"\r\nThe Cypher Notepad was built for protecting user's data. It provides user-friendly security so that users don't need to care about encryption. \r\n\r\nThe source code of this program may be found on Github, \"https://github.com/Cypher-Notepad/Cypher-Notepad\".  You are always welcome to press the \"follow\" and \"star\" button.");
 		
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
