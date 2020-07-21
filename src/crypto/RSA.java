@@ -25,6 +25,7 @@ import javax.crypto.NoSuchPaddingException;
 abstract public class RSA {
 	private static final int KEY_SIZE = 1024;
 	private static final String ENCRYPT_ALGO = "RSA";
+	/* ECB mode for RSA is meaningless because RSA in Java doesn't support block encryption. */
 	private static final String TRANSFORMATION = ENCRYPT_ALGO + "/ECB/OAEPWithSHA-1AndMGF1Padding";
 	private byte[] publicKey = null;
 	private byte[] privateKey = null;

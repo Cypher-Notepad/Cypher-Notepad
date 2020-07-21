@@ -22,7 +22,8 @@ import ui.NotepadUI;
 import ui.custom.KFontChooser;
 
 public class Property {
-
+	public static final String CURRENT_VERSION = "2.1.0.0";
+	
 	public static String version = "VERSION";
 	public static String language = "LANGUAGE";
 	public static String nOfRcntFiles = "NUMBER_OF_RECENT_FILES";
@@ -58,7 +59,9 @@ public class Property {
 
 	public static void load(InputStream inStream) {
 		try {
-			Property.getProperties().load(inStream);
+			Properties prop = Property.getProperties();
+			prop.load(inStream);
+			prop.setProperty(version, CURRENT_VERSION);
 			switch (Property.getProperties().getProperty(Property.language)) {
 			case "KOREAN":
 				LazyHolder.INSTANCE.languagePack = new KoreanPack();
@@ -82,7 +85,9 @@ public class Property {
 
 	public static void reload(InputStream inStream) {
 		try {
-			Property.getProperties().load(inStream);
+			Properties prop = Property.getProperties();
+			prop.load(inStream);
+			prop.setProperty(version, CURRENT_VERSION);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -98,6 +103,7 @@ public class Property {
 
 	public static void setDefaultProperties() {
 		Properties prop = Property.getProperties();
+		prop.setProperty(version, CURRENT_VERSION);
 		prop.setProperty(nOfRcntFiles, "5");
 		prop.setProperty(nOfKeys, "8192");
 		prop.setProperty(fontFamily, "Dialog");
@@ -108,7 +114,7 @@ public class Property {
 
 	public static void initialize() {
 		Properties prop = Property.getProperties();
-		prop.setProperty(version, "2.1");
+		prop.setProperty(version, CURRENT_VERSION);
 		prop.setProperty(language, "ENGLISH");
 		prop.setProperty(nOfRcntFiles, "5");
 		prop.setProperty(nOfKeys, "8192");

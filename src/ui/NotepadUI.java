@@ -64,6 +64,7 @@ import ui.custom.KInformation;
 import ui.custom.KPrinter;
 import ui.custom.KReplacer;
 import ui.custom.KSettings;
+import ui.custom.KUpdater;
 import ui.custom.KeyExporter;
 import ui.custom.KeyImporter;
 import ui.custom.KeyVerifier;
@@ -85,7 +86,7 @@ public class NotepadUI extends JFrame implements UI {
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
 			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem , 
-			HomepageMenuItem, aboutNotepadMenuItem, settingsMenuItem;
+			HomepageMenuItem, aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
 
 	private JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
 
@@ -289,6 +290,7 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
 		HomepageMenuItem = new JMenuItem(lang.miCNWeb);
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
+		updateMenuItem = new JMenuItem("Check for update");
 		settingsMenuItem = new JMenuItem(lang.miSetting);
 		
 		statusBar = new JPanel();
@@ -366,6 +368,7 @@ public class NotepadUI extends JFrame implements UI {
 		helpMenu.add(aboutNotepadMenuItem);
 		helpMenu.add(HomepageMenuItem);
 		helpMenu.addSeparator();
+		helpMenu.add(updateMenuItem);
 		helpMenu.add(settingsMenuItem);
 
 		// sets it
@@ -733,6 +736,10 @@ public class NotepadUI extends JFrame implements UI {
 			checkDialogCreated(info);
 			info.showDialog();
 		});
+		
+		updateMenuItem.addActionListener(e -> {
+			new KUpdater().showDialog();
+		});
 
 		// settings
 		settingsMenuItem.addActionListener(e -> {
@@ -835,8 +842,11 @@ public class NotepadUI extends JFrame implements UI {
 		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
 		timeDateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		
-		HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		cryptoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+		
 		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
 		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 		
 
