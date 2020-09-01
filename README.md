@@ -4,7 +4,11 @@
 
 > A Java-based, plain-text (<code>.txt</code>) editor for file encryption.
 
-To see all the information of Cypher Notepad, [See our documentation](https://cyphernotepad.com/wiki/#/?coverpage=false).
+<br>
+
+Easy, Secure, Simple, Free, and **Compatible with any OS**
+<br>
+To download, [See our documentation](https://cyphernotepad.com/wiki/#/?coverpage=false).
 
 ## What is Cypher Notepad?
 
@@ -43,5 +47,8 @@ It uses hybrid encryption, both RSA and AES:
 Then, your RSA secret key is saved internally. 
 
 ![algo](https://cypher-notepad.github.io/resource/algorithm.png) 
+
+
+### To see all the information of Cypher Notepad, [See our documentation](https://cyphernotepad.com/wiki/#/?coverpage=false).
 
 
