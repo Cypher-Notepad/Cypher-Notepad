@@ -37,12 +37,12 @@ public class FileManager {
 
 	public static final String SEPARATOR = File.separator;
 	public static final String HOME_DIR = System.getProperty("user.home") + SEPARATOR;
-	public static final String DIR_NAME = HOME_DIR + "Crypto-Notepad" + SEPARATOR;
-	public static final String FILE_NAME_PROP = "crypto-notepad.properties";
-	public static final String FILE_NAME_KEYS = "crypto-notepad.keys";
+	public static final String DIR_NAME = HOME_DIR + "Cypher-Notepad" + SEPARATOR;
+	public static final String FILE_NAME_PROP = "cypher-notepad.properties";
+	public static final String FILE_NAME_KEYS = "cypher-notepad.keys";
 	private static final int NUM_HEADER_LINE = 8;
 	private static final String HEADER_WARNING = "____________________Warning_____________________\r\n" + 
-			" This file has been encrypted. By using Windows\r\n" +
+			" This file has been encrypted. By using normal \r\n" +
 			" Notepad, you can not access this file anymore.\r\n" +
 			" Please open it with valid key. Do not modify\r\n" +
 			" anything in this file including this message\r\n" +
@@ -100,7 +100,7 @@ public class FileManager {
 		try {
 			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
-				System.out.println("[FileManager]Create crypto-notepad.keys");
+				System.out.println("[FileManager]Create cypher-notepad.keys");
 				File parentDir = keyFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -253,7 +253,7 @@ public class FileManager {
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
 			try {
-				System.out.println("[FileManager]Clear crypto-notepad.keys");
+				System.out.println("[FileManager]Clear cypher-notepad.keys");
 				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				// ========================================================================
@@ -294,7 +294,7 @@ public class FileManager {
 		try {
 			File propFile = new File(propFilePath);
 			if (!propFile.exists()) {
-				System.out.println("[FileManager]Create crypto-notepad.properties");
+				System.out.println("[FileManager]Create cypher-notepad.properties");
 				File parentDir = propFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -327,7 +327,7 @@ public class FileManager {
 		OutputStream outStream;
 		try {
 			outStream = new FileOutputStream(DIR_NAME + FILE_NAME_PROP);
-			Property.store(outStream, "Crypto-notepad User Properties");
+			Property.store(outStream, "Cypher-notepad User Properties");
 			outStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
