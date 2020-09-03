@@ -85,7 +85,7 @@ public class NotepadUI extends JFrame implements UI {
 	private JMenuItem newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, keyImportMenuItem, keyExportMenuItem, 
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
-			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem , 
+			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem, sendFeedbackMenuItem, 
 			HomepageMenuItem, aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
 
 	private JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
@@ -288,7 +288,8 @@ public class NotepadUI extends JFrame implements UI {
 		statusBarMenuItem = new JCheckBoxMenuItem(lang.miStsBar);
 
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
-		HomepageMenuItem = new JMenuItem(lang.miCNWeb);
+		sendFeedbackMenuItem = new JMenuItem("Send Feedback");
+		//HomepageMenuItem = new JMenuItem(lang.miCNWeb);
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
 		updateMenuItem = new JMenuItem("Check for update");
 		settingsMenuItem = new JMenuItem(lang.miSetting);
@@ -363,13 +364,17 @@ public class NotepadUI extends JFrame implements UI {
 
 		viewMenu.add(statusBarMenuItem);
 
-		//helpMenu.add(viewHelpMenuItem);
-		//helpMenu.addSeparator();
-		helpMenu.add(aboutNotepadMenuItem);
-		helpMenu.add(HomepageMenuItem);
+		helpMenu.add(viewHelpMenuItem);
+		helpMenu.add(sendFeedbackMenuItem);
 		helpMenu.addSeparator();
 		helpMenu.add(updateMenuItem);
 		helpMenu.add(settingsMenuItem);
+		helpMenu.addSeparator();
+		helpMenu.add(aboutNotepadMenuItem);
+		//helpMenu.add(HomepageMenuItem);
+		
+		
+		
 
 		// sets it
 		frame.setJMenuBar(menuBar);
@@ -718,6 +723,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
+		/*
 		HomepageMenuItem.addActionListener(e->{
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
@@ -730,6 +736,7 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		});
+		*/
 
 		// about
 		aboutNotepadMenuItem.addActionListener(e -> {
@@ -844,10 +851,11 @@ public class NotepadUI extends JFrame implements UI {
 		
 		cryptoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
 		
-		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-		HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-		updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+		viewHelpMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		//HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
+		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 		
 
 		// sub menu mnemonic keys
@@ -878,7 +886,7 @@ public class NotepadUI extends JFrame implements UI {
 
 		statusBarMenuItem.setMnemonic(KeyEvent.VK_S);
 
-		//viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
+		viewHelpMenuItem.setMnemonic(KeyEvent.VK_H);
 		aboutNotepadMenuItem.setMnemonic(KeyEvent.VK_A);
 		settingsMenuItem.setMnemonic(KeyEvent.VK_S);
 
