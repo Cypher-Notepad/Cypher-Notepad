@@ -1158,7 +1158,7 @@ public class NotepadUI extends JFrame implements UI {
 		int response = new KeyExporter().showDialog(this);
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
-			FileManager.getInstance().setOpenedWithExportedKey(true);
+			//FileManager.getInstance().setOpenedWithExportedKey(true);
 			statusLogger.showLog(lang.status_export);
 		}
 		setTempMode(FileManager.getInstance().isTemporary());

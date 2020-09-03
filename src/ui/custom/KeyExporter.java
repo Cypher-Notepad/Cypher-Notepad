@@ -1,5 +1,6 @@
 package ui.custom;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
@@ -8,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -34,6 +36,9 @@ import javax.swing.JCheckBox;
 public class KeyExporter extends JDialog {
 	private static final long serialVersionUID = -7169483905654387775L;
 	
+	private static final int SHORT_HEIGHT = 390;
+	private static final int LONG_HEIGHT = 450;
+	
 	public static final int EXPORT_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
 	public static final int CLOSED_OPTION = -1;
@@ -56,7 +61,11 @@ public class KeyExporter extends JDialog {
 	public KeyExporter() {
 		lang = Property.getLanguagePack();
 		
-		setBounds(100, 100, 520, 390);
+		//original size
+		//setBounds(100, 100, 520, 390);
+		
+		setBounds(100, 100, 520, LONG_HEIGHT);
+		
 		this.setMinimumSize(new Dimension(520,370));
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,13 +87,33 @@ public class KeyExporter extends JDialog {
 		txtpnWarn.setBackground(new Color(0xF0F0F0));
 		txtpnWarn.setFocusable(false);
 		
+		JTextPane txtpnWarn2 = new JTextPane();
+		txtpnWarn2.setText("4. This will re-encrypt the file with the new encrpytion key.\n5. The PEM file will be created with the new encryption key.");
+		txtpnWarn2.setFont(txtpnWarn.getFont().deriveFont(12f));
+		txtpnWarn2.setBackground(new Color(0xF0F0F0));
+		txtpnWarn2.setFocusable(false);
+		
 		chckbxDelete = new JCheckBox(lang.keDeleteKey);
-		if(FileManager.getInstance().isTemporary()) {
-			chckbxDelete.setEnabled(false);
-			chckbxDelete.setSelected(false);
-		} else {
-			chckbxDelete.setSelected(true);
-		}
+		
+		chckbxDelete.addItemListener(e -> {
+			if(chckbxDelete.isSelected()) {
+				txtKey.setBackground(new Color(0xE8E8E8));
+				txtKey.setForeground(txtKey.getDisabledTextColor());
+				txtKey.setText("N/A for security reason.");
+				btnCopy.setEnabled(false);
+				btnCopy.setForeground(txtKey.getDisabledTextColor());
+				txtpnWarn2.setVisible(true);
+				this.setSize(this.getWidth(), LONG_HEIGHT);
+			} else {
+				txtKey.setBackground(Color.WHITE);
+				txtKey.setForeground(Color.BLACK);
+				txtKey.setText(FileManager.getInstance().getCurKey());
+				btnCopy.setEnabled(true);
+				btnCopy.setForeground(Color.BLACK);
+				txtpnWarn2.setVisible(false);
+				this.setSize(this.getWidth(), SHORT_HEIGHT);
+			}
+		});
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 		gl_contentPanel.setHorizontalGroup(
@@ -92,10 +121,11 @@ public class KeyExporter extends JDialog {
 				.addGroup(gl_contentPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(txtpnWarn2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
 						.addComponent(txtpnWarn, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
 						.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-						.addComponent(chckbxDelete, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
+						.addComponent(lblKey, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+						.addComponent(chckbxDelete, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_contentPanel.setVerticalGroup(
@@ -106,9 +136,12 @@ public class KeyExporter extends JDialog {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtpnWarn, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+					.addComponent(txtpnWarn, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(chckbxDelete, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(chckbxDelete))
+					.addComponent(txtpnWarn2, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		contentPanel.setLayout(gl_contentPanel);
 		{
@@ -143,11 +176,13 @@ public class KeyExporter extends JDialog {
 				if (!filePath.endsWith(".pem")) {
 					filePath += ".pem";
 				}
-				FileManager.getInstance().exportKey(filePath, txtKey.getText());
+				
 				if(chckbxDelete.isSelected()) {
 					FileManager.getInstance().deleteCurrentKey();
 					frame.saveSavedMemo(true);
 				}
+				
+				FileManager.getInstance().exportKey(filePath, FileManager.getInstance().getCurKey());
 				
 				result = EXPORT_OPTION;
 				setVisible(false);
@@ -183,7 +218,13 @@ public class KeyExporter extends JDialog {
 		result = CLOSED_OPTION;
 		this.frame = frame;
 		
-		txtKey.setText(FileManager.getInstance().getCurKey());
+		if(FileManager.getInstance().isTemporary()) {
+			chckbxDelete.setEnabled(false);
+			chckbxDelete.setSelected(false);
+		} else {
+			chckbxDelete.setSelected(true);
+		}
+		//txtKey.setText(FileManager.getInstance().getCurKey());
 		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
 		int fileExtensionIdx = keyFileName.lastIndexOf('.');
 		if(fileExtensionIdx == -1) {
@@ -215,7 +256,11 @@ public class KeyExporter extends JDialog {
 
 			if (btnCopy.isShowing()) {
 				btnCopy.setText(lang.keCopy);
-				btnCopy.setForeground(Color.black);
+				if(btnCopy.isEnabled()) {
+					btnCopy.setForeground(Color.black);	
+				} else {
+					btnCopy.setForeground(txtKey.getDisabledTextColor());
+				}
 			} else {/*do nothing.*/}
 			
 			//remove reference.

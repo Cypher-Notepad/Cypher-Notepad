@@ -147,6 +147,7 @@ public class FileManager {
 						}
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
+					System.out.println("test : procID : " + processID);
 					//recycleKey = false;
 				} else {
 					processID = new Random().nextInt(maxKey);
@@ -231,7 +232,20 @@ public class FileManager {
 	public void deleteCurrentKey() {
 		if(!isTemporary) {
 			System.out.println("[FileManager] key deleted.");
-			tempKey = getCurKey();
+			
+			//legacy
+			//tempKey = getCurKey();
+			
+			//generate the new key.
+			tempKey = RSAImpl.getInstance(true).getPrivateKey();
+			
+			//then, prepare another new key for the next file.
+			addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
+			keys.add(RSAImpl.getInstance().getPrivateKey());
+			processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
+			
+			System.out.println("tset222 procID:" + processID);
+			
 			isTemporary = true;
 			isOpenedWithExportedKey = true;
 			

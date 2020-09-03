@@ -96,7 +96,7 @@ public abstract class Language {
 	//KeyExporter
 	public String keTitle = "Export Key";
 	public String keKey = "Key";
-	public String keDeleteKey = "delete from program";
+	public String keDeleteKey = "delete from program (highly recommended)";
 	public String keSave = "Save";
 	public String keCopy = "Copy";
 	public String keCopied = "Copied";
