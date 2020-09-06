@@ -399,7 +399,7 @@ public class FileManager {
 				isCurrentFileEncrypted = false;
 				isOpenedWithExportedKey = false;
 				
-				//not To use same key when tempkey - not encrypt - encrypt 
+				// not to use same key when temp key - not encrypt - encrypt 
 				isTemporary = false;
 				tempKey = null;
 			}

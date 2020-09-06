@@ -184,7 +184,6 @@ public class KeyVerifier extends JDialog {
 							toBeSelected = false;
 						}
 					} else {
-						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
 								lang.fileNotExist, "Cypher Notepad",
 								JOptionPane.ERROR_MESSAGE);

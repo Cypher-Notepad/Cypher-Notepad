@@ -165,8 +165,9 @@ public abstract class Language {
 	//dialog
 	public String btnOK = "OK";
 	public String btnCancel = "Cancel";
+	public String btnNo = "No";
 	public String IHaveExportedKeyFile = "No, I have exported keyfile.";
-	public String yes = "Yes";
+	public String btnYes = "Yes";
 	
 	//Language Support
 	public char testChar_EN = 'a';

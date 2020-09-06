@@ -200,8 +200,12 @@ public class NotepadUI extends JFrame implements UI {
 
 		//fix the bug in Java1.8
 		try {
-			String[][] icons = { { "OptionPane.errorIcon", "65581" }, { "OptionPane.warningIcon", "65577" },
-					{ "OptionPane.questionIcon", "65579" }, { "OptionPane.informationIcon", "65583" } };
+			String[][] icons = {
+				    {"OptionPane.warningIcon",     "65581"},
+				    {"OptionPane.questionIcon",    "65583"},
+				    {"OptionPane.errorIcon",       "65585"},
+				    {"OptionPane.informationIcon", "65587"}
+				};
 			// obtain a method for creating proper icons
 			Method getIconBits = Class.forName("sun.awt.shell.Win32ShellFolder2").getDeclaredMethod("getIconBits",
 					new Class[] { long.class, int.class });
@@ -706,15 +710,7 @@ public class NotepadUI extends JFrame implements UI {
 		viewHelpMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
-					if (Property.getProperties().get(Property.language).equals("ENGLISH")) {
-						Desktop.getDesktop()
-								.browse(new URI("https://www.bing.com/search?q=windows+10+notepad+help&FORM=AWRE"));
-					} else {
-						Desktop.getDesktop().browse(new URI("https://www.bing.com/search?q=windows+"
-								+ "10%ec%9d%98+%eb%a9%94%eb%aa%a8%ec%9e%a5%ec%97%90+%eb%8c%80%ed%95%9c+"
-								+ "%eb%8f%84%ec%9b%80%eb%a7%90+%eb%b3%b4%ea%b8%b0&filters=guid%3a%224466414-ko-dia%22+"
-								+ "lang%3a%22ko%22&ocid=HelpPane-BingIA&setmkt=en-us&setlang=en-us"));
-					}
+					Desktop.getDesktop().browse(new URI("https://cyphernotepad.com/wiki/#/howtouse"));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				} catch (URISyntaxException e1) {
@@ -738,10 +734,16 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		*/
 
-		// about
-		aboutNotepadMenuItem.addActionListener(e -> {
-			checkDialogCreated(info);
-			info.showDialog();
+		sendFeedbackMenuItem.addActionListener(e -> {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://cyphernotepad.com/wiki/#/contact_us"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
 		});
 		
 		updateMenuItem.addActionListener(e -> {
@@ -754,6 +756,12 @@ public class NotepadUI extends JFrame implements UI {
 			if (st.showDialog()) {
 				st.applySettings();
 			}
+		});
+		
+		// about
+		aboutNotepadMenuItem.addActionListener(e -> {
+			checkDialogCreated(info);
+			info.showDialog();
 		});
 		
 		cryptoMenuItem.setSelected(true);
@@ -853,7 +861,7 @@ public class NotepadUI extends JFrame implements UI {
 		
 		viewHelpMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		//HomepageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-		updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+		//updateMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		settingsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
 		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 		
@@ -911,22 +919,29 @@ public class NotepadUI extends JFrame implements UI {
 	public boolean saveAsAction() {
 		boolean rtn = false;
 		checkJFileChooserCreated(fc);
-		int userSelection = fc.showSaveDialog(frame);
-		if (userSelection == JFileChooser.APPROVE_OPTION) {
-			fileName = fc.getSelectedFile().getName();
-			if (!fileName.endsWith(".txt")) {
-				fileName += ".txt";
+		
+		boolean selectAgain = true;
+		while (selectAgain) {
+			int userSelection = fc.showSaveDialog(frame);
+			if (userSelection == JFileChooser.APPROVE_OPTION) {
+				String filePath = fc.getSelectedFile().getPath();
+				if (!filePath.endsWith(".txt")) {
+					filePath += ".txt";
+				}
+				File file = new File(filePath);
+				
+				if(!((new File(filePath).exists()) && (showOverwritingDialog(file.getName())!=YES_OPTION))) {
+					directory = fc.getCurrentDirectory();
+					saveMemo();
+					
+					Property.addRecentFiles(directory + FileManager.SEPARATOR + fileName);
+					
+					selectAgain = false;
+					rtn = true;
+				}
+			} else {
+				selectAgain = false;
 			}
-			directory = fc.getCurrentDirectory();
-			saveMemo();
-
-			Property.addRecentFiles(directory + FileManager.SEPARATOR + fileName);
-
-			rtn = true;
-		} else if (userSelection == JFileChooser.CANCEL_OPTION) {
-			//do nothing.
-		} else if (userSelection == JFileChooser.ERROR_OPTION) {
-			//do nothing.
 		}
 		return rtn;
 	}
@@ -1098,10 +1113,28 @@ public class NotepadUI extends JFrame implements UI {
 	public int showEncryptModeDialog() {
 		int rtn = CANCEL_OPTION;
 		//to make looks better, add space
-		Object[] options = { "      " + lang.yes + "      ", lang.btnCancel };
+		Object[] options = { "      " + lang.btnYes + "      ", lang.btnNo };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.warningTurnOffEncryption,
 				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				options[1]);
+
+		if(response == 0) {
+			rtn = YES_OPTION;
+		} else {
+			rtn = CANCEL_OPTION;
+		}
+		
+		return rtn;
+	}
+	
+	public int showOverwritingDialog(String fileName) {
+		int rtn = CANCEL_OPTION;
+		//to make looks better, add space
+		Object[] options = { "      " + lang.btnYes + "      ", lang.btnNo };
+
+		int response = JOptionPane.showOptionDialog(frame, "[" + fileName + "] already exists. \r\n Do you want to replace it?",
+				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options,
 				options[1]);
 
 		if(response == 0) {

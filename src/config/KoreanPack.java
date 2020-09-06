@@ -166,8 +166,9 @@ class KoreanPack extends Language {
 		//dialog
 		btnOK = "\uD655\uC778";
 		btnCancel = "\uCDE8\uC18C";
+		//btnNo = "No";
 		IHaveExportedKeyFile = "\uC544\uB2C8\uC624\u002C \uC774\uBBF8 \uC554\uD638\uD0A4\uB97C \uC54C\uACE0 \uC788\uC2B5\uB2C8\uB2E4.";
-		yes = "\uC608";
+		btnYes = "\uC608";
 		
 		//etc
 		defaultFileName = "\uC81C\uBAA9 \uC5C6\uC74C";
