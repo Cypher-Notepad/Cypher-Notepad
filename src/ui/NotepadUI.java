@@ -778,6 +778,7 @@ public class NotepadUI extends JFrame implements UI {
 					if(directory != null) {
 						applyInstantly(true);
 					}
+					statusLogger.showLog("Encryption mode is on.");
 				} else {
 					if(directory != null) {
 						int response = showEncryptModeDialog();
@@ -787,11 +788,13 @@ public class NotepadUI extends JFrame implements UI {
 						} else {
 							cryptoMenuItem.setSelected(true);
 							isEncrypted = true;
+							return ;
 						}
 						
 					} else {
 						isEncrypted = false;
 					}
+					statusLogger.showLog("Encryption mode is off.");
 				}
 			}
 		});
@@ -928,9 +931,10 @@ public class NotepadUI extends JFrame implements UI {
 				if (!filePath.endsWith(".txt")) {
 					filePath += ".txt";
 				}
-				File file = new File(filePath);
 				
+				File file = new File(filePath);
 				if(!((new File(filePath).exists()) && (showOverwritingDialog(file.getName())!=YES_OPTION))) {
+					fileName = file.getName();
 					directory = fc.getCurrentDirectory();
 					saveMemo();
 					
