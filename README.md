@@ -1,4 +1,4 @@
-# Cypher Notepad  [![Documentaion](https://img.shields.io/badge/documentation-%20is%20ready-brightgreen?style=flat-square)](https://cyphernotepad.com/wiki/#/?coverpage=false)
+# <img src="https://cypher-notepad.github.io/resource/icon.ico" width="8%">Cypher Notepad  [![Documentaion](https://img.shields.io/badge/documentation-%20is%20ready-brightgreen?style=flat-square)](https://cyphernotepad.com/wiki/#/?coverpage=false)
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Cypher-Notepad/Cypher-Notepad?style=flat-square) ![GitHub Release Date](https://img.shields.io/github/release-date/cypher-notepad/cypher-notepad?style=flat-square) ![GitHub All Releases](https://img.shields.io/github/downloads/cypher-notepad/cypher-notepad/total?color=%23ff69b4&style=flat-square) [![HitCount](http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad.svg)](http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad) ![GitHub last commit](https://img.shields.io/github/last-commit/cypher-notepad/cypher-notepad?style=flat-square)
 
@@ -8,7 +8,7 @@
 
 Easy, Secure, Simple, Free, and **Compatible with any OS**
 <br>
-To download, [See our documentation](https://cyphernotepad.com/wiki/#/?coverpage=false).
+To download, [See our documentation](https://cyphernotepad.com/wiki/#/installation).
 
 ## What is Cypher Notepad?
 
