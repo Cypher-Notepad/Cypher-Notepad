@@ -927,7 +927,7 @@ public class NotepadUI extends JFrame implements UI {
 		while (selectAgain) {
 			int userSelection = fc.showSaveDialog(frame);
 			if (userSelection == JFileChooser.APPROVE_OPTION) {
-				String filePath = fc.getSelectedFile().getPath();
+				String filePath = fc.getSelectedFile().getAbsolutePath();
 				if (!filePath.endsWith(".txt")) {
 					filePath += ".txt";
 				}

@@ -170,24 +170,33 @@ public class KeyExporter extends JDialog {
 		fc.setAcceptAllFileFilterUsed(false);
 		btnSave.addActionListener(e -> {
 			String filePath = null;
-			int userSelection = fc.showSaveDialog(this);
-			if (userSelection == JFileChooser.APPROVE_OPTION) {
-				filePath = fc.getSelectedFile().getAbsolutePath();
-				if (!filePath.endsWith(".pem")) {
-					filePath += ".pem";
+			boolean selectAgain = true;
+			
+			while(selectAgain) {
+				int userSelection = fc.showSaveDialog(this);
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+					filePath = fc.getSelectedFile().getAbsolutePath();
+					if (!filePath.endsWith(".pem")) {
+						filePath += ".pem";
+					}
+					
+					File file = new File(filePath);
+					if(!((new File(filePath).exists()) && (frame.showOverwritingDialog(file.getName())!=1))) {
+						if(chckbxDelete.isSelected()) {
+							FileManager.getInstance().deleteCurrentKey();
+							frame.saveSavedMemo(true);
+						}
+						
+						FileManager.getInstance().exportKey(filePath, FileManager.getInstance().getCurKey());
+						
+						selectAgain = false;
+						result = EXPORT_OPTION;
+						setVisible(false);
+					}
+				} else {
+					selectAgain = false;
 				}
-				
-				if(chckbxDelete.isSelected()) {
-					FileManager.getInstance().deleteCurrentKey();
-					frame.saveSavedMemo(true);
-				}
-				
-				FileManager.getInstance().exportKey(filePath, FileManager.getInstance().getCurKey());
-				
-				result = EXPORT_OPTION;
-				setVisible(false);
-			} else if (userSelection == JFileChooser.CANCEL_OPTION) {/* do nothing.*/}
-			else if (userSelection == JFileChooser.ERROR_OPTION) {/* do nothing.*/}
+			}
 		});
 
 		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
