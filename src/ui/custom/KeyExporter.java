@@ -88,7 +88,7 @@ public class KeyExporter extends JDialog {
 		txtpnWarn.setFocusable(false);
 		
 		JTextPane txtpnWarn2 = new JTextPane();
-		txtpnWarn2.setText("4. This will re-encrypt the file with the new encrpytion key.\n5. The PEM file will be created with the new encryption key.");
+		txtpnWarn2.setText(lang.keWarn2);
 		txtpnWarn2.setFont(txtpnWarn.getFont().deriveFont(12f));
 		txtpnWarn2.setBackground(new Color(0xF0F0F0));
 		txtpnWarn2.setFocusable(false);
@@ -229,7 +229,7 @@ public class KeyExporter extends JDialog {
 		
 		if(FileManager.getInstance().isTemporary()) {
 			chckbxDelete.setEnabled(false);
-			chckbxDelete.setSelected(false);
+			chckbxDelete.setSelected(true);
 		} else {
 			chckbxDelete.setSelected(true);
 		}

@@ -49,8 +49,10 @@ public abstract class Language {
 	public String miStsBar = "Status Bar        ";
 	
 	public String miViewHelp = "View Help        ";
+	public String miSendFeedback = "Send Feedback";
 	public String miCNWeb = "Cypher Notepad Website    ";
 	public String miAbtCN = "About Cypher Notepad        ";
+	public String miUpdate = "Check for update";
 	public String miSetting = "Settings        ";
 	
 	//KFinder
@@ -103,7 +105,9 @@ public abstract class Language {
 	public String keWarn = "1. The keyfile must be PEM format.\n" + 
 			"2. If you export the key of file, the file will not be affected by file-invalidation.\n" + 
 			"3. If you have exported keyfile, you can decrypt the encrypted file on other devices.";
-
+	public String keWarn2 = "4. This will re-encrypt the file with the new encrpytion key.\n" + 
+			"5. The PEM file will be created with the new encryption key.";
+	
 	//KeyImporter
 	public String kiTitle = "Import Key";
 	public String kiMainContent = "Do you really want to import the key?";
@@ -128,6 +132,18 @@ public abstract class Language {
 	public String kvMainContent = "Verify your key : ";
 	public String kvVerify = "Verify";
 	
+	//KUpdater
+	public String kuCheck = "Check for update";
+	public String kuDefaultResult = "Press the button below to check the latest version.";
+	public String kuCheckingResult = "Checking...";
+	public String kuNewVersionResult_pre = "";
+	public String kuNewVersionResult_post = " has been released!!";
+	public String kuUpToDate = "You're up to date.";
+	public String kuGetTheLatestVersion = "Get the latest version!";
+	public String kuCurVersion = "Current version: ";
+	public String kuLatVersion = "Latest version : ";
+	public String kuFailedToConnect = "Cannot Connect to the server.\nPlease check your network connection.";
+			
 	//Date
 	public String am = "AM";
 	public String pm = "PM";
@@ -148,18 +164,23 @@ public abstract class Language {
 	public String fileNotExist = "The file does not exist." + " Please check your file name.";
 	public String notAvailable = "N/A";
 	public String warningSaveKey = "The key used for this file is not saved. To open this file next time, keep the key via options below    ";
-	public String warningTurnOffEncryption = "Do you really want to turn off encryption mode?     \nIt will be applied instantly. If you have exported keyfile, it will be invalidated.    ";
+	public String warningTurnOffEncryption = "Do you really want to turn off encryption mode?     \n" + 
+			"It will be applied instantly. If you already have exported keyfile, it will be invalidated.    ";
+	public String warnOverwriteFile_pre = " [";
+	public String warnOverwriteFile_post = "] already exists. \n Do you want to replace it?        ";
+	
 	
 	//status logger
 	public String status_save = " is saved.";
 	public String status_open = " is opened.";
 	public String status_import = "The key of current file is imported.";
 	public String status_export = "The key of current file is exported.";
+	public String status_turnOnEncryption = "Encryption mode ON.";
+	public String status_turnOffEncryption = "Encryption mode OFF.";
 	
 	//MainUI title
 	public String title_openWithExportedKey = "  (opened with exported keyfile)";
 	public String title_needToImportOrExport = "  (required to import or export the key)";
-	
 	public String title_notEncrypted = "  (Not encrypted)";
 	
 	//dialog

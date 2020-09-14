@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -35,6 +36,8 @@ import javax.swing.JTextArea;
 public class KUpdater extends JDialog {
 
 	private static final long serialVersionUID = -4760411000350458806L;
+	private static final String latestVersionURL = "https://Cypher-Notepad.github.io/version.html";
+	private static final String latestReleaseNoteURL = "https://github.com/Cypher-Notepad/Cypher-Notepad/releases/latest";
 	
 	private JPanel contentPane;
 	private JTextArea txtrConsole; 
@@ -43,12 +46,6 @@ public class KUpdater extends JDialog {
 	public boolean isConfirmed;
 
 	private Language lang;
-	
-	private Thread trCheckVersion = new Thread() {
-		public void run() {
-			
-		}
-	};
 	
 	/**
 	 * Create the dialog.
@@ -66,11 +63,11 @@ public class KUpdater extends JDialog {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0x68217A));
 
-		btnCheck = new JButton("Check for update");
+		btnCheck = new JButton(lang.kuCheck);
 		btnCheck.addActionListener(e -> {
 			btnCheck.setEnabled(false);
 
-			if(btnCheck.getText().equals("Check for update")) {
+			if(btnCheck.getText().equals(lang.kuCheck)) {
 				TrVersionChecker versionChecker = new TrVersionChecker();
 				versionChecker.start();
 
@@ -78,7 +75,7 @@ public class KUpdater extends JDialog {
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 					try {
 						Desktop.getDesktop()
-						.browse(new URI("https://github.com/Cypher-Notepad/Cypher-Notepad/releases/latest"));
+						.browse(new URI(latestReleaseNoteURL));
 					} catch (IOException | URISyntaxException e1) {
 						e1.printStackTrace();
 					}
@@ -96,7 +93,7 @@ public class KUpdater extends JDialog {
 			setVisible(false);
 		});
 
-		lblResult = new JLabel("");
+		lblResult = new JLabel(lang.kuDefaultResult);
 		lblResult.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -216,11 +213,11 @@ public class KUpdater extends JDialog {
 		
 		public void run() {	
 			try {
-				lblResult.setText("Checking...");
+				lblResult.setText(lang.kuCheckingResult);
 				txtrConsole.setText("Start to check version of Cypher Notepad....\n");
 				txtrConsole.append("connecting to server...");
 				
-				URL oracle = new URL("https://Cypher-Notepad.github.io/version.html");
+				URL oracle = new URL(latestVersionURL);
 				in = new BufferedReader(new InputStreamReader(oracle.openStream()));
 			
 				txtrConsole.append("OK\n");
@@ -233,27 +230,30 @@ public class KUpdater extends JDialog {
 				
 				txtrConsole.append("OK\n");
 				txtrConsole.append("\n===============\n");
-				txtrConsole.append("Current version: " + curVersion + "\n");
-				txtrConsole.append("Latest version : " + latestVersion);
+				txtrConsole.append(lang.kuCurVersion + curVersion + "\n");
+				txtrConsole.append(lang.kuLatVersion + latestVersion);
+				
 				if(Integer.parseInt(latestVersion.replace(".", "")) 
 						> Integer.parseInt(curVersion.replace(".", ""))){
 					result = OUTDATED;
-					lblResult.setText("Cypher Notepad " + latestVersion + " has been released!!");
+					lblResult.setText(lang.kuNewVersionResult_pre + "Cypher Notepad " + latestVersion + lang.kuNewVersionResult_post);
 				} else {
 					result = LATEST;
-					lblResult.setText("You're up to date");
+					lblResult.setText(lang.kuUpToDate);
 				}
 				
 				if(result == TrVersionChecker.OUTDATED) {
 					if(btnCheck.isShowing()) {
-						btnCheck.setText("Get the latest version!");
+						btnCheck.setText(lang.kuGetTheLatestVersion);
 					}
 				} 
 				btnCheck.setEnabled(true);
 				
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				lblResult.setText("");
+				txtrConsole.append("\n===============\n");
+				txtrConsole.append(lang.kuFailedToConnect);
 			}
 		}
 	}

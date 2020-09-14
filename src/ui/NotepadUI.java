@@ -292,10 +292,10 @@ public class NotepadUI extends JFrame implements UI {
 		statusBarMenuItem = new JCheckBoxMenuItem(lang.miStsBar);
 
 		viewHelpMenuItem = new JMenuItem(lang.miViewHelp);
-		sendFeedbackMenuItem = new JMenuItem("Send Feedback");
+		sendFeedbackMenuItem = new JMenuItem(lang.miSendFeedback);
 		//HomepageMenuItem = new JMenuItem(lang.miCNWeb);
 		aboutNotepadMenuItem = new JMenuItem(lang.miAbtCN);
-		updateMenuItem = new JMenuItem("Check for update");
+		updateMenuItem = new JMenuItem(lang.miUpdate);
 		settingsMenuItem = new JMenuItem(lang.miSetting);
 		
 		statusBar = new JPanel();
@@ -778,7 +778,7 @@ public class NotepadUI extends JFrame implements UI {
 					if(directory != null) {
 						applyInstantly(true);
 					}
-					statusLogger.showLog("Encryption mode is on.");
+					statusLogger.showLog(lang.status_turnOnEncryption);
 				} else {
 					if(directory != null) {
 						int response = showEncryptModeDialog();
@@ -794,7 +794,7 @@ public class NotepadUI extends JFrame implements UI {
 					} else {
 						isEncrypted = false;
 					}
-					statusLogger.showLog("Encryption mode is off.");
+					statusLogger.showLog(lang.status_turnOffEncryption);
 				}
 			}
 		});
@@ -1137,7 +1137,7 @@ public class NotepadUI extends JFrame implements UI {
 		//to make looks better, add space
 		Object[] options = { "      " + lang.btnYes + "      ", lang.btnNo };
 
-		int response = JOptionPane.showOptionDialog(frame, "[" + fileName + "] already exists. \r\n Do you want to replace it?",
+		int response = JOptionPane.showOptionDialog(frame, lang.warnOverwriteFile_pre + fileName + lang.warnOverwriteFile_post,
 				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options,
 				options[1]);
 

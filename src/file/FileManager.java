@@ -508,9 +508,7 @@ public class FileManager {
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(frame,
-					"[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name.", "Cypher Notepad",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, lang.fileNotExist, "Cypher Notepad", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 
