@@ -1248,12 +1248,15 @@ public class NotepadUI extends JFrame implements UI {
 			setEncryptMode(true);
 			
 		} else {
-			if (directory != null) {
-				frame.setTitle(fileName + " - Cypher Notepad" + lang.title_notEncrypted);
-			}
 			keyImportMenuItem.setEnabled(false);
 			keyExportMenuItem.setEnabled(false);
-			setEncryptMode(false);
+			
+			if (directory != null) {
+				frame.setTitle(fileName + " - Cypher Notepad" + lang.title_notEncrypted);
+				setEncryptMode(false);
+			} else {
+				setEncryptMode(true);
+			}
 			
 		}
 	}
