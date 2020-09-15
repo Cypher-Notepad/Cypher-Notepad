@@ -1,14 +1,25 @@
-# <img src="https://cypher-notepad.github.io/resource/icon.ico" width="8%">Cypher Notepad  [![Documentaion](https://img.shields.io/badge/documentation-%20is%20ready-brightgreen?style=flat-square)](https://cyphernotepad.com/wiki/#/?coverpage=false)
+<p align="center">
+  <a href="https://Cypher-Notepad.github.io/"><img height="200" style="height:200px;" src="https://cypher-notepad.github.io/resource/icon.ico" alt="Cypher Notepad"></a>
+  <h1 align="center">Cypher Notepad</h1>
+</p>
+<p align="center">
+  <a href="https://Cypher-Notepad.github.io/wiki/#/?coverpage=false"><img src="https://img.shields.io/badge/documentation-%20is%20ready-brightgreen?style=flat-square" alt="Documentation is ready" /></a>
+  <br>
+  A Java-based, plain-text (<code>.txt</code>) editor for file encryption.
+  <br>
+  <i>Easy, Secure, Simple, Free, and <b>Compatible with any OS</b></i>
+</p>
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/Cypher-Notepad/Cypher-Notepad?style=flat-square) ![GitHub Release Date](https://img.shields.io/github/release-date/cypher-notepad/cypher-notepad?style=flat-square) ![GitHub All Releases](https://img.shields.io/github/downloads/cypher-notepad/cypher-notepad/total?color=%23ff69b4&style=flat-square) [![HitCount](http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad.svg)](http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad) ![GitHub last commit](https://img.shields.io/github/last-commit/cypher-notepad/cypher-notepad?style=flat-square)
+<p align="center">
+ <img src="https://img.shields.io/github/v/release/Cypher-Notepad/Cypher-Notepad?style=flat-square" alt="GitHub release (latest by date)" />
+ <img src="https://img.shields.io/github/release-date/cypher-notepad/cypher-notepad?style=flat-square" alt="GitHub Release Date" />
+ <img src="https://img.shields.io/github/downloads/cypher-notepad/cypher-notepad/total?color=%23ff69b4&style=flat-square" alt="GitHub All Releases" />
+ <img src="https://img.shields.io/github/last-commit/cypher-notepad/cypher-notepad?style=flat-square" alt="GitHub last commit" />
+ <a href="http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad"><img src="http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad.svg" alt="HitCount" /></a>
+</p>
 
-> A Java-based, plain-text (<code>.txt</code>) editor for file encryption.
 
-<br>
-
-Easy, Secure, Simple, Free, and **Compatible with any OS**
-<br>
-To download, [See our documentation](https://cyphernotepad.com/wiki/#/installation).
+### To download, [See our documentation](https://cyphernotepad.com/wiki/#/installation).
 
 ## What is Cypher Notepad?
 
