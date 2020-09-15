@@ -37,7 +37,7 @@ public class KUpdater extends JDialog {
 
 	private static final long serialVersionUID = -4760411000350458806L;
 	private static final String latestVersionURL = "https://Cypher-Notepad.github.io/version.html";
-	private static final String latestReleaseNoteURL = "https://github.com/Cypher-Notepad/Cypher-Notepad/releases/latest";
+	private static final String latestReleaseNoteURL = "https://Cypher-Notepad.github.io/wiki/#/release_note?id=latest-release";
 	
 	private JPanel contentPane;
 	private JTextArea txtrConsole; 

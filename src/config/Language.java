@@ -142,7 +142,7 @@ public abstract class Language {
 	public String kuGetTheLatestVersion = "Get the latest version!";
 	public String kuCurVersion = "Current version: ";
 	public String kuLatVersion = "Latest version : ";
-	public String kuFailedToConnect = "Cannot Connect to the server.\nPlease check your network connection.";
+	public String kuFailedToConnect = "Cannot connect to the server.\nPlease check your network connection.";
 			
 	//Date
 	public String am = "AM";
