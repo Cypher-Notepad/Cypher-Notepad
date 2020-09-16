@@ -40,6 +40,7 @@ import config.Property;
 public class KFontChooser extends JDialog {
 
 	private static final long serialVersionUID = -3202168458886792245L;
+	
 	public static final int FONT_SIZE_CORRECTION = 7;
 	private static final String TEST_STRING = "AaBbYyZz";
 	private final JPanel contentPanel = new JPanel();
@@ -98,15 +99,12 @@ public class KFontChooser extends JDialog {
 
 		this.setTitle(lang.kfcTitle);
 
-		//setBounds(100, 100, 556, 621);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
 		JLabel lblFont = new JLabel(lang.kfcFamily);
-
 		JLabel lblFontStyle = new JLabel(lang.kfcStyle);
-
 		JLabel lblFontSize = new JLabel(lang.kfcSize);
 
 		JPanel panel = new JPanel();
@@ -183,7 +181,7 @@ public class KFontChooser extends JDialog {
 		JColorChooser cc = null;
 		btnColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Color color = JColorChooser.showDialog(cc, "Select Color", selectedColor);
+				Color color = JColorChooser.showDialog(cc, lang.kfSelectColor, selectedColor);
 				if (color != null) {
 					selectedColor = color;
 					txtrScriptView.setForeground(selectedColor);
@@ -213,7 +211,6 @@ public class KFontChooser extends JDialog {
 					listFont.setSelectedIndex(0);
 				}
 				listFont.ensureIndexIsVisible(listFont.getSelectedIndex());
-				
 				listFont.addListSelectionListener(familyListListener);
 
 			}

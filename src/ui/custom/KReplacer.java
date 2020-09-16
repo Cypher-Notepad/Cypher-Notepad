@@ -26,6 +26,7 @@ import config.Property;
 public class KReplacer extends JDialog {
 
 	private static final long serialVersionUID = 8578949730681943840L;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JButton findButton;
 	private JButton replaceButton;
@@ -298,6 +299,6 @@ public class KReplacer extends JDialog {
 
 	
 	private void showInfoMessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg, "Cypher Notepad", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg, lang.cypherNotepad, JOptionPane.INFORMATION_MESSAGE);
 	}
 }

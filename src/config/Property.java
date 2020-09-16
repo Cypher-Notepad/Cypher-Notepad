@@ -22,7 +22,7 @@ import ui.NotepadUI;
 import ui.custom.KFontChooser;
 
 public class Property {
-	public static final String CURRENT_VERSION = "2.1.0.0";
+	public static final String CURRENT_VERSION = "3.0.0";
 	
 	public static String version = "VERSION";
 	public static String language = "LANGUAGE";
@@ -143,7 +143,7 @@ public class Property {
 			NotepadUI.textArea.setFont(textFont);
 			
 		} catch (NullPointerException e) {
-			// not critical.
+			// Not critical.
 		}
 	}
 
@@ -230,7 +230,7 @@ public class Property {
 		private WatchKey watchKey;
 		private Thread updater;
 
-		// make catch-throw clear...
+		// Make catch-throw clear...
 		public PropertyUpdater() {
 			ws = null;
 			try {
@@ -258,23 +258,23 @@ public class Property {
 							case FileManager.FILE_NAME_PROP:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
 									// Reload new property and apply.
-									System.out.println("[Property] modified " + paths.getFileName());
+									System.out.println("[Property] " + paths.getFileName() + " modified.");
 									FileManager.getInstance().loadProperties(true);
 									applyReloadedProp();
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("[Property] deleted" + paths.getFileName());
+									System.out.println("[Property] " + paths.getFileName() + " deleted.");
 									FileManager.getInstance().saveProperties();
 								}
 								break;
 
 							case FileManager.FILE_NAME_KEYS:
 								if (kind.equals(StandardWatchEventKinds.ENTRY_MODIFY)) {
-									System.out.println("[Property] modified" + paths.getFileName());
+									System.out.println("[Property] " + paths.getFileName() + " modified.");
 									FileManager.getInstance().loadKeys(true);
 
 								} else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
-									System.out.println("[Property] deleted" + paths.getFileName());
+									System.out.println("[Property] " + paths.getFileName() + " deleted.");
 									FileManager.getInstance().saveKeys();
 								}
 								break;
@@ -307,7 +307,6 @@ public class Property {
 
 		public void startUpdater() {
 			updater.start();
-			//System.out.println("[Property]Updater Start");
 		}
 
 	}

@@ -21,6 +21,7 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class KeyImporter extends JDialog {
+	
 	private static final long serialVersionUID = -426831946642003239L;
 	
 	public static final int IMPORT_OPTION = 1;
@@ -28,7 +29,7 @@ public class KeyImporter extends JDialog {
 	public static final int CLOSED_OPTION = -1;
 	
 	private final JPanel contentPanel = new JPanel();
-	private JButton okButton, cancelButton;
+	private JButton importButton, cancelButton;
 	
 	private int result = CLOSED_OPTION;
 
@@ -75,9 +76,9 @@ public class KeyImporter extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton(lang.kiImport);
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				importButton = new JButton(lang.kiImport);
+				buttonPane.add(importButton);
+				getRootPane().setDefaultButton(importButton);
 			}
 			{
 				cancelButton = new JButton(lang.btnCancel);
@@ -85,7 +86,7 @@ public class KeyImporter extends JDialog {
 			}
 		}
 		
-		okButton.addActionListener(e->{
+		importButton.addActionListener(e->{
 			result = IMPORT_OPTION;
 			setVisible(false);
 		});

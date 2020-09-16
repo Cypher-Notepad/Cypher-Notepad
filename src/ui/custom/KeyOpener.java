@@ -33,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class KeyOpener extends JDialog {
+	
 	private static final long serialVersionUID = 949855548485976167L;
 	
 	public static final int DECRYPT_OPTION = 1;
@@ -43,7 +44,7 @@ public class KeyOpener extends JDialog {
 	private JTextArea txtKey;
 
 	private JFileChooser fc;
-	private JLabel lblNewLabel;
+	private JLabel lblArrow;
 	
 	private int result = CANCEL_OPTION;
 	
@@ -93,7 +94,6 @@ public class KeyOpener extends JDialog {
 				txtKey.setForeground(Color.BLACK);
 				txtKey.setText("");	
 			}
-			
 		});
 		
 		JScrollPane scrollPane = new JScrollPane(txtKey);
@@ -124,11 +124,11 @@ public class KeyOpener extends JDialog {
 
 			btnOpen = new JButton(lang.koOpen);
 			btnDecrypt = new JButton(lang.koDecrypt);
-			lblNewLabel = new JLabel("sdfsd        ");
+			lblArrow = new JLabel("");
 			
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			buttonPane.add(btnOpen);
-			buttonPane.add(lblNewLabel);
+			buttonPane.add(lblArrow);
 			buttonPane.add(btnDecrypt);
 		}
 		
@@ -139,9 +139,9 @@ public class KeyOpener extends JDialog {
 
 			public void run() {
 				try {
-					lblNewLabel.setText(lblStr);
+					lblArrow.setText(lblStr);
 					while (true) {
-						if (lblNewLabel.isShowing()) {
+						if (lblArrow.isShowing()) {
 							for (i = 0; i < count; i++) {
 								lblStr = "";
 								for (j = 0; j < i; j++) {
@@ -152,7 +152,7 @@ public class KeyOpener extends JDialog {
 									lblStr += " ";
 								}
 								Thread.sleep(70);
-								lblNewLabel.setText(lblStr);
+								lblArrow.setText(lblStr);
 							}
 							Thread.sleep(350);
 						} else {
@@ -180,7 +180,7 @@ public class KeyOpener extends JDialog {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Cypher Notepad",
+								lang.fileNotExist, lang.cypherNotepad,
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -222,7 +222,7 @@ public class KeyOpener extends JDialog {
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					lang.fileFormat_PEM, "Cypher Notepad",
+					lang.fileFormat_PEM, lang.cypherNotepad,
 					JOptionPane.ERROR_MESSAGE);
 		}
 		

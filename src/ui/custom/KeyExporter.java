@@ -1,6 +1,5 @@
 package ui.custom;
 
-import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
@@ -9,7 +8,6 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -34,6 +32,7 @@ import javax.swing.JTextPane;
 import javax.swing.JCheckBox;
 
 public class KeyExporter extends JDialog {
+	
 	private static final long serialVersionUID = -7169483905654387775L;
 	
 	private static final int SHORT_HEIGHT = 390;
@@ -60,9 +59,6 @@ public class KeyExporter extends JDialog {
 	
 	public KeyExporter() {
 		lang = Property.getLanguagePack();
-		
-		//original size
-		//setBounds(100, 100, 520, 390);
 		
 		setBounds(100, 100, 520, LONG_HEIGHT);
 		
@@ -151,12 +147,10 @@ public class KeyExporter extends JDialog {
 			btnSave = new JButton(lang.keSave);
 			{
 				btnCopy = new JButton(lang.keCopy);
-				btnCopy.setActionCommand("OK");
 				getRootPane().setDefaultButton(btnCopy);
 			}
 			{
 				btnCancel = new JButton(lang.btnCancel);
-				btnCancel.setActionCommand("Cancel");
 			}
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			buttonPane.add(btnSave);
@@ -188,9 +182,9 @@ public class KeyExporter extends JDialog {
 						}
 						
 						FileManager.getInstance().exportKey(filePath, FileManager.getInstance().getCurKey());
-						
 						selectAgain = false;
 						result = EXPORT_OPTION;
+						
 						setVisible(false);
 					}
 				} else {
@@ -233,7 +227,7 @@ public class KeyExporter extends JDialog {
 		} else {
 			chckbxDelete.setSelected(true);
 		}
-		//txtKey.setText(FileManager.getInstance().getCurKey());
+		
 		String keyFileName = frame.directory + FileManager.SEPARATOR + frame.fileName;
 		int fileExtensionIdx = keyFileName.lastIndexOf('.');
 		if(fileExtensionIdx == -1) {
@@ -270,8 +264,7 @@ public class KeyExporter extends JDialog {
 				} else {
 					btnCopy.setForeground(txtKey.getDisabledTextColor());
 				}
-			} else {/*do nothing.*/}
-			
+			}
 			//remove reference.
 			copyThread = null;
 		}

@@ -70,7 +70,9 @@ import ui.custom.KeyImporter;
 import ui.custom.KeyVerifier;
 
 public class NotepadUI extends JFrame implements UI {
+	
 	private static final long serialVersionUID = -6173408665024649253L;
+	
 	private static final int YES_OPTION = 1;
 	private static final int NO_OPTION = 2;
 	private static final int CANCEL_OPTION = 0;
@@ -86,7 +88,7 @@ public class NotepadUI extends JFrame implements UI {
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
 			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem, sendFeedbackMenuItem, 
-			HomepageMenuItem, aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
+			homepageMenuItem, aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
 
 	private JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
 
@@ -142,16 +144,13 @@ public class NotepadUI extends JFrame implements UI {
 		savedContext = "";
 		undoText = savedContext;
 
-		
-		/**
-		 * OOME detection.
-		 * */
+		// OOME detection.
 		TrOOME.setPercentageUsageThreshold(0.8);
 		OOMEChecker = new TrOOME();
 		OOMEChecker.addExceedListener(new TrOOME.ExceedListener() {
 			@Override
 			public void memoryUsageExceeded(long usedMemory, long maxMemory) {
-				System.out.println("[Warning] out of Momory.");
+				System.out.println("[Warning] out of Memory.");
 				OOMEFlag = true;
 				if(statusLogger != null) {
 					statusLogger.setDefault(lang.OOMEWarning);
@@ -161,7 +160,7 @@ public class NotepadUI extends JFrame implements UI {
 		OOMEChecker.addMemSafeListener(new TrOOME.MemorySafeListener() {
 			@Override
 			public void memoryUsageSafe(long usedMemory, long maxMemory) {
-				System.out.println("[Warning] Escape OOME.");
+				System.out.println("[Warning] OOME escaped.");
 				OOMEFlag = false;
 
 			}
@@ -169,7 +168,7 @@ public class NotepadUI extends JFrame implements UI {
 	}
 
 	public NotepadUI(File file) {
-		/*Never used*/
+		// Never used
 		this();
 		String path;
 		try {
@@ -198,7 +197,7 @@ public class NotepadUI extends JFrame implements UI {
 			ex.printStackTrace();
 		}
 
-		//fix the bug in Java1.8
+		// Fix the bug in Java1.8
 		try {
 			String[][] icons = {
 				    {"OptionPane.warningIcon",     "65581"},
@@ -206,11 +205,11 @@ public class NotepadUI extends JFrame implements UI {
 				    {"OptionPane.errorIcon",       "65585"},
 				    {"OptionPane.informationIcon", "65587"}
 				};
-			// obtain a method for creating proper icons
+			// Obtain a method for creating proper icons
 			Method getIconBits = Class.forName("sun.awt.shell.Win32ShellFolder2").getDeclaredMethod("getIconBits",
 					new Class[] { long.class, int.class });
 			getIconBits.setAccessible(true);
-			// calculate scaling factor
+			// Calculate scaling factor
 			double dpiScalingFactor = Toolkit.getDefaultToolkit().getScreenResolution() / 96.0;
 			int icon32Size = (dpiScalingFactor == 1) ? (32)
 					: ((dpiScalingFactor == 1.25) ? (40)
@@ -219,14 +218,14 @@ public class NotepadUI extends JFrame implements UI {
 			for (String[] s : icons) {
 				if (javax.swing.UIManager.get(s[0]) instanceof ImageIcon) {
 					arguments[0] = Long.valueOf(s[1]);
-					// this method is static, so the first argument can be null
+					// This method is static, so the first argument can be null
 					int[] iconBits = (int[]) getIconBits.invoke(null, arguments);
 					if (iconBits != null) {
-						// create an image from the obtained array
+						// Create an image from the obtained array
 						BufferedImage img = new BufferedImage(icon32Size, icon32Size, BufferedImage.TYPE_INT_ARGB);
 						img.setRGB(0, 0, icon32Size, icon32Size, iconBits, 0, icon32Size);
 						ImageIcon newIcon = new ImageIcon(img);
-						// override previous icon with the new one
+						// Override previous icon with the new one
 						javax.swing.UIManager.put(s[0], newIcon);
 					}
 				}
@@ -242,25 +241,25 @@ public class NotepadUI extends JFrame implements UI {
 		textArea.setFont(curFont);
 		textArea.setForeground(new Color(Integer.parseInt(p.getProperty(Property.fontColor))));
 
-		// Bar
+		// Menu bar
 		menuBar = new JMenuBar();
 		menuBar.setBorder(BorderFactory.createLineBorder(Color.white));
 
-		// menu
+		// Menu
 		fileMenu = new JMenu(lang.mbFile);
 		editMenu = new JMenu(lang.mbEdit);
 		formatMenu = new JMenu(lang.mbFormat);
 		viewMenu = new JMenu(lang.mbView);
 		helpMenu = new JMenu(lang.mbHelp);
 
-		// add menu to bar
+		// Add menu to menu bar
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu);
 		menuBar.add(formatMenu);
 		menuBar.add(viewMenu);
 		menuBar.add(helpMenu);
 
-		// menu items
+		// Menu items
 		newMenuItem = new JMenuItem(lang.miNew);
 		openMenuItem = new JMenuItem(lang.miOpen);
 		saveMenuItem = new JMenuItem(lang.miSave);
@@ -308,19 +307,19 @@ public class NotepadUI extends JFrame implements UI {
 		txtPanRowCol.setEditable(false);
 		txtPanMagnification.setEditable(false);
 		
-		//initial call
+		// Initial call
 		statusLogger = new StatusLogger();
 		updateRowCol();
 		
-		//add listeners
+		// Add listeners
 		new Thread() {
 			public void run() {
 				settings();
-				System.out.println("[NotepainUI]Finish settings() in thread.");
+				System.out.println("[NotepainUI] Finish settings() in thread.");
 			}
 		}.start();
 
-		System.out.println("[NotepainUI]Finish initializeUI() in thread. But the thread for settings() may be alive.");
+		System.out.println("[NotepainUI] Finish initializeUI() in thread. But the thread for settings() may be alive.");
 	}
 
 	@Override
@@ -331,7 +330,7 @@ public class NotepadUI extends JFrame implements UI {
 		Image changedImg = originImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 		frame.setIconImage(changedImg);
 
-		// add items to menus
+		// Add items to menus
 		fileMenu.add(newMenuItem);
 		fileMenu.add(openMenuItem);
 		fileMenu.add(saveMenuItem);
@@ -377,10 +376,7 @@ public class NotepadUI extends JFrame implements UI {
 		helpMenu.add(aboutNotepadMenuItem);
 		//helpMenu.add(HomepageMenuItem);
 		
-		
-		
-
-		// sets it
+		// Set MenuBar
 		frame.setJMenuBar(menuBar);
 		frame.add(textArea);
 
@@ -390,10 +386,8 @@ public class NotepadUI extends JFrame implements UI {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(scrollPane, BorderLayout.CENTER);
 		
-		/*Start statusBar*/
-		/**
-		 * put maximum string length of status instead of 450
-		 */
+		// Start statusBar
+		// Put maximum string length of status instead of 450
 		txtPaneStatus.setMinimumSize(new Dimension(450, txtPaneStatus.getHeight()));
 		txtPanRowCol.setMinimumSize(new Dimension(0, txtPanRowCol.getHeight()));
 		txtPanMagnification.setMinimumSize(new Dimension(0, txtPanMagnification.getHeight()));
@@ -419,7 +413,7 @@ public class NotepadUI extends JFrame implements UI {
 		statusBar.add(txtPanMagnification);
 		
 		frame.add(statusBar, BorderLayout.SOUTH);
-		/*End statusBar*/
+		// End statusBar
 		
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(950, 500);
@@ -427,7 +421,7 @@ public class NotepadUI extends JFrame implements UI {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		//curText must be set after loading content.
+		// curText must be set after loading content.
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			String curText = undoText;
 			
@@ -466,7 +460,7 @@ public class NotepadUI extends JFrame implements UI {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				if (e.isControlDown()) {
 					rotation = e.getWheelRotation();
-					updataMagVal(-rotation);
+					updateMagVal(-rotation);
 					updateFontMag();
 					txtPanMagnification.setText(fontMagnification + "%");
 				} else if (e.isShiftDown()) {
@@ -482,7 +476,7 @@ public class NotepadUI extends JFrame implements UI {
 	            }
 			}
 
-			private void updataMagVal(int val) {
+			private void updateMagVal(int val) {
 				fontMagnification += (val*10);
 				
 				if(fontMagnification < 10) {
@@ -533,7 +527,7 @@ public class NotepadUI extends JFrame implements UI {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				// call the function, erase().
+				// Call erase().
 				UIManager.getInstance().closeWindow();
 			}
 		});
@@ -552,13 +546,14 @@ public class NotepadUI extends JFrame implements UI {
 				fd = new KFinder(textArea);
 				rp = new KReplacer(textArea);
 				
-				// find next
+				// Find next
 				findNextMenuItem.addActionListener(fd);
 				
-				// page setup
+				// Page setup
 				pageSetupMenuItem.setActionCommand("PageSetup");
 				pageSetupMenuItem.addActionListener(pt);
-				// print
+				
+				// Print
 				printMenuItem.setActionCommand("Print");
 				printMenuItem.addActionListener(pt);
 
@@ -566,7 +561,7 @@ public class NotepadUI extends JFrame implements UI {
 		};
 		dialogCreationThread.start();
 
-		// actions
+		// Action listeners
 		newMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				if (checkSave()) {
@@ -580,33 +575,36 @@ public class NotepadUI extends JFrame implements UI {
 					FileManager.getInstance().newBtnProcedure();
 					setTempMode(FileManager.getInstance().isTemporary());
 					
-					//correct setting.
+					// Correct setting.
 					setEncryptMode(true);
 					frame.setTitle(fileName + " - Cypher Notepad");
 				}
 			}
 		});
 
-		// exit
+		// Exit
 		exitMenuItem.addActionListener(e -> UIManager.getInstance().closeWindow());
-		//
-		// undo
+		
+		// Undo
 		undoMenuItem.addActionListener(e -> {
 			String origin = textArea.getText();
 			textArea.setText(undoText);
 			undoText = origin;
 		});
 
-		// cut
+		// Cut
 		cutMenuItem.addActionListener(e -> textArea.cut());
-		// copy
+		
+		// Copy
 		copyMenuItem.addActionListener(e -> textArea.copy());
-		// paste
+		
+		// Paste
 		pasteMenuItem.addActionListener(e -> textArea.paste());
-		// delete
+		
+		// Delete
 		deleteMenuItem.addActionListener(e -> textArea.replaceSelection(""));
 
-		// search
+		// Search
 		searchMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
@@ -624,24 +622,25 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 
-		// find
+		// Find
 		findMenuItem.addActionListener(e -> {
 			checkDialogCreated(fd);
 			fd.showDialog();
 		});
 
-		// replace
+		// Replace
 		replaceMenuItem.addActionListener(e -> {
 			checkDialogCreated(rp);
 			rp.showDialog();
 		});
 
-		// goto
+		// Goto
 		goToMenuItem.setEnabled(false);
 
-		// select all
+		// Select all
 		selectAllMenuItem.addActionListener(e -> textArea.selectAll());
-		// time date
+		
+		// Time-date
 		timeDateMenuItem.addActionListener(e -> {
 			Calendar cal = Calendar.getInstance();
 			int hour = cal.get(Calendar.HOUR);
@@ -666,7 +665,7 @@ public class NotepadUI extends JFrame implements UI {
 			textArea.insert(date, textArea.getCaretPosition());
 		});
 
-		// word wrap
+		// Word wrap
 		wordWrapMenuItem.addActionListener(e -> {
 			if (wordWrapMenuItem.isSelected()) {
 				textArea.setLineWrap(true);
@@ -677,7 +676,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 
-		// font
+		// Font
 		fontMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -695,7 +694,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		// status bar
+		// Status bar
 		statusBarMenuItem.setSelected(true);
 		statusBarMenuItem.addActionListener(e -> {
 			if (statusBarMenuItem.isSelected()) {
@@ -706,7 +705,7 @@ public class NotepadUI extends JFrame implements UI {
 		});
 		
 		
-		// view
+		// View
 		viewHelpMenuItem.addActionListener(e -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				try {
@@ -750,7 +749,7 @@ public class NotepadUI extends JFrame implements UI {
 			new KUpdater().showDialog();
 		});
 
-		// settings
+		// Settings
 		settingsMenuItem.addActionListener(e -> {
 			checkDialogCreated(st);
 			if (st.showDialog()) {
@@ -758,7 +757,7 @@ public class NotepadUI extends JFrame implements UI {
 			}
 		});
 		
-		// about
+		// About
 		aboutNotepadMenuItem.addActionListener(e -> {
 			checkDialogCreated(info);
 			info.showDialog();
@@ -833,15 +832,14 @@ public class NotepadUI extends JFrame implements UI {
 			exportKey();
 		});
 		
-		
-		// menu mnemonic keys
+		// Set mnemonic keys
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		editMenu.setMnemonic(KeyEvent.VK_E);
 		formatMenu.setMnemonic(KeyEvent.VK_O);
 		viewMenu.setMnemonic(KeyEvent.VK_V);
 		helpMenu.setMnemonic(KeyEvent.VK_H);
 
-		// sub menu accelerators keys
+		// Set accelerators keys
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 		openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
 		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
@@ -869,7 +867,7 @@ public class NotepadUI extends JFrame implements UI {
 		aboutNotepadMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 		
 
-		// sub menu mnemonic keys
+		// Set mnemonic keys
 		newMenuItem.setMnemonic(KeyEvent.VK_N);
 		openMenuItem.setMnemonic(KeyEvent.VK_O);
 		saveMenuItem.setMnemonic(KeyEvent.VK_S);
@@ -925,8 +923,7 @@ public class NotepadUI extends JFrame implements UI {
 		
 		boolean selectAgain = true;
 		while (selectAgain) {
-			int userSelection = fc.showSaveDialog(frame);
-			if (userSelection == JFileChooser.APPROVE_OPTION) {
+			if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 				String filePath = fc.getSelectedFile().getAbsolutePath();
 				if (!filePath.endsWith(".txt")) {
 					filePath += ".txt";
@@ -1005,7 +1002,7 @@ public class NotepadUI extends JFrame implements UI {
 					rtn = true;
 				}
 			} else {
-				// the case of nothing changed
+				// The case of nothing changed
 				rtn = true;
 			}
 		} else {
@@ -1043,7 +1040,7 @@ public class NotepadUI extends JFrame implements UI {
 		Object[] options = { lang.save, lang.noSave, lang.btnCancel };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.checkSave_pre + fileName + lang.checkSave_post,
-				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				lang.cypherNotepad, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 				options[0]);
 
 		if (response == JOptionPane.YES_OPTION) {
@@ -1072,7 +1069,7 @@ public class NotepadUI extends JFrame implements UI {
 		while (toBeContinue) {
 			int response = JOptionPane.showOptionDialog(frame,
 					lang.warningSaveKey,
-					"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+					lang.cypherNotepad, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 					options[0]);
 
 			if (response == 0) {
@@ -1116,11 +1113,11 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int showEncryptModeDialog() {
 		int rtn = CANCEL_OPTION;
-		//to make looks better, add space
+		// Add space to make looks better
 		Object[] options = { "      " + lang.btnYes + "      ", lang.btnNo };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.warningTurnOffEncryption,
-				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+				lang.cypherNotepad, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 				options[1]);
 
 		if(response == 0) {
@@ -1134,11 +1131,11 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int showOverwritingDialog(String fileName) {
 		int rtn = CANCEL_OPTION;
-		//to make looks better, add space
+		// Add space to make looks better
 		Object[] options = { "      " + lang.btnYes + "      ", lang.btnNo };
 
 		int response = JOptionPane.showOptionDialog(frame, lang.warnOverwriteFile_pre + fileName + lang.warnOverwriteFile_post,
-				"Cypher Notepad", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options,
+				lang.cypherNotepad, JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options,
 				options[1]);
 
 		if(response == 0) {
@@ -1200,10 +1197,11 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int exportKey() {
 		ThreadManager.getInstance().joinKeyLoadingThread();
+		
 		int response = new KeyExporter().showDialog(this);
 		if(response == KeyExporter.EXPORT_OPTION) {
 			setInvalidationFlag(false);
-			//FileManager.getInstance().setOpenedWithExportedKey(true);
+			FileManager.getInstance().setOpenedWithExportedKey(true);
 			statusLogger.showLog(lang.status_export);
 		}
 		setTempMode(FileManager.getInstance().isTemporary());
@@ -1212,8 +1210,8 @@ public class NotepadUI extends JFrame implements UI {
 	
 	public int checkKey() {
 		ThreadManager.getInstance().joinKeyLoadingThread();
-		KeyVerifier ki = new KeyVerifier();
-		int response = ki.showDialog(this);
+		
+		int response = new KeyVerifier().showDialog(this);
 		if(response == KeyVerifier.CHECK_OPTION) {
 			setInvalidationFlag(false);
 		}

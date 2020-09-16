@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 public class KInformation extends JDialog {
 
 	private static final long serialVersionUID = -7189136707064969558L;
+	
 	private JPanel contentPane;
 	JButton btnOk;
 	
@@ -62,7 +63,7 @@ public class KInformation extends JDialog {
 		lblIcon.setIcon(Icon1);
 		
 		JTextPane txtpnG = new JTextPane();
-		txtpnG.setText("Cypher Notepad\r\nVersion 2.1\r\nImplemented by \"LeeDongGeon1996\" on Github");
+		txtpnG.setText("Cypher Notepad\r\nVersion 3.0\r\nImplemented by \"LeeDongGeon1996\" on Github");
 		txtpnG.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtpnG.setEditable(false);
 		txtpnG.setBackground(new Color(240, 240, 240));

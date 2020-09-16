@@ -24,7 +24,7 @@ public class Main {
 		UIManager.getInstance().setDefaultUI();
 		
 		long end = System.currentTimeMillis(); 
-		System.out.println( "[Main]Loading MainUI time : " + ( end - start )/1000.0 +"sec");
+		System.out.println( "[Main] Loading MainUI time : " + ( end - start )/1000.0 +"sec");
 		threadInit.start();
 		
 	}

@@ -29,6 +29,7 @@ import javax.swing.JCheckBox;
 public class KFinder extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -9113689274250209739L;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JButton findButton;
 	private JButton cancelButton;
@@ -205,6 +206,6 @@ public class KFinder extends JDialog implements ActionListener {
 	}
 	
 	private void showNothingMessage() {
-		JOptionPane.showMessageDialog(null, lang.kfNoMoreFD_pre + strToFind +lang.kfNoMoreFD_post, "Cypher Notepad", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, lang.kfNoMoreFD_pre + strToFind +lang.kfNoMoreFD_post, lang.cypherNotepad, JOptionPane.INFORMATION_MESSAGE);
 	}
 }

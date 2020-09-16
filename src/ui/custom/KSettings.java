@@ -100,7 +100,7 @@ public class KSettings extends JDialog {
 	public KSettings() {
 		lang = Property.getLanguagePack();
 		
-		selectedBorder = new TitledBorder("Reserved");
+		selectedBorder = new TitledBorder(lang.ksReserved);
 		selectedBorder.setBorder(new LineBorder(Color.BLACK, 3));
 		selectedTimer = new Timer(650, selectedAction);
 
@@ -306,7 +306,7 @@ public class KSettings extends JDialog {
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		panelForBtn.setLayout(gl_panelForBtn);
 
-		JLabel lblNewLabel = new JLabel("Cypher Notepad");
+		JLabel lblNewLabel = new JLabel(lang.cypherNotepad);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
@@ -392,7 +392,7 @@ public class KSettings extends JDialog {
 	}
 
 	public void applySettings() {
-		System.out.println("[KSettings]Apply settings");
+		System.out.println("[KSettings] Apply settings");
 		if(isConfirmed) {
 			for (Thread t : toDoList) {
 				if(t.getState() == Thread.State.NEW) {

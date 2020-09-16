@@ -1,9 +1,7 @@
 package crypto;
 public class RSAImpl extends RSA{
 	
-	private RSAImpl() {
-		//do nothing.
-	}
+	private RSAImpl() {}
 	
 	private RSAImpl(boolean decryptMode) {
 		super(decryptMode);

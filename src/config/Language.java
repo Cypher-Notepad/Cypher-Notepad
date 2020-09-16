@@ -1,6 +1,9 @@
 package config;
 
 public abstract class Language {
+	
+	public String cypherNotepad = "Cypher Notepad";
+	
 	//MainUI
 	public String btnNew = "New";
 	public String btnOpen = "Open";
@@ -84,6 +87,7 @@ public abstract class Language {
 	public String kfcPlain = "Plain";
 	public String kfcBold = "Bold";
 	public String kfcItalic = "Italics";
+	public String kfSelectColor = "Select Color";
 	
 
 	//KSettings
@@ -94,6 +98,7 @@ public abstract class Language {
 	public String ksNoti = "\u203B Some changes will take effect after restart.";
 	public String ksLangWarn = " Language(Not Recommended)";
 	public String ksLangWarnHover = "English -> Korean(Not Recommended)";
+	public String ksReserved = "Reserved";
 	
 	//KeyExporter
 	public String keTitle = "Export Key";
@@ -168,7 +173,8 @@ public abstract class Language {
 			"It will be applied instantly. If you already have exported keyfile, it will be invalidated.    ";
 	public String warnOverwriteFile_pre = " [";
 	public String warnOverwriteFile_post = "] already exists. \n Do you want to replace it?        ";
-	
+	public String failedToDecrypt = "Failed to decrypt the file. Please try again with valid key.";
+	public String unableToDecrypt = "Unable to decrypt this file.\nThis encrypted file may be modified.";
 	
 	//status logger
 	public String status_save = " is saved.";

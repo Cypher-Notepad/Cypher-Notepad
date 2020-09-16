@@ -36,7 +36,6 @@ public class CryptoFacade {
 	}
 	
 	public void encrypt(MemoVO memo, String privateKey) {
-		//String secretKey = this.aes.generateSecretKey();
 		Encryptor aesEncryptor = aes.getEncryptor();
 		String secretKey = Base64.getEncoder().encodeToString(aesEncryptor.getKey().getEncoded());
 		memo.setContent(aesEncryptor.encrypt(memo.getContent()));

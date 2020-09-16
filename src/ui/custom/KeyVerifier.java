@@ -33,8 +33,9 @@ import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class KeyVerifier extends JDialog {
+	
 	private static final long serialVersionUID = -5181681288167371761L;
-
+	
 	public static final int CHECK_OPTION = 1;
 	public static final int CANCEL_OPTION = 0;
 	
@@ -78,7 +79,6 @@ public class KeyVerifier extends JDialog {
 			@Override
 			public void focusLost(FocusEvent e) {
 				setPlaceholder();
-				//lblKey.requestFocusInWindow();
 			}
 			
 			public void setPlaceholder() {
@@ -125,14 +125,10 @@ public class KeyVerifier extends JDialog {
 
 			btnOpen = new JButton(lang.koOpen);
 			btnCheck = new JButton(lang.kvVerify);
-			//btnDecrypt.setActionCommand("Cancel");
+			lblNewLabel = new JLabel("");
 			
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			buttonPane.add(btnOpen);
-			
-			//lblNewLabel = new JLabel("    ->    ");
-			lblNewLabel = new JLabel("sdfsd        ");
-			
 			buttonPane.add(lblNewLabel);
 			buttonPane.add(btnCheck);
 
@@ -185,7 +181,7 @@ public class KeyVerifier extends JDialog {
 						}
 					} else {
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Cypher Notepad",
+								lang.fileNotExist, lang.cypherNotepad,
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -206,7 +202,7 @@ public class KeyVerifier extends JDialog {
 			String enteredKey = txtKey.getText();
 			if((enteredKey == null) || (!enteredKey.equals(FileManager.getInstance().getCurKey()))) {
 				JOptionPane.showMessageDialog(this,
-						lang.keyNotValid, "Cypher Notepad",
+						lang.keyNotValid, lang.cypherNotepad,
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				result = CHECK_OPTION;
@@ -235,7 +231,7 @@ public class KeyVerifier extends JDialog {
 			isSucceed = true;
 		} else {
 			JOptionPane.showMessageDialog(this,
-					lang.fileFormat_PEM, "Cypher Notepad",
+					lang.fileFormat_PEM, lang.cypherNotepad,
 					JOptionPane.ERROR_MESSAGE);
 		}
 		

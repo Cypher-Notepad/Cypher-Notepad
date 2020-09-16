@@ -31,23 +31,23 @@ abstract public class RSA {
 	private byte[] privateKey = null;
 
 	public RSA() {
-		System.out.println("[RSA]RSA initialize.");
+		System.out.println("[RSA] RSA initialize.");
 		initialize();
 	}
 	
 	
 	public RSA(boolean decryptMode) {
 		if(decryptMode) {
-			System.out.println("[RSA]RSA initialize. - decrypt mode");
+			System.out.println("[RSA] RSA initialize. - decrypt mode");
 		} else {
-			System.out.println("[RSA]RSA initialize.");
+			System.out.println("[RSA] RSA initialize.");
 			initialize();
 		}
 	}
 	
 	private void initialize() {
 
-		// create a pair of key
+		// Create a pair of key
 		try {
 			KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance(ENCRYPT_ALGO);
 			keyGenerator.initialize(KEY_SIZE);
@@ -63,12 +63,12 @@ abstract public class RSA {
 
 	public String generatePublicKey() {
 
-		// transfer public key to client
+		// Transfer public key to client
 		String publicKeyStr = Base64.getEncoder().encodeToString(this.publicKey);
 		return publicKeyStr;
 	}
 
-	// get public key from server
+	// Get public key from server
 	abstract protected String getPublicKey();
 
 	protected String getPrivateKey() {
@@ -119,7 +119,7 @@ abstract public class RSA {
 
 		private RSAEncryptor(String publicKeyStr) {
 
-			// convert string as parameter into public key.
+			// Convert string as parameter into public key.
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyStr));
 			try {
 				KeyFactory factory = KeyFactory.getInstance(ENCRYPT_ALGO);
@@ -140,7 +140,7 @@ abstract public class RSA {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.ENCRYPT_MODE, (RSAPublicKey) getKey());
 
-				// be careful about encoding, charset, flag of base64
+				// Be careful about encoding, charset, flag of base64
 				encrypted = Base64.getEncoder()
 						.encodeToString(cipher.doFinal(rawValue.getBytes(StandardCharsets.UTF_8)));
 
@@ -172,7 +172,7 @@ abstract public class RSA {
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (InvalidKeySpecException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 
@@ -184,17 +184,17 @@ abstract public class RSA {
 				Cipher cipher = Cipher.getInstance(TRANSFORMATION);
 				cipher.init(Cipher.DECRYPT_MODE, (RSAPrivateKey) getKey());
 
-				// make sure to specify charset when creating string.
+				// Make sure to specify charset when creating string.
 				decoded = new String(
 						cipher.doFinal(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8))),
 						StandardCharsets.UTF_8);
 
 			} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (InvalidKeyException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 			return decoded;

@@ -77,7 +77,7 @@ public class KPrinter implements ActionListener, Printable {
 				try {
 					job.print();
 				} catch (PrinterException ex) {
-					System.out.println("[KPrinter]Printing failed");
+					System.out.println("[KPrinter] Printing failed");
 				}
 			}
 		}

@@ -10,11 +10,9 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -36,6 +34,7 @@ import javax.swing.JTextArea;
 public class KUpdater extends JDialog {
 
 	private static final long serialVersionUID = -4760411000350458806L;
+	
 	private static final String latestVersionURL = "https://Cypher-Notepad.github.io/version.html";
 	private static final String latestReleaseNoteURL = "https://Cypher-Notepad.github.io/wiki/#/release_note?id=latest-release";
 	
@@ -82,9 +81,6 @@ public class KUpdater extends JDialog {
 				}
 				btnCheck.setEnabled(true);
 			}
-			
-			//isConfirmed = true;
-			//setVisible(false);
 		});
 
 		JButton btnCancel = new JButton(lang.btnCancel);
@@ -134,7 +130,7 @@ public class KUpdater extends JDialog {
 		txtrConsole.setEditable(false);
 		scrollPane.setViewportView(txtrConsole);
 
-		JLabel lblNewLabel = new JLabel("Cypher Notepad");
+		JLabel lblNewLabel = new JLabel(lang.cypherNotepad);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
@@ -236,7 +232,7 @@ public class KUpdater extends JDialog {
 				if(Integer.parseInt(latestVersion.replace(".", "")) 
 						> Integer.parseInt(curVersion.replace(".", ""))){
 					result = OUTDATED;
-					lblResult.setText(lang.kuNewVersionResult_pre + "Cypher Notepad " + latestVersion + lang.kuNewVersionResult_post);
+					lblResult.setText(lang.kuNewVersionResult_pre + lang.cypherNotepad + latestVersion + lang.kuNewVersionResult_post);
 				} else {
 					result = LATEST;
 					lblResult.setText(lang.kuUpToDate);

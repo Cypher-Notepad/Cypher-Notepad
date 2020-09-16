@@ -62,19 +62,16 @@ public class FileManager {
 	private int maxKey = 8192; // Allocated again after loading the prop.
 	private boolean recycleKey = false;
 
-	/*for unimported file*/
+	/* For un-imported file */
 	private boolean isTemporary = false;
 	private String tempKey = null;
 	
 	private boolean isCurrentFileEncrypted = false;
-	
 	private boolean isOpenedWithExportedKey = false;
 	
 	private UI curFrame = null;
 	
-	private FileManager() {
-		// do nothing.
-	}
+	private FileManager() {}
 
 	public static FileManager getInstance() {
 		if (instance == null) {
@@ -100,7 +97,7 @@ public class FileManager {
 		try {
 			File keyFile = new File(keyFilePath);
 			if (!keyFile.exists()) {
-				System.out.println("[FileManager]Create cypher-notepad.keys");
+				System.out.println("[FileManager] Create cypher-notepad.keys");
 				File parentDir = keyFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -117,7 +114,7 @@ public class FileManager {
 
 				/*
 				 * The program uses the key below the maximum index to encrypt. But the number
-				 * of key in the key file may be exceed max idx.
+				 * of key in the key file may be exceed max index.
 				 */
 				if (reloaded.size() < maxKey) {
 					/*
@@ -125,7 +122,7 @@ public class FileManager {
 					 * must be re-created to make new key-pair.
 					 **/
 					if (reloaded.size() < keys.size()) {
-						//first, save the key currently using. (only one time..)
+						// First, save the key currently using. (only one time..)
 						if (isCurrentFileEncrypted) {
 							if (!isTemporary) {
 								isTemporary = true;
@@ -147,8 +144,7 @@ public class FileManager {
 						}
 					}
 					processID = reloaded.indexOf(RSAImpl.getInstance().getPrivateKey());
-					System.out.println("test : procID : " + processID);
-					//recycleKey = false;
+					
 				} else {
 					processID = new Random().nextInt(maxKey);
 					recycleKey = true;
@@ -176,7 +172,7 @@ public class FileManager {
 			closeIO(keyReader, keyWriter);
 		}
 
-		System.out.println("[FileManager] KEY procID : " + processID + ", #ofkeys : " + keys.size());
+		System.out.println("[FileManager] Key-procID : " + processID + ", # of keys : " + keys.size());
 	}
 
 	private void closeIO(Closeable... IOs) {
@@ -231,20 +227,15 @@ public class FileManager {
 	 * */
 	public void deleteCurrentKey() {
 		if(!isTemporary) {
-			System.out.println("[FileManager] key deleted.");
+			System.out.println("[FileManager] Key deleted.");
 			
-			//legacy
-			//tempKey = getCurKey();
-			
-			//generate the new key.
+			// Generate the new key.
 			tempKey = RSAImpl.getInstance(true).getPrivateKey();
 			
-			//then, prepare another new key for the next file.
+			// Then, prepare another new key for the next file.
 			addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
 			keys.add(RSAImpl.getInstance().getPrivateKey());
 			processID = keys.indexOf(RSAImpl.getInstance().getPrivateKey());
-			
-			System.out.println("tset222 procID:" + processID);
 			
 			isTemporary = true;
 			isOpenedWithExportedKey = true;
@@ -267,7 +258,7 @@ public class FileManager {
 		File keyFile = new File(DIR_NAME + FILE_NAME_KEYS);
 		if (keyFile.exists()) {
 			try {
-				System.out.println("[FileManager]Clear cypher-notepad.keys");
+				System.out.println("[FileManager] Clear cypher-notepad.keys");
 				// Important. This code clears keyFile.====================================
 				keyWriter = new PrintWriter(new FileWriter(keyFile, false));
 				// ========================================================================
@@ -308,7 +299,7 @@ public class FileManager {
 		try {
 			File propFile = new File(propFilePath);
 			if (!propFile.exists()) {
-				System.out.println("[FileManager]Create cypher-notepad.properties");
+				System.out.println("[FileManager] Create cypher-notepad.properties");
 				File parentDir = propFile.getParentFile();
 				if (!parentDir.exists()) {
 					parentDir.mkdir();
@@ -327,7 +318,7 @@ public class FileManager {
 			inStream.close();
 
 			maxKey = Integer.valueOf(Property.getProperties().getProperty(Property.nOfKeys, "8192"));
-			// ignore the value less than 500.
+			// Ignore the value less than 500.
 			if(maxKey < 500) {
 				maxKey = 500;
 			}
@@ -369,7 +360,7 @@ public class FileManager {
 					crypto.encrypt(memo);
 					NotepadUI.setInvalidationFlag(false);
 					
-					//make new key for the next file.
+					// Make new key for the next file.
 					recycleKey = true;
 					if (keys.size() < maxKey) {
 						addToKeyFile(true, RSAImpl.getInstance(true).getPrivateKey());
@@ -399,7 +390,7 @@ public class FileManager {
 				isCurrentFileEncrypted = false;
 				isOpenedWithExportedKey = false;
 				
-				// not to use same key when temp key - not encrypt - encrypt 
+				// Not to use the same key when temp key -> not encrypt -> encrypt 
 				isTemporary = false;
 				tempKey = null;
 			}
@@ -421,7 +412,6 @@ public class FileManager {
 			try {
 				BufferedReader memoReader = new BufferedReader(new FileReader(filename));
 				if (isEncrypted(memoReader)) {
-					
 					memoReader.readLine();
 					String strIdx = memoReader.readLine();
 					readMemo.setKey(memoReader.readLine());
@@ -432,11 +422,11 @@ public class FileManager {
 					int idx = Integer.parseInt(new String(Base64.getDecoder().decode(strIdx)));
 					new CryptoFacade().decrypt(readMemo, getKey(idx));
 					
+					isCurrentFileEncrypted = true;
+					
 					// And use again its key which was used to encrypt at the first.
 					recycleKey = true;
 					keyID = idx;
-					
-					isCurrentFileEncrypted = true;
 					
 				} else {
 					memoReader.close();
@@ -458,11 +448,7 @@ public class FileManager {
 
 			// Return null not to show up notepadUI(= stay MainUI).
 			} catch (FileNotFoundException e) {
-				JOptionPane
-						.showMessageDialog(
-								frame, "[ERROR]" + "\nThe file does not exist." + "\nPlease check your file name."
-										+ "\n(" + e.getClass().getName() + ")",
-								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frame, lang.fileNotExist, lang.cypherNotepad, JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (NumberFormatException e) {
 				/*
@@ -483,11 +469,7 @@ public class FileManager {
 				*/
 				return loadMemoTemporary(frame, readMemo);
 			} catch (NullPointerException | IOException e) {
-				JOptionPane
-						.showMessageDialog(frame,
-								"[ERROR]" + "\nUnable to decrypt this file." + "\nThis encrypted file may be modified."
-										+ "\n(" + e.getClass().getName() + ")",
-								"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(frame, lang.unableToDecrypt, lang.cypherNotepad, JOptionPane.ERROR_MESSAGE);
 				return null;
 			} catch (IndexOutOfBoundsException | BadPaddingException e) {
 				/*
@@ -502,13 +484,13 @@ public class FileManager {
 						"[ERROR]" + "\nUnable to decrypt this file because of unhandled error."
 								+ "\nPlease contact developer via email with error name below."
 								+ "\n*E-mail : matth1996@hanmail.net" + "\n**Error Name : " + e.getClass().getName(),
-						"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
+								lang.cypherNotepad, JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 				return null;
 			}
 
 		} else {
-			JOptionPane.showMessageDialog(frame, lang.fileNotExist, "Cypher Notepad", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, lang.fileNotExist, lang.cypherNotepad, JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 
@@ -526,14 +508,13 @@ public class FileManager {
 	}
 	
 	public MemoVO loadMemoTemporary(JFrame frame, MemoVO readMemo) {
-		//Do process when the file is encrypted
+		// Do process when the file is encrypted
 		if (readMemo.getKey() != null) {
 			KeyOpener kp = new KeyOpener();
 			
 			boolean toContinue = true;
 			while (toContinue) {
-				int result = kp.showDialog(frame);
-				if (result == KeyOpener.DECRYPT_OPTION) {
+				if (kp.showDialog(frame) == KeyOpener.DECRYPT_OPTION) {
 					String key = kp.getEnteredKey();
 					if (key != null) {
 						try {
@@ -544,9 +525,8 @@ public class FileManager {
 							isOpenedWithExportedKey = true;
 							toContinue = false;
 						} catch (Exception e) {
-							JOptionPane.showMessageDialog(frame,
-									"Failed to decrypt the file." + " Please try again with valid key.",
-									"Cypher Notepad", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frame, lang.failedToDecrypt, lang.cypherNotepad,
+									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				} else {

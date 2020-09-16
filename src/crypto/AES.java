@@ -6,7 +6,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.KeySpec;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -16,7 +15,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public abstract class AES {
@@ -30,15 +28,15 @@ public abstract class AES {
 	private SecureRandom secureRandom;
 	
 	public AES() {
-		System.out.println("[AES]AES initialize.");
+		System.out.println("[AES] AES initialize.");
 		initialize();	
 	}
 	
 	public AES(boolean decryptMode) {
 		if(decryptMode) {
-			System.out.println("[AES]AES initialize. - decrypt mode");
+			System.out.println("[AES] AES initialize. - decrypt mode");
 		} else {
-			System.out.println("[AES]AES initialize.");
+			System.out.println("[AES] AES initialize.");
 			initialize();
 		}
 	}
@@ -122,7 +120,6 @@ public abstract class AES {
 			} catch (InvalidKeyException e) {
 				e.printStackTrace();
 			} catch (InvalidAlgorithmParameterException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -149,7 +146,7 @@ public abstract class AES {
 		        // Get Nonce(IV) size, it should be 12 in my implementation.
 		        int nonceSize = byteBuffer.getInt();
 		        if(nonceSize != NONCE_SIZE) {
-		        	throw new IllegalArgumentException("Nonce size is incorrect. Make sure that input file is not modified improperly.");
+		        	throw new IllegalArgumentException("[AES] Nonce size is incorrect. Make sure that input file is not modified improperly.");
 		        }
 		        
 		        byte[] iv = new byte[NONCE_SIZE];
@@ -167,16 +164,15 @@ public abstract class AES {
 		        		cipher.doFinal(encryptedContent),StandardCharsets.UTF_8);
 		        
 			} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (InvalidKeyException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (BadPaddingException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (InvalidAlgorithmParameterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 			return decoded;

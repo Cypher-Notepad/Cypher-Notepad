@@ -43,6 +43,7 @@ import ui.custom.KButton;
 public class MainUI extends JFrame implements UI {
 
 	private static final long serialVersionUID = -8901510103598913554L;
+	
 	private Container contentPane;
 	private JTable table;
 	private KButton btnNew, btnOpen, btnX;
@@ -134,7 +135,7 @@ public class MainUI extends JFrame implements UI {
 						.addGap(4)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 396, GroupLayout.PREFERRED_SIZE)));
 
-		JLabel lblNewLabel = new JLabel("Cypher Notepad");
+		JLabel lblNewLabel = new JLabel(lang.cypherNotepad);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 39));
 		lblNewLabel.setForeground(new Color(0xffffff));
 
@@ -273,7 +274,7 @@ public class MainUI extends JFrame implements UI {
 				posX = curFramePos.x + distanceX;
 				posY = curFramePos.y + distanceY;
 
-				//calc the distance from the boundaries of the screen.
+				// Calculate the distance from the boundaries of the screen.
 				left = curFramePos.x - taskBar.left;
 				right = screenXSize - left - frameWidth - taskBar.right - taskBar.left;
 				top = curFramePos.y - taskBar.top;
@@ -355,7 +356,7 @@ public class MainUI extends JFrame implements UI {
 					} else {
 						toBeSelected = true;
 						JOptionPane.showMessageDialog(this,
-								lang.fileNotExist, "Cypher Notepad",
+								lang.fileNotExist, lang.cypherNotepad,
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
