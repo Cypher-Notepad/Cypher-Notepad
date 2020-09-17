@@ -519,10 +519,12 @@ public class FileManager {
 					if (key != null) {
 						try {
 							new CryptoFacade().decrypt(readMemo, key);
+							
 							isTemporary = true;
 							tempKey = key;
 							isCurrentFileEncrypted = true;
 							isOpenedWithExportedKey = true;
+							
 							toContinue = false;
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(frame, lang.failedToDecrypt, lang.cypherNotepad,
