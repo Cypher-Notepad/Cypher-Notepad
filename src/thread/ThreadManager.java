@@ -51,7 +51,7 @@ public class ThreadManager {
 		}
 		listTr.clear();
 		
-		System.out.println("[ThreadManager]Finish Join");
+		System.out.println("[ThreadManager] Finish Join");
 	}
 
 }

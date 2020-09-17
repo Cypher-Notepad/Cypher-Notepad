@@ -265,7 +265,7 @@ public class KeyExporter extends JDialog {
 					btnCopy.setForeground(txtKey.getDisabledTextColor());
 				}
 			}
-			//remove reference.
+			// Remove reference.
 			copyThread = null;
 		}
 

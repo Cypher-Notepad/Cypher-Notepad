@@ -4,7 +4,7 @@ public abstract class Language {
 	
 	public String cypherNotepad = "Cypher Notepad";
 	
-	//MainUI
+	// MainUI
 	public String btnNew = "New";
 	public String btnOpen = "Open";
 	public String rcntFiles = "Recent Files";
@@ -14,7 +14,7 @@ public abstract class Language {
 	public String tblPath = "Path";
 	
 	
-	//NotepadUI
+	// NotepadUI
 	public String frmUntitled = "Untitled";
 	public String mbFile = " File ";
 	public String mbEdit = " Edit ";
@@ -58,7 +58,7 @@ public abstract class Language {
 	public String miUpdate = "Check for update";
 	public String miSetting = "Settings        ";
 	
-	//KFinder
+	// KFinder
 	public String kfiTitle = "Find";
 	public String kfiFind = "Find:";
 	public String kfiFindNxt = "Find Next";
@@ -69,13 +69,13 @@ public abstract class Language {
 	public String kfNoMoreFD_pre = "Cannot find \"";
 	public String kfNoMoreFD_post = "\"";
 	
-	//KReplacer
+	// KReplacer
 	public String kreReplce = "Replace";
 	public String krelblReplce = "Replace:";
 	public String kreReplceAll = "Replace All";
 	public String kreNoMoreRP = "No more to replace.";
 	
-	//KFontChooser
+	// KFontChooser
 	public String kfcTitle = "Select Font";
 	public String kfcFamily = "Font Family:";
 	public String kfcStyle = "Style:";
@@ -90,7 +90,7 @@ public abstract class Language {
 	public String kfSelectColor = "Select Color";
 	
 
-	//KSettings
+	// KSettings
 	public String ksLang = " \uC5B8\uC5B4";
 	public String ksLangHover = " \uC601\uC5B4 -> \uD55C\uAD6D\uC5B4";
 	public String ksInval = "  Invalidate All Encrypted Files";
@@ -100,7 +100,7 @@ public abstract class Language {
 	public String ksLangWarnHover = "English -> Korean(Not Recommended)";
 	public String ksReserved = "Reserved";
 	
-	//KeyExporter
+	// KeyExporter
 	public String keTitle = "Export Key";
 	public String keKey = "Key";
 	public String keDeleteKey = "delete from program (highly recommended)";
@@ -113,7 +113,7 @@ public abstract class Language {
 	public String keWarn2 = "4. This will re-encrypt the file with the new encrpytion key.\n" + 
 			"5. The PEM file will be created with the new encryption key.";
 	
-	//KeyImporter
+	// KeyImporter
 	public String kiTitle = "Import Key";
 	public String kiMainContent = "Do you really want to import the key?";
 	public String kiSubContent = "This process will store your key internally.\n\n" +
@@ -126,18 +126,18 @@ public abstract class Language {
 	public String kiImport = "Import the key...";
 	
 	public String txtBoxDrag = "Drag or Open the keyfile.";
-	//KeyOpener
+	// KeyOpener
 	public String koTitle = "Enter Key";
 	public String koMainContent = "Enter the key for decryption : ";
 	public String koOpen = "Open keyfile...";
 	public String koDecrypt = "Decrypt";
 	
-	//keyVerifier
+	// KeyVerifier
 	public String kvTitle = "Verification";
 	public String kvMainContent = "Verify your key : ";
 	public String kvVerify = "Verify";
 	
-	//KUpdater
+	// KUpdater
 	public String kuCheck = "Check for update";
 	public String kuDefaultResult = "Press the button below to check the latest version.";
 	public String kuCheckingResult = "Checking...";
@@ -149,21 +149,21 @@ public abstract class Language {
 	public String kuLatVersion = "Latest version : ";
 	public String kuFailedToConnect = "Cannot connect to the server.\nPlease check your network connection.";
 			
-	//Date
+	// Date
 	public String am = "AM";
 	public String pm = "PM";
 	
-	//CheckSave
+	// CheckSave
 	public String checkSave_pre = "Your work has not been saved. Do you want to save changes to [";
 	//public String checkSaveToExport_pre = "Your work has to be saved to export key. Do you want to save changes to [";
 	public String checkSave_post = "]?   \n";
 	public String save = "Save";
 	public String noSave = "  Don't Save  ";
 	
-	//OOME
+	// OOME
 	public String OOMEWarning = "Out of Memory. Some functions may not work correctly.";
 	
-	//Warning message
+	// Warning message
 	public String keyNotValid = "The key you entered is not valid for this file. Please go back to import or export the valid key";
 	public String fileFormat_PEM = "The keyfile format must be PEM format. Please check your file format.";
 	public String fileNotExist = "The file does not exist." + " Please check your file name.";
@@ -176,7 +176,7 @@ public abstract class Language {
 	public String failedToDecrypt = "Failed to decrypt the file. Please try again with valid key.";
 	public String unableToDecrypt = "Unable to decrypt this file.\nThis encrypted file may be modified.";
 	
-	//status logger
+	// Status logger
 	public String status_save = " is saved.";
 	public String status_open = " is opened.";
 	public String status_import = "The key of current file is imported.";
@@ -184,23 +184,23 @@ public abstract class Language {
 	public String status_turnOnEncryption = "Encryption mode ON.";
 	public String status_turnOffEncryption = "Encryption mode OFF.";
 	
-	//MainUI title
+	// MainUI title
 	public String title_openWithExportedKey = "  (opened with exported keyfile)";
 	public String title_needToImportOrExport = "  (required to import or export the key)";
 	public String title_notEncrypted = "  (Not encrypted)";
 	
-	//dialog
+	// Dialog
 	public String btnOK = "OK";
 	public String btnCancel = "Cancel";
 	public String btnNo = "No";
 	public String IHaveExportedKeyFile = "No, I have exported keyfile.";
 	public String btnYes = "Yes";
 	
-	//Language Support
+	// Language Support
 	public char testChar_EN = 'a';
 	public char testChar_KO = '\uAC00';
 	
-	//etc
+	// Etc
 	public String defaultFileName = "Untitled";
 	public String fileFilter_txt = "Text Documents (*.txt)";
 		

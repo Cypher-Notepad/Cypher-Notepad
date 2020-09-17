@@ -22,7 +22,7 @@ import ui.NotepadUI;
 import ui.custom.KFontChooser;
 
 public class Property {
-	public static final String CURRENT_VERSION = "3.0.0";
+	public static final String CURRENT_VERSION = "3.0.0.0";
 	
 	public static String version = "VERSION";
 	public static String language = "LANGUAGE";

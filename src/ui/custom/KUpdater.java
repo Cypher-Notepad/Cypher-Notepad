@@ -232,7 +232,7 @@ public class KUpdater extends JDialog {
 				if(Integer.parseInt(latestVersion.replace(".", "")) 
 						> Integer.parseInt(curVersion.replace(".", ""))){
 					result = OUTDATED;
-					lblResult.setText(lang.kuNewVersionResult_pre + lang.cypherNotepad + latestVersion + lang.kuNewVersionResult_post);
+					lblResult.setText(lang.kuNewVersionResult_pre + lang.cypherNotepad + " " + latestVersion + lang.kuNewVersionResult_post);
 				} else {
 					result = LATEST;
 					lblResult.setText(lang.kuUpToDate);

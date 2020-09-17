@@ -97,7 +97,7 @@ public class NotepadUI extends JFrame implements UI {
 	private JScrollPane scrollPane;
 	private Font curFont = null;
 
-	//status bar
+	// Status bar
 	private JPanel statusBar;
 	private JTextPane txtPaneStatus, txtPanRowCol, txtPanMagnification;
 	//private Thread stsUpdateThread = null;

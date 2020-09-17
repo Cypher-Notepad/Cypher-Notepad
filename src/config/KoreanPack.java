@@ -98,7 +98,7 @@ class KoreanPack extends Language {
 		ksInit = " \uC124\uC815 \uCD08\uAE30\uD654";
 		ksNoti = "\u203B \uC77C\uBD80 \uBCC0\uACBD\uC0AC\uD56D\uC740 \uD504\uB85C\uADF8\uB7A8 \uC7AC\uC2DC\uC791 \uD6C4 \uC801\uC6A9\uB429\uB2C8\uB2E4.";
 
-		//KeyExporter
+		// KeyExporter
 		keTitle = "\uC678\uBD80\uD30C\uC77C\uC5D0 \uC554\uD638\uD0A4 \uC800\uC7A5";
 		keKey = "\uC554\uD638\uD0A4";
 		keDeleteKey = "\uD504\uB85C\uADF8\uB7A8\uC5D0\uC11C \uD0A4 \uC81C\uAC70\uD558\uAE30 \u0028\uB9E4\uC6B0 \uAD8C\uC7A5\u0029";
@@ -111,7 +111,7 @@ class KoreanPack extends Language {
 		keWarn2 = "4. \uC0C8\uB85C\uC6B4 \uC554\uD638\uD0A4\uB85C \uD30C\uC77C\uC774 \uB2E4\uC2DC \uC554\uD638\uD654 \uB429\uB2C8\uB2E4. \n" + 
 				"5. \uC0C8\uB85C\uC6B4 \uC554\uD638\uD0A4\uB97C \uD3EC\uD568\uD55C PEM\uD30C\uC77C\uC774 \uC0DD\uC131\uB429\uB2C8\uB2E4.";
 		
-		//KeyImporter
+		// KeyImporter
 		kiTitle = "\uD504\uB85C\uADF8\uB7A8\uC5D0 \uC554\uD638\uD0A4 \uCD94\uAC00";
 		kiMainContent = "\uD504\uB85C\uADF8\uB7A8\uC5D0 \uC554\uD638\uD0A4\uB97C \uCD94\uAC00\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C\u003F";
 		kiSubContent = "\uC774 \uC791\uC5C5\uC740 \uD30C\uC77C\uC758 \uC554\uD638\uD0A4\uB97C \uD504\uB85C\uADF8\uB7A8\uC5D0\uC11C \uBCF4\uAD00\uD558\uB3C4\uB85D \uD569\uB2C8\uB2E4.\n\n" +
@@ -124,18 +124,19 @@ class KoreanPack extends Language {
 		kiImport = "\uD504\uB85C\uADF8\uB7A8\uC5D0 \uCD94\uAC00...";
 		
 		//public String txtBoxDrag = "Drag or Open the keyfile.";
-		//KeyOpener
+		
+		// KeyOpener
 		koTitle = "\uD0A4 \uC785\uB825";
 		koMainContent = "\uC554\uD638\uD0A4\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694 \u003A ";
 		koOpen = "\uD0A4\uD30C\uC77C \uBD88\uB7EC\uC624\uAE30...";
 		koDecrypt = "\uBCF5\uD638\uD654";
 		
-		//keyVerifier
+		// KeyVerifier
 		kvTitle = "\uD0A4 \uAC80\uC99D";
 		kvMainContent = "\uC720\uD6A8\uD55C \uD0A4\uC778\uC9C0 \uD655\uC778\uD558\uC2ED\uC2DC\uC624 \u003A ";
 		kvVerify = "\uAC80\uC99D ";
 		
-		//KUpdater
+		// KUpdater
 		kuCheck = "\uC5C5\uB370\uC774\uD2B8 \uD655\uC778";
 		kuDefaultResult = "\uC544\uB798 \uBC84\uD2BC\uC744 \uB20C\uB7EC \uCD5C\uC2E0\uBC84\uC804\uC744 \uD655\uC778\uD558\uC138\uC694.";
 		kuCheckingResult = "\uD655\uC778\uC911...";
@@ -148,20 +149,20 @@ class KoreanPack extends Language {
 		kuFailedToConnect = "\uC11C\uBC84 \uC5F0\uACB0\uC5D0 \uC2E4\uD328\uD558\uC600\uC2B5\uB2C8\uB2E4.\n" + 
 				"\uC778\uD130\uB137 \uC5F0\uACB0 \uC0C1\uD0DC\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.";
 		
-		//Date
+		// Date
 		am = "\uC624\uC804";
 		pm = "\uC624\uD6C4";
 		
-		//CheckSave
+		// CheckSave
 		checkSave_pre = "\uC791\uC5C5\uC774 \uC800\uC7A5\uB418\uC9C0 \uC54A\uC558\uC2B5\uB2C8\uB2E4. \uBCC0\uACBD \uB0B4\uC6A9\uC744 [";
 		checkSave_post = "]\uC5D0 \uC800\uC7A5\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?   \n";
 		save = "\uC800\uC7A5";
 		noSave = "  \uC800\uC7A5 \uC548 \uD568  ";
 
-		//OOME
+		// OOME
 		OOMEWarning = "\uBA54\uBAA8\uB9AC\uAC00 \uBD80\uC871\uD569\uB2C8\uB2E4. \uC77C\uBD80 \uAE30\uB2A5\uC774 \uC815\uC0C1\uC801\uC73C\uB85C \uB3D9\uC791\uD558\uC9C0 \uC54A\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4. ";
 	
-		//Warning message
+		// Warning message
 		keyNotValid = "\uC62C\uBC14\uB978 \uD0A4\uAC00 \uC544\uB2D9\uB2C8\uB2E4. \uC774\uC804 \uD654\uBA74\uC5D0\uC11C \uC720\uD6A8\uD55C \uD0A4\uB97C \uC800\uC7A5\uD558\uC2ED\uC2DC\uC624.";
 		
 		fileFormat_PEM = "\uC62C\uBC14\uB978 \uD30C\uC77C \uD615\uC2DD\uC774 \uC544\uB2D9\uB2C8\uB2E4. \uD0A4\uD30C\uC77C\uC740  PEM \uD30C\uC77C \uD615\uC2DD\uC774\uC5B4\uC57C \uD569\uB2C8\uB2E4.";
@@ -174,7 +175,7 @@ class KoreanPack extends Language {
 		failedToDecrypt = "\uC62C\uBC14\uB978 \uD0A4\uAC00 \uC544\uB2D9\uB2C8\uB2E4. \uC720\uD6A8\uD55C \uD0A4\uB97C \uC0AC\uC6A9\uD558\uC5EC \uB2E4\uC2DC \uC2DC\uB3C4\uD558\uC2ED\uC2DC\uC624";
 		unableToDecrypt = "\uD30C\uC77C\uC744 \uBCF5\uD638\uD654 \uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.\n \uD30C\uC77C\uC774 \uC784\uC758\uC801\uC73C\uB85C \uBCC0\uACBD\uB418\uC5C8\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4.";
 				
-		//status logger
+		// Status logger
 		status_save = " \uB97C \uC800\uC7A5\uD588\uC2B5\uB2C8\uB2E4.";
 		status_open = " \uB97C \uC5F4\uC5C8\uC2B5\uB2C8\uB2E4.";
 		status_import = "\uC554\uD638\uD0A4\uAC00 \uD504\uB85C\uADF8\uB7A8\uC5D0 \uCD94\uAC00\uB418\uC5C8\uC2B5\uB2C8\uB2E4.";
@@ -182,19 +183,19 @@ class KoreanPack extends Language {
 		status_turnOnEncryption = "\uC554\uD638\uD654 \uBAA8\uB4DC \uCF2C.";
 		status_turnOffEncryption = "\uC554\uD638\uD654 \uBAA8\uB4DC \uB054.";
 		
-		//MainUI title
+		// MainUI title
 		title_openWithExportedKey = "  (\uC678\uBD80 \uD0A4 \uD30C\uC77C \uC0AC\uC6A9)";
 		title_needToImportOrExport = "  (\uC554\uD638\uD0A4 \uC800\uC7A5 \uD544\uC694)";
 		title_notEncrypted = "  (\uC554\uD638\uD654\uB418\uC9C0 \uC54A\uC74C)";
 		
-		//dialog
+		// Dialog
 		btnOK = "\uD655\uC778";
 		btnCancel = "\uCDE8\uC18C";
 		btnNo = "\uC544\uB2C8\uC624";
 		IHaveExportedKeyFile = "\uC544\uB2C8\uC624\u002C \uC774\uBBF8 \uC554\uD638\uD0A4\uB97C \uC54C\uACE0 \uC788\uC2B5\uB2C8\uB2E4.";
 		btnYes = "\uC608";
 		
-		//etc
+		// Etc
 		defaultFileName = "\uC81C\uBAA9 \uC5C6\uC74C";
 		fileFilter_txt = "\uD14D\uC2A4\uD2B8 \uBB38\uC11C (*.txt)";
 				
