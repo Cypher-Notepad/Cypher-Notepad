@@ -78,7 +78,7 @@ public class NotepadUI extends JFrame implements UI {
 	private static final int CANCEL_OPTION = 0;
 	
 	// Frame
-	private JFrame frame;
+	public JFrame frame;
 	// Menu bar
 	private JMenuBar menuBar;
 	// Menus
@@ -231,7 +231,7 @@ public class NotepadUI extends JFrame implements UI {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			// Ignore.
 		}
 
 		Properties p = Property.getProperties();
@@ -251,6 +251,14 @@ public class NotepadUI extends JFrame implements UI {
 		formatMenu = new JMenu(lang.mbFormat);
 		viewMenu = new JMenu(lang.mbView);
 		helpMenu = new JMenu(lang.mbHelp);
+		
+		//set color for Linux system.
+		menuBar.setBackground(Color.WHITE);
+		fileMenu.setForeground(Color.black);
+		editMenu.setForeground(Color.black);
+		formatMenu.setForeground(Color.black);
+		viewMenu.setForeground(Color.black);
+		helpMenu.setForeground(Color.black);
 
 		// Add menu to menu bar
 		menuBar.add(fileMenu);

@@ -13,6 +13,7 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -204,8 +205,6 @@ public class KeyExporter extends JDialog {
 				copyThread = new CopyThread();
 				copyThread.start();
 			}
-			
-
 		});
 		
 		btnCancel.addActionListener(e->{
@@ -236,7 +235,7 @@ public class KeyExporter extends JDialog {
 		keyFileName = keyFileName.substring(0, fileExtensionIdx) + ".pem";
 		fc.setSelectedFile(new File(keyFileName));
 
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(frame.frame);
 		setVisible(true);
 		
 		return result;
