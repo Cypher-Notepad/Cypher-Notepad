@@ -210,11 +210,11 @@ public class KUpdater extends JDialog {
 		public void run() {	
 			try {
 				lblResult.setText(lang.kuCheckingResult);
-				txtrConsole.setText("Start to check version of Cypher Notepad....\n");
-				txtrConsole.append("connecting to server...");
+				txtrConsole.setText("Start to check the latest version....\n");
 				
-				URL oracle = new URL(latestVersionURL);
-				in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+				txtrConsole.append("connecting to server...");
+				URL latestVersionWeb = new URL(latestVersionURL);
+				in = new BufferedReader(new InputStreamReader(latestVersionWeb.openStream()));
 			
 				txtrConsole.append("OK\n");
 				txtrConsole.append("getting the latest version...");

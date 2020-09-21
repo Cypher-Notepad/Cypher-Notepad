@@ -173,8 +173,8 @@ public abstract class Language {
 			"It will be applied instantly. If you already have exported keyfile, it will be invalidated.    ";
 	public String warnOverwriteFile_pre = " [";
 	public String warnOverwriteFile_post = "] already exists. \n Do you want to replace it?        ";
-	public String failedToDecrypt = "Failed to decrypt the file. Please try again with valid key.";
-	public String unableToDecrypt = "Unable to decrypt this file.\nThis encrypted file may be modified.";
+	public String failedToDecrypt = "Failed to decrypt file. Please try again with valid key.";
+	public String unableToDecrypt = "Unable to decrypt file.\nThis encrypted file may be modified.";
 	
 	// Status logger
 	public String status_save = " is saved.";
