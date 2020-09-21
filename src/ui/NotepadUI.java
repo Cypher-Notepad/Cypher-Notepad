@@ -88,8 +88,9 @@ public class NotepadUI extends JFrame implements UI {
 			pageSetupMenuItem, printMenuItem, exitMenuItem, undoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, 
 			deleteMenuItem, findMenuItem, findNextMenuItem, replaceMenuItem, searchMenuItem, goToMenuItem, 
 			selectAllMenuItem, timeDateMenuItem, fontMenuItem, viewHelpMenuItem, sendFeedbackMenuItem, 
-			homepageMenuItem, aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
-
+			aboutNotepadMenuItem, updateMenuItem, settingsMenuItem;
+	//private JMenuItem homepageMenuItem;
+	
 	private JCheckBoxMenuItem wordWrapMenuItem, statusBarMenuItem, cryptoMenuItem;
 
 	// Text area

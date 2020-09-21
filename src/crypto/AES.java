@@ -25,25 +25,25 @@ public abstract class AES {
 	private static final String ENCRYPT_ALGO = "AES";
 	private static final String TRANSFORMATION = ENCRYPT_ALGO + "/GCM/NoPadding";
 	private KeyGenerator keyGenerator;
-	private SecureRandom secureRandom;
+	//private SecureRandom secureRandom;
 	
 	public AES() {
-		System.out.println("[AES] AES initialize.");
+		System.out.println("[AES] AES initialized.");
 		initialize();	
 	}
 	
 	public AES(boolean decryptMode) {
 		if(decryptMode) {
-			System.out.println("[AES] AES initialize. - decrypt mode");
+			System.out.println("[AES] AES initialized. - decrypt mode");
 		} else {
-			System.out.println("[AES] AES initialize.");
+			System.out.println("[AES] AES initialized.");
 			initialize();
 		}
 	}
 	
 	private void initialize() {
 		try {
-			secureRandom = SecureRandom.getInstanceStrong();
+			//secureRandom = SecureRandom.getInstanceStrong();
 			keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -81,9 +81,9 @@ public abstract class AES {
 	public class AESEncryptor extends Encryptor {
 		
 		private AESEncryptor() {			
-			// Generate key
-	        keyGenerator.init(KEY_SIZE, secureRandom);
-	        SecretKey key = keyGenerator.generateKey();		
+			// Generate key with highest priority RNG algorithm.
+			keyGenerator.init(KEY_SIZE, new SecureRandom());
+	        SecretKey key = keyGenerator.generateKey();
 			setKey(key);
 		}
 		
@@ -92,8 +92,9 @@ public abstract class AES {
 			String complexMessage = null;
 			
 			try {
-				// Create initialization vector
+				// Create initialization vector with highest priority RNG algorithm.
 				byte[] initVector = new byte[NONCE_SIZE];
+				SecureRandom secureRandom = new SecureRandom();
 				secureRandom.nextBytes(initVector);
 				
 				// Encrypt

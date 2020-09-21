@@ -42,7 +42,7 @@ public class CryptoFacade {
 
 		Encryptor rsaEncryptor;
 		if(privateKey != null) {
-			rsaEncryptor = rsa.getEncryptor(privateKey);			
+			rsaEncryptor = rsa.getEncryptor(privateKey);
 		}else {
 			rsaEncryptor = rsa.getEncryptor();
 		}

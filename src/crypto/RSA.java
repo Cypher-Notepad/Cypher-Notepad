@@ -31,16 +31,16 @@ abstract public class RSA {
 	private byte[] privateKey = null;
 
 	public RSA() {
-		System.out.println("[RSA] RSA initialize.");
+		System.out.println("[RSA] RSA initialized.");
 		initialize();
 	}
 	
 	
 	public RSA(boolean decryptMode) {
 		if(decryptMode) {
-			System.out.println("[RSA] RSA initialize. - decrypt mode");
+			System.out.println("[RSA] RSA initialized. - decrypt mode");
 		} else {
-			System.out.println("[RSA] RSA initialize.");
+			System.out.println("[RSA] RSA initialized.");
 			initialize();
 		}
 	}
