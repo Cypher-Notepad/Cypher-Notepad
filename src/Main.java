@@ -4,7 +4,7 @@ import ui.UIManager;
 
 /**
  * @author LeeDongGeon1996
- * @release 2020.05.21 Cypher Notepad 2.1 
+ * @release 2020.09.28 Cypher Notepad 3.0
  * 
  */
 
