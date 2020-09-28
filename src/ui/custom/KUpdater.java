@@ -242,8 +242,8 @@ public class KUpdater extends JDialog {
 					if(btnCheck.isShowing()) {
 						btnCheck.setText(lang.kuGetTheLatestVersion);
 					}
-				} 
-				btnCheck.setEnabled(true);
+					btnCheck.setEnabled(true);	
+				}
 				
 				
 			} catch (IOException e) {

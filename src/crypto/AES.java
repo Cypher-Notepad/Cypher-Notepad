@@ -25,7 +25,6 @@ public abstract class AES {
 	private static final String ENCRYPT_ALGO = "AES";
 	private static final String TRANSFORMATION = ENCRYPT_ALGO + "/GCM/NoPadding";
 	private KeyGenerator keyGenerator;
-	//private SecureRandom secureRandom;
 	
 	public AES() {
 		System.out.println("[AES] AES initialized.");
@@ -43,7 +42,6 @@ public abstract class AES {
 	
 	private void initialize() {
 		try {
-			//secureRandom = SecureRandom.getInstanceStrong();
 			keyGenerator = KeyGenerator.getInstance(ENCRYPT_ALGO);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
