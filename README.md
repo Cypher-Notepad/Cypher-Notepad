@@ -17,9 +17,12 @@
  <img src="https://img.shields.io/github/last-commit/cypher-notepad/cypher-notepad?style=flat-square" alt="GitHub last commit" />
  <a href="http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad"><img src="http://hits.dwyl.com/Cypher-Notepad/Cypher-Notepad.svg" alt="HitCount" /></a>
 </p>
-
-
-### To download, [See our documentation](https://cyphernotepad.com/wiki/#/installation).
+<p align="center">
+  <a href="https://cyphernotepad.com/wiki/#/installation"><img height='45' src="https://cypher-notepad.github.io/resource/btn_download.PNG" alt="Download" /></a>
+</p>
+<p align="center">
+  <a href='https://ko-fi.com/M4M32TTK8' target='_blank'><img height='30' style='border:0px;height:30px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+</p>
 
 ## What is Cypher Notepad?
 
